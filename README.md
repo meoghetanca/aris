@@ -11,8 +11,8 @@
 <p align="center">
   <img src="https://img.shields.io/badge/version-0.1.0-4c566b?style=flat-square&labelColor=161b25" alt="version 0.1.0">
   <img src="https://img.shields.io/badge/fields-62-4c566b?style=flat-square&labelColor=161b25" alt="fields 62">
-  <img src="https://img.shields.io/badge/specialists-9-4c566b?style=flat-square&labelColor=161b25" alt="specialists 9">
-  <img src="https://img.shields.io/badge/checks-39%20fail--closed-4c566b?style=flat-square&labelColor=161b25" alt="39 checks, fail-closed">
+  <img src="https://img.shields.io/badge/specialists-11-4c566b?style=flat-square&labelColor=161b25" alt="specialists 11">
+  <img src="https://img.shields.io/badge/checks-43%20fail--closed-4c566b?style=flat-square&labelColor=161b25" alt="43 checks, fail-closed">
   <img src="https://img.shields.io/badge/licence-MIT-4c566b?style=flat-square&labelColor=161b25" alt="MIT licence">
 </p>
 
@@ -27,18 +27,21 @@ you open in a browser where **clicking any sentence shows you the source it came
 ## How it runs
 
 ```
-     you                                                              you
-   describe                                                         review
-      │                                                                │
-      ▼                                                                ▼
-  ┌────────┐   ┌──────────┐   ┌──────────┐   ┌─────────┐   ┌──────┐   ┌─────────┐
-  │research│──▶│ validate │──▶│ position │──▶│ message │──▶│ plan │──▶│ package │
-  └────────┘   └──────────┘   └────┬─────┘   └─────────┘   └──┬───┘   └─────────┘
-   who else       is there         │           what do        │         one HTML
-   is here,       demand,          ▼           we say         ▼         file you
-   what hurts     and for whom  you choose                 you choose   can share
-                                the direction              channels
-                                                           and price
+     you                                                        you        you
+   describe                                                   review     decide
+      │                                                          │          │
+      ▼                                                          ▼          ▼
+  ┌────────┐   ┌──────────┐   ┌─────────┐   ┌──────┐   ┌─────────┐   ┌────────┐
+  │research│──▶│ position │──▶│ message │──▶│ plan │──▶│ package │──▶│ launch │
+  └────────┘   └────┬─────┘   └─────────┘   └──┬───┘   └─────────┘   └───┬────┘
+   who else         │           what do        │         one page        │
+   is here,         ▼           we say         ▼         you can         ▼
+   what hurts   you choose                 you choose    share       ┌────────┐
+                the direction              channels                  │  keep  │
+                                           and price                 │  them  │
+                                                                     └────────┘
+                                                              activation, retention,
+                                                              twelve weeks of cadence
 ```
 
 It stops **only** where a person has a real choice, and shows you options it has already
@@ -159,7 +162,7 @@ claim fails closed, and `/aris-sector <name>` researches it properly.
 
 ## The specialists
 
-Nine roles, dispatched in parallel, each seeing only its own slice:
+Eleven roles, dispatched in parallel, each seeing only its own slice:
 
 | | |
 |:--|:--|
@@ -170,10 +173,11 @@ Nine roles, dispatched in parallel, each seeing only its own slice:
 | `aris-channel-analyst` | one per channel — argues its case, never ranks the others |
 | `aris-evaluator` | one per persona — tests the messaging against that persona's evidence |
 | `aris-copywriter` | one per asset — the only one with Write, and it cannot invent a claim |
+| `aris-claim-verifier` | **opens each cited page and answers whether it supports that exact sentence** |
 | `aris-compliance-reviewer` | the regulated-claims lens, and it never sees who wrote the copy |
 | `aris-sector-researcher` | bootstraps a field the base doesn't cover |
 
-Seven of the nine have **no Write or Edit**, deliberately. A reviewer who rewrites has
+Nine of the eleven have **no Write or Edit**, deliberately. A reviewer who rewrites has
 already decided how to resolve the finding, and that decision isn't theirs: "clinically
 proven" can be fixed by citing a trial or by deleting the claim, and those are
 completely different products.
@@ -204,10 +208,12 @@ Honest limits, because they matter more than the feature list:
 | `/aris-status` | where this project stands |
 | `/aris-verify` | run every check |
 | `/aris-setup` | check and fix what's missing |
+| `/aris-evidence` | what a run could not read, and how to hand it over yourself |
+| `/aris-runway` | the ninety days after launch |
 
 The fifteen individual steps — `/aris-category`, `/aris-voc`, `/aris-personas`,
 `/aris-size`, `/aris-demand`, `/aris-position`, `/aris-messages`, `/aris-gtm`,
-`/aris-assets`, `/aris-harness`, `/aris-playbook`, `/aris-package` — can each be run on
+`/aris-assets`, `/aris-harness`, `/aris-playbook`, `/aris-runway`, `/aris-package` — can each be run on
 their own. Every one states what it needs and stops if that's missing, naming the
 command that produces it.
 
@@ -273,10 +279,27 @@ without either.
 
 ## Status
 
-**v0.1.0.** The scripts, hooks, sector knowledge, HTML generator and test suite are
-built and passing. The commands are written but have **not yet been run against a real
-market** — the first live run is what will calibrate the quote thresholds and show
-whether each sector's research targets are the right ones.
+**v0.1.0.** Run once, end to end, against a real product in a real market. That run
+changed the tool more than any amount of design did, and the findings worth knowing
+before you use it are these:
+
+- **The big review sites block automated fetching.** G2, Capterra and TrustRadius all
+  return 403, and most sector entries name them as the primary place to look. Use
+  `/aris-evidence` when it happens; a blocked source becomes a two-minute paste rather
+  than a silent gap, and a thin result must never be reported as a quiet market.
+- **Prices are frequently unreadable by a plain fetch**, injected by JavaScript and
+  chosen by the visitor's country. A fetch that returns no number has not proved the
+  price is unpublished.
+- **Do not let the model pick the competitors.** It picks whoever has the best
+  international SEO and misses the local incumbent a buyer already owns — which is the
+  one whose absence wrecks a positioning. `/aris-category` discovers them in the
+  market's own language first.
+- **The run was stopped by its user partway through**, because the research step
+  dispatched one deep agent per competitor. Every fan-out now has a hard budget and a
+  cheap default, and depth is something you ask for.
+
+The quote thresholds have still only been exercised on one market, and every sector's
+`priceBands` are deliberately null until a run cites them.
 
 Built on the shape of [pica](https://github.com/vqdungwork/pica) by Dung Vuong: state
 on disk, rules loaded by name, and gates enforced by script rather than by good
