@@ -10,7 +10,7 @@
 
 <p align="center">
   <img src="https://img.shields.io/badge/version-0.1.0-4c566b?style=flat-square&labelColor=161b25" alt="version 0.1.0">
-  <img src="https://img.shields.io/badge/fields-62-4c566b?style=flat-square&labelColor=161b25" alt="fields 62">
+  <img src="https://img.shields.io/badge/fields-53-4c566b?style=flat-square&labelColor=161b25" alt="fields 53">
   <img src="https://img.shields.io/badge/specialists-11-4c566b?style=flat-square&labelColor=161b25" alt="specialists 11">
   <img src="https://img.shields.io/badge/checks-43%20fail--closed-4c566b?style=flat-square&labelColor=161b25" alt="43 checks, fail-closed">
   <img src="https://img.shields.io/badge/licence-MIT-4c566b?style=flat-square&labelColor=161b25" alt="MIT licence">
@@ -91,25 +91,28 @@ and it carries on. At the end:
 .aris/package/aris-launch.html
 ```
 
-One file. Fourteen sections. Open it in any browser, works offline, share it by
-sending the file.
+One file. Twelve sections behind three tabs — **what we know**, **what we do**,
+**what happens after**. Open it in any browser, works offline, share it by sending
+the file.
 
-| | |
-|:--|:--|
-| **Market overview** | who else is doing this, what they charge, what they claim |
-| **Customer & pain** | ranked by how many real people said it — click to read their actual words |
-| **Personas** | built from quotes, not imagination |
-| **Market size** | with the arithmetic shown, so anyone can check it |
-| **Demand signals** | and a blunt list of what they do *not* prove |
-| **Positioning** | all three options, the chosen one marked, the rejected two with reasons |
-| **Messaging** | every message traced back to the pain it answers |
-| **GTM** | channels argued from where the evidence actually came from |
-| **Launch assets** | emails, social posts, ads, FAQ, sales deck, PR, launch post |
-| **Verification** | what passed, what blocks the launch |
-| **Measurement** | the dashboard, deliberately empty until real data arrives |
-| **Keeping them** | lifecycle emails that fire on what someone did, a twelve-week cadence, and the first ninety days as decision points |
-| **Growth playbook** | if CAC goes above X for 14 days, do Y |
-| **Evidence** | every source, and what used it |
+| | | |
+|:--|:--|:--|
+| *what we know* | **01 The field** | who else is selling to these people, what they charge, what they claim — read off their own pages |
+| | **02 Customers** | what buyers actually said, ranked by how many said it — click a pain to read their words |
+| | **03 Size** | the arithmetic shown, as a range, because the weakest factor sets the width |
+| | **04 Risk** | every assumption this rests on, and every step that was cut |
+| | **05 Evidence** | every source, and what used it |
+| *what we do* | **06 Position** | the chosen direction and why, with the rejected two and their reasons |
+| | **07 Message** | what to say, in priority order, each carrying the evidence it rests on |
+| | **08 Channels** | where to say it, and what it costs |
+| | **09 Assets** | emails, social posts, ads, FAQ, sales deck, PR, launch post |
+| | **10 Next** | what to do first, and what verification is still blocking |
+| *what happens after* | **11 Keeping them** | lifecycle emails that fire on what someone did, a twelve-week cadence, the first ninety days as decision points, and the growth rules — if CAC goes above X for 14 days, do Y |
+| | **12 Measure** | the dashboard, deliberately empty until real data arrives |
+
+Personas and demand signals have no section of their own on the page. They are
+written to `.aris/intel/`, and what they produce — who the messaging is aimed at,
+what the demand does and does not prove — shows up inside the sections above.
 
 ---
 
@@ -166,6 +169,7 @@ Eleven roles, dispatched in parallel, each seeing only its own slice:
 
 | | |
 |:--|:--|
+| `aris-category-scout` | one cheap pass over the whole category — the default; the deep analysts are opt-in |
 | `aris-miner` | one per platform — mines the public voice. No Write. |
 | `aris-competitor-analyst` | one per competitor — never sees another's profile |
 | `aris-sizing-analyst` | one per sizing factor — so nobody completes the chain to make the arithmetic work |
@@ -177,7 +181,7 @@ Eleven roles, dispatched in parallel, each seeing only its own slice:
 | `aris-compliance-reviewer` | the regulated-claims lens, and it never sees who wrote the copy |
 | `aris-sector-researcher` | bootstraps a field the base doesn't cover |
 
-Nine of the eleven have **no Write or Edit**, deliberately. A reviewer who rewrites has
+Ten of the eleven have **no Write or Edit**, deliberately. A reviewer who rewrites has
 already decided how to resolve the finding, and that decision isn't theirs: "clinically
 proven" can be fixed by citing a trial or by deleting the claim, and those are
 completely different products.
@@ -211,11 +215,11 @@ Honest limits, because they matter more than the feature list:
 | `/aris-evidence` | what a run could not read, and how to hand it over yourself |
 | `/aris-runway` | the ninety days after launch |
 
-The fifteen individual steps — `/aris-category`, `/aris-voc`, `/aris-personas`,
-`/aris-size`, `/aris-demand`, `/aris-position`, `/aris-messages`, `/aris-gtm`,
-`/aris-assets`, `/aris-harness`, `/aris-playbook`, `/aris-runway`, `/aris-package` — can each be run on
-their own. Every one states what it needs and stops if that's missing, naming the
-command that produces it.
+The fifteen individual steps — `/aris`, `/aris-category`, `/aris-voc`,
+`/aris-personas`, `/aris-size`, `/aris-demand`, `/aris-position`, `/aris-messages`,
+`/aris-gtm`, `/aris-assets`, `/aris-verify`, `/aris-harness`, `/aris-playbook`,
+`/aris-runway`, `/aris-package` — can each be run on their own. Every one states
+what it needs and stops if that's missing, naming the command that produces it.
 
 ## What it costs to run
 
@@ -233,6 +237,8 @@ context at all.
 
 ```
 .aris/
+├── state.json     the run, its decisions and its authorisation
+├── assumptions.json, cutSteps.json
 ├── intel/        category, sources, pains, personas, size, demand
 ├── strategy/     positioning, messaging, go-to-market
 ├── assets/       every launch material + the claim registry
