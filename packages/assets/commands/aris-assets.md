@@ -58,8 +58,15 @@ unmissable. A quote this workflow wrote is fabricated evidence.
 /aris-verify --only language
 ```
 
-First, dispatch **one `aris-claim-verifier` per claim, concurrently**, each given one
-claim's exact sentence and the sources it cites. It opens them and answers whether the
+First, verify the claims. **Dispatch at most four `aris-claim-verifier` agents**,
+splitting the claims between them, each given the exact sentences and the sources they
+cite.
+
+One agent per claim looks obvious and is wrong: a package with forty claims would
+dispatch forty agents, which is the mistake that got an earlier run stopped by the user
+partway through. Grouping by source is also wrong — measured on a real package, seven
+claims cited ten distinct sources, so per-source was *more* agents, not fewer. Cap the
+fan-out and batch; a verifier holding six claims re-reads a shared page once. It opens them and answers whether the
 page supports that sentence, then writes a `verification` block back onto the claim.
 
 This is not the same check as citation completeness. That one says a claim **has** a

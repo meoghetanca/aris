@@ -5,8 +5,16 @@ description: Where this aris project stands — what exists, what is validated, 
 # aris-status
 
 ```
+node ${CLAUDE_PLUGIN_ROOT}/scripts/next.mjs --all
 node ${CLAUDE_PLUGIN_ROOT}/scripts/aris-status.mjs
 ```
+
+**Lead with the next command, not the inventory.** Someone running status wants to know
+what to do; the counts are context for that answer, not the answer. `next.mjs` computes
+it from what exists and whether each gate passes, so it is never a guess.
+
+A step whose output exists but whose gate fails is reported as failing rather than done,
+and it becomes the next command. Resuming past a failing step buries the failure.
 
 Reads state and counts what is on disk. It asserts nothing and fixes nothing.
 

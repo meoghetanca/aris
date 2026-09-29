@@ -77,8 +77,18 @@ re-run the decisions that matter.
 
 ## `--resume`
 
-Read `state.json`, find the furthest step whose output exists and whose gate passes,
-and continue from the next one. Say which step you resumed at and why.
+```
+node ${CLAUDE_PLUGIN_ROOT}/scripts/next.mjs --all
+```
+
+It prints the whole chain with what is done, what is waiting and what is **failing** —
+a step whose output exists but whose gate does not pass. Resume at what it names.
+
+A failing step outranks a missing one. Its output exists, so the chain would happily
+carry on past it, and everything downstream would inherit something that did not pass.
+Re-run it before anything else.
+
+Say which step you resumed at and why, then continue the chain from there.
 
 ## At the end
 
