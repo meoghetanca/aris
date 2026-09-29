@@ -84,8 +84,9 @@ install commands in a terminal. If you can run Claude Code, you can run this.
 
 ## What you get
 
-It stops **four times** to show you options it has already written out, you pick one,
-and it carries on. At the end:
+It stops **six times** to show you options it has already written out, you pick one,
+and it carries on — seven decisions in all, because `/aris-gtm` settles both the
+channel mix and the price point. At the end:
 
 ```
 .aris/package/aris-launch.html
@@ -127,7 +128,7 @@ aris makes that **mechanically impossible**:
   to publish**. Not a warning — a refusal.
 - A pain is only "validated" at **8+ quotes from 3+ separate sources**. Below that it
   stays marked insufficient and nothing is built on it.
-- Testimonials are written as `[TESTIMONIAL — SUPPLY REAL]`. If a made-up quote
+- Testimonials are written as `[TESTIMONIAL - SUPPLY REAL]`. If a made-up quote
   appears instead, **the build stops**.
 - Market sizes are recomputed from their factors by a script. A number that doesn't
   add up fails.
@@ -147,7 +148,7 @@ legally allowed to make**.
 | `consumer-app` | streaming, gaming, fitness, dating, travel, creator tools |
 | `marketplace` | food delivery, mobility, freelance, and two-sided platforms generally |
 | `regulated-finance` | wealth, banking, insurance, payments, lending, crypto |
-| `regulated-health` | telehealth, mental health, medical devices |
+| `regulated-health` | health platforms, telehealth, mental health, medical devices |
 | `physical-goods` | DTC, beauty, fashion, food & drink, pet, home & hardware |
 | `services` | agencies, hospitality, real estate, events, tutoring |
 | `industrial-b2b` | manufacturing, freight, energy, telecom |
@@ -198,7 +199,8 @@ Honest limits, because they matter more than the feature list:
   on its front page.
 - **It does not set your price or your budget.** It recommends; you decide.
 - **It does not press publish.** You review the file, then grant permission by hand.
-- **It does not build the landing page.** It writes the copy brief and hands it to
+- **It does not build the landing page.** It writes the copy deck to
+  `assets/landing-brief.md` and hands that to
   [pica](https://github.com/vqdungwork/pica), which builds the page and the Figma file.
 
 ---
@@ -244,7 +246,7 @@ context at all.
 ├── assets/       every launch material + the claim registry
 ├── verification/ what passed, what blocks
 ├── harness/      metrics contract + analyzer
-├── playbook/     conditional growth rules
+├── playbook/     conditional growth rules + the ninety-day runway
 └── package/      manifest + aris-launch.html
 ```
 
