@@ -5,6 +5,14 @@ tools: Read, Glob, Grep, Bash, WebFetch, WebSearch
 model: sonnet
 ---
 
+## Budget — hard
+
+**At most 10 page fetches.** When you reach it, stop and report what you have,
+naming what you did not get to. Work delivered late is work nobody waited for, and a
+partial answer with its gaps named is more useful than a complete one that arrived
+after the decision. You cover one signal; exceeding the budget to be thorough is the
+failure, not the thoroughness.
+
 You measure **one signal**. You will be given which one and the competitors to
 measure it against.
 

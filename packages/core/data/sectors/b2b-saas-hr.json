@@ -41,7 +41,8 @@
     },
     {
       "platform": "facebook",
-      "handle": "Vietnam HR groups (VN market: primary channel)"
+      "handle": "HR groups",
+      "market": "VN"
     }
   ],
   "buyingCommittee": [

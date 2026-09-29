@@ -50,7 +50,18 @@ function load(dir) {
   }).filter(Boolean);
 }
 
-const entries = [...load(BUILTIN), ...load(projectDir() || "")];
+const allEntries = [...load(BUILTIN), ...load(projectDir() || "")];
+
+// An entry can itself be market-bound (hr-payroll-vn is about Vietnamese payroll law and
+// is meaningless anywhere else). Drop those when a different market is named, so they do
+// not turn up as co-matches for a product that will never touch them.
+const marketArg = (() => {
+  const i = process.argv.indexOf("--market");
+  return i === -1 ? null : String(process.argv[i + 1] || "").toUpperCase();
+})();
+const entries = marketArg
+  ? allEntries.filter((e) => !e.market || String(e.market).toUpperCase() === marketArg)
+  : allEntries;
 const byName = new Map(entries.map((e) => [e.sector, e]));
 const norm = (s) => String(s || "").toLowerCase().replace(/[^a-z0-9]+/g, "-").replace(/^-|-$/g, "");
 
@@ -106,7 +117,7 @@ if (args.includes("--list") || args.length === 0) {
 const flag = args.includes("--why") ? "--why" : "--show";
 const i = args.indexOf(flag);
 if (i === -1 || !args[i + 1]) {
-  process.stderr.write("usage: sector-check.mjs --list | --show <field> | --why <field>\n");
+  process.stderr.write("usage: sector-check.mjs --list | --show <field> [--market XX] | --why <field>\n");
   process.exit(2);
 }
 const wantRaw = args[i + 1];
@@ -131,20 +142,32 @@ const GENERIC = new Set(["platform", "software", "app", "apps", "tool", "tools",
   "company", "business", "tech", "technology", "management", "mobile", "web", "portal", "cloud",
   "brand", "subscription", "store", "shop", "startup", "software"]);
 
-const qTokens = [...new Set(tok(wantRaw))];
+// English connectives carry no signal about a field.
+const STOP = new Set(["and", "for", "the", "with", "of", "in", "to", "a", "an", "or",
+  "my", "our", "your", "their", "on", "at", "by", "from"]);
+
+const qTokens = [...new Set(tok(wantRaw))].filter((w) => !STOP.has(w));
 const weight = (w) => (w.length >= 5 ? 3 : w.length >= 4 ? 2 : 1);
 
-function score(haystack, { allowGeneric = false } = {}) {
+/**
+ * `name` is the entry's own sector slug. A short token that matches it is an acronym,
+ * not noise: "hr" is two characters and identifies a field exactly, while length alone
+ * would score it below "and". Without this, an HR-plus-project product matched only the
+ * project half and dropped every HR constraint silently.
+ */
+function score(haystack, { allowGeneric = false, name = "" } = {}) {
   const ht = new Set(haystack.flatMap(tok));
+  const nameTokens = new Set(tok(name));
   let n = 0;
   for (const w of qTokens) {
     if (!ht.has(w)) continue;
     if (GENERIC.has(w) && !allowGeneric) continue;
-    n += weight(w);
+    n += nameTokens.has(w) ? Math.max(weight(w), 3) : weight(w);
   }
   return n;
 }
 
+let alsoMatched = [];
 let hit = entries.find((e) => norm(e.sector) === want)
        || entries.find((e) => (e.aliases || []).some((a) => norm(a) === want));
 let quality = hit ? "covered" : null;
@@ -152,10 +175,16 @@ let quality = hit ? "covered" : null;
 if (!hit) {
   // Best specific entry, and only on a substantial word.
   const ranked = entries
-    .map((e) => ({ e, s: score([e.sector, ...(e.aliases || [])]) }))
+    .map((e) => ({ e, s: score([e.sector, ...(e.aliases || [])], { name: e.sector }) }))
     .filter((x) => x.s >= 3)
     .sort((a, b) => b.s - a.s || a.e.sector.length - b.e.sector.length);
-  if (ranked.length) { hit = ranked[0].e; quality = "covered"; }
+  if (ranked.length) {
+    hit = ranked[0].e; quality = "covered";
+    // A product can genuinely sit in two fields. Returning only the winner silently
+    // drops the runner-up's constraints - including its regulated claims - which is a
+    // decision, not something sorting should do on its own.
+    alsoMatched = ranked.slice(1).filter((x) => x.s >= ranked[0].s * 0.7).map((x) => x.e.sector);
+  }
 }
 
 if (!hit) {
@@ -183,6 +212,34 @@ if (!hit) {
 const r = resolve(hit);
 r.resolution = quality;
 r.matched = hit.sector;
+r.alsoMatched = alsoMatched;
+
+/**
+ * Filter mining targets by market.
+ *
+ * A sector entry describes a FIELD, but where that field's customers talk depends on
+ * GEOGRAPHY. The two were conflated in the first draft, so a Slovak product would have
+ * been mined in Vietnamese Facebook groups, found nothing, and reported the absence as
+ * a finding about the market.
+ *
+ * Entries with no `market` are market-neutral and always apply. Entries with one apply
+ * only to that market. If a market has no local targets at all, say so: that is a gap
+ * to research, not a reason to mine somewhere else.
+ */
+const mkt = (() => {
+  const i = args.indexOf("--market");
+  return i === -1 ? null : String(args[i + 1] || "").toUpperCase();
+})();
+r.market = mkt;
+r.localGap = false;
+if (mkt) {
+  for (const key of ["communities", "reviewPlatforms"]) {
+    const all = r[key] ?? [];
+    const local = all.filter((e) => String(e.market || "").toUpperCase() === mkt);
+    r[key] = all.filter((e) => !e.market || String(e.market).toUpperCase() === mkt);
+    if (!local.length) r.localGap = true;
+  }
+}
 
 if (args.includes("--json")) {
   process.stdout.write(JSON.stringify(r, null, 2) + "\n");
@@ -223,6 +280,22 @@ const L = (label, v) => {
 
 process.stdout.write(`${hit.sector}${hit.status === "provisional" ? "  [PROVISIONAL]" : ""}\n`);
 process.stdout.write(`inherits: ${r._chain.join(" -> ")}\n`);
+if (r.alsoMatched.length)
+  process.stdout.write(
+    `\n  ALSO MATCHED: ${r.alsoMatched.join(", ")}\n` +
+    `  This product may sit in more than one field. Constraints UNION - the second\n` +
+    `  field's regulated claims and forbidden list apply too. Record them in\n` +
+    `  state.market.secondarySectors, or state why they do not apply. Dropping one\n` +
+    `  must be a decision, not a side effect of sorting.\n`);
+if (r.market)
+  process.stdout.write(`market filter: ${r.market}${r.localGap ?
+    "  — NO LOCAL TARGETS LISTED for this market" : ""}\n`);
+if (r.localGap)
+  process.stdout.write(
+    `\n  The entry lists no community or review platform specific to ${r.market}.\n` +
+    `  Market-neutral targets below still apply, but the places this field's ${r.market}\n` +
+    `  buyers actually talk are unresearched. Run /aris-sector to establish them before\n` +
+    `  treating a thin mining result as evidence that the market is quiet.\n`);
 if (quality === "family")
   process.stdout.write(
     `\n  RESOLVED TO A FAMILY, NOT A SPECIFIC FIELD.\n` +

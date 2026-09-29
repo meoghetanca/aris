@@ -16,7 +16,8 @@
     },
     {
       "platform": "facebook",
-      "handle": "VN e-wallet user groups"
+      "handle": "e-wallet user groups",
+      "market": "VN"
     }
   ],
   "regulatedClaims": [

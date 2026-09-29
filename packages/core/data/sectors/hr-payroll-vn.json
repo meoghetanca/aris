@@ -1,6 +1,7 @@
 {
   "sector": "hr-payroll-vn",
   "extends": "b2b-saas-hr",
+  "market": "VN",
   "aliases": [
     "payroll vietnam",
     "bhxh",
@@ -16,7 +17,8 @@
     },
     {
       "platform": "forum",
-      "handle": "webketoan.vn"
+      "handle": "webketoan.vn",
+      "market": "VN"
     }
   ],
   "regulatedClaims": [

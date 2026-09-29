@@ -42,7 +42,8 @@
     },
     {
       "platform": "facebook",
-      "handle": "teacher and parent groups (VN market: primary)"
+      "handle": "teacher and parent groups",
+      "market": "VN"
     },
     {
       "platform": "youtube",

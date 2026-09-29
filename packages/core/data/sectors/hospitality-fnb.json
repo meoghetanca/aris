@@ -24,13 +24,16 @@
     {
       "name": "Foody / local review apps",
       "url": "https://www.foody.vn",
-      "coverage": "high"
+      "coverage": "high",
+      "market": "VN",
+      "handle": "Foody / local review apps"
     }
   ],
   "communities": [
     {
       "platform": "facebook",
-      "handle": "local food and area groups - dominant in VN"
+      "handle": "local food and area groups - dominant in",
+      "market": "VN"
     },
     {
       "platform": "instagram",

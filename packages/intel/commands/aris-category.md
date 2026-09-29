@@ -1,72 +1,65 @@
 ---
-description: Map the category from the public record — players, claims, the price ladder, the feature matrix and the gaps
+description: Map the category - who the players are, what they charge, where the gaps are
+argument-hint: "[--deep <competitor>] [--players a,b,c]"
 ---
 
 # aris-category: the market map
 
-Step 2. Desk research, fully automatable, and the foundation everything else stands on.
+Step 2. **Cheap by default.** One scout, one pass, a hard page budget.
 
 Load `${CLAUDE_PLUGIN_ROOT}/rules/mining.md` and the core package's
 `evidence-discipline.md` and `sector-discipline.md`.
 
 ## Preconditions
 
-Check and **stop** if any fail, naming the one that failed:
+Stop, naming the failure, unless `.aris/state.json` exists and `state.market.sector`
+is set.
 
-- `.aris/state.json` exists
-- `state.market.sector` is set
+---
 
-## 1. Find the players
+## 1. The default: one scout
 
-Identify the players first — the obvious leaders plus at least two adjacent or smaller
-ones. A map of only the leaders makes every gap look like whitespace when it is really
-a deliberate choice.
+Dispatch a single **`aris-category-scout`**. It discovers the players in the market's
+own language, then reads two pages each — homepage and pricing.
 
-Then dispatch **one `aris-competitor-analyst` per player, in a single message so they
-run concurrently.** Each gets one company and nothing else. None sees another's
-profile: an analyst who has read the market leader describes everyone else as a
-variation of it, and the feature matrix then reflects the reading order rather than
-the market.
+That is the whole default pass. It costs one agent and a few minutes.
 
-Do not profile any competitor yourself in parallel with them. Wait for the returns,
-then assemble the matrix — that is the step that needs every profile at once, and it
-is yours.
+**Do not fan out here.** A first run of this workflow dispatched one deep analyst per
+competitor: six agents, four to eleven minutes each, roughly 450,000 tokens, for step 2
+of fifteen. Every profile was excellent and the phase was still wrong, because nobody
+can wait forty minutes to find out who the competitors are. Depth is worth buying for
+one or two names — after you know which ones.
 
-From the sector entry's `reviewPlatforms`, plus a search on the category. Include
-the obvious leaders and at least two adjacent or smaller players — a map of only the
-leaders makes every gap look like whitespace when it is really a deliberate choice.
+If the human already knows the players, `--players a,b,c` skips discovery.
 
-For each, open the product's own pages. For each `COMP-` entry record
-`targetCustomer`, `positioning` (their words, not yours), `features`, `pricing`,
-`distribution`, `claims`, `strengths`, `weaknesses`, and `evidence` as source ids.
+## 2. Read the scout's "who matters most"
 
-## 2. The price ladder
+It returns at most two names with reasons. That is the decision point, and it is cheap
+to act on because it is two names rather than a matrix.
 
-Read pricing pages directly. Record the unit — per seat, per month, per transaction —
-because a ladder mixing units is unusable. Where pricing is "contact sales", that is
-the finding: record `unknown` with the URL showing it.
+## 3. Only then, `--deep`
 
-## 3. The feature matrix
+`--deep <competitor>` dispatches one **`aris-competitor-analyst`** on that one company:
+changelog, job posts, docs, localisation, the things that take time. Worth it for the
+direct competitor and the local incumbent. Rarely worth it for the rest.
 
-Rows are features the field treats as meaningful; columns are the players. Every cell
-is `true`, `false` or `unknown` **with a source id**. `unknown` is the honest value
-for a feature you could not confirm, and it is common — do not infer absence from a
-marketing page's silence.
+Run at most two. If a third seems necessary, say why in the report rather than spending
+on it silently.
 
-## 4. The gaps
-
-`marketGaps` are rows where the matrix, the reviews and the ladder agree that
-something is missing. A gap asserted from one competitor's marketing page is not a
-gap. Each entry names the evidence that makes it one.
-
-## 5. Write
+## 4. Assemble
 
 `intel/category.json` and `intel/sources.json`. Every factual field takes the
-`{ value, sourceIds, status }` shape. Set `state.status = "researching"`.
+`{ value, sourceIds, status }` shape.
+
+The feature matrix is built from whatever depth you actually have. A matrix that is
+mostly `unknown` after a scout-only pass is **correct** — `unknown` means nobody looked
+yet, which is true, and it tells the positioning step exactly where the risk is. Do not
+fill it in to make it look finished.
+
+Set `state.status = "researching"`.
 
 ## Report
 
-The player count, the ladder's span, how many matrix cells are `unknown`, and the
-gaps with their evidence. If more than about a third of the matrix is `unknown`, say
-so plainly — it means the field does not publish, and the positioning step will be
-working with less than it looks.
+The player table, the two names that matter, the price ladder, and the gaps — each with
+the evidence behind it. Then say plainly what depth this pass bought: a scout-only map
+is a map of marketing pages, not of products.

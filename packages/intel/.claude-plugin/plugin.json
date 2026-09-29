@@ -13,6 +13,7 @@
     "./commands"
   ],
   "agents": [
+    "./agents/aris-category-scout.md",
     "./agents/aris-miner.md",
     "./agents/aris-competitor-analyst.md",
     "./agents/aris-sizing-analyst.md",

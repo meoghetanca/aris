@@ -22,9 +22,18 @@ Stop, naming the failure, unless:
 
 ## 1. Fan out, one miner per platform
 
-Dispatch a `aris-miner` per platform from the sector entry's `reviewPlatforms` and
-`communities`, **in a single message so they run concurrently**, each given its
-platform, the competitor names and the category. None sees another's findings.
+Dispatch a `aris-miner` per platform, **in a single message so they run concurrently**,
+each given its platform, the competitor names and the category. None sees another's
+findings.
+
+**Cap the fan-out at four miners, and pick the four by what actually opens.** The sector
+entry's `coverage` says how much a platform carries, not whether a miner can retrieve it
+— G2, Capterra, TrustRadius and most help centres return 403 to automated fetching, and
+a miner sent to one burns its whole budget discovering that. Prefer open sources: the
+market's own forums, Reddit, GitHub issues, app stores, and vendors' own docs.
+
+Each miner has a hard page budget and stops when it hits it. Four bounded miners beat
+eight unbounded ones, and the run finishes while the human is still watching.
 
 Do not mine yourself in parallel with them. Wait for the returns.
 

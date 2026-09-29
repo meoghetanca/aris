@@ -50,7 +50,9 @@
     {
       "name": "Shopee / Lazada reviews",
       "url": "https://shopee.vn",
-      "coverage": "high"
+      "coverage": "high",
+      "market": "VN",
+      "handle": "Shopee / Lazada reviews"
     }
   ],
   "communities": [

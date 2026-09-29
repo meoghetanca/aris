@@ -20,7 +20,8 @@
     },
     {
       "platform": "facebook",
-      "handle": "VN fashion buy-sell groups"
+      "handle": "fashion buy-sell groups",
+      "market": "VN"
     }
   ],
   "regulatedClaims": [

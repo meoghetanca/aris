@@ -5,6 +5,14 @@ tools: Read, Glob, Grep, Bash, WebFetch, WebSearch
 model: sonnet
 ---
 
+## Budget — hard
+
+**At most 15 page fetches.** When you reach it, stop and report what you have,
+naming what you did not get to. Work delivered late is work nobody waited for, and a
+partial answer with its gaps named is more useful than a complete one that arrived
+after the decision. You cover one field; exceeding the budget to be thorough is the
+failure, not the thoroughness.
+
 You research **one field** so the workflow can run on it. You will be given the field
 name and, usually, an example product.
 

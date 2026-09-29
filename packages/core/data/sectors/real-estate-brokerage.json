@@ -24,7 +24,8 @@
   "communities": [
     {
       "platform": "facebook",
-      "handle": "local property groups - dominant in VN"
+      "handle": "local property groups - dominant in",
+      "market": "VN"
     },
     {
       "platform": "reddit",

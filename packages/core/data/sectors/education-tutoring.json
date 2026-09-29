@@ -24,7 +24,8 @@
   "communities": [
     {
       "platform": "facebook",
-      "handle": "parent and learner groups - primary in VN"
+      "handle": "parent and learner groups - primary in",
+      "market": "VN"
     },
     {
       "platform": "reddit",
