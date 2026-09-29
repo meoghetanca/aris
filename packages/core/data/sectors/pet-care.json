@@ -1,0 +1,42 @@
+{
+  "sector": "pet-care",
+  "extends": "physical-goods",
+  "aliases": [
+    "pet food",
+    "pet products",
+    "veterinary retail",
+    "pet supplies"
+  ],
+  "status": "covered",
+  "communities": [
+    {
+      "platform": "reddit",
+      "handle": "r/dogs and r/cats"
+    },
+    {
+      "platform": "facebook",
+      "handle": "breed and local pet groups - primary in VN"
+    }
+  ],
+  "regulatedClaims": [
+    {
+      "claim": "health, veterinary or nutritional benefit",
+      "rule": "forbidden",
+      "authority": "veterinary medicine claims are regulated"
+    },
+    {
+      "claim": "complete and balanced nutrition",
+      "rule": "requires_disclosure",
+      "authority": "must meet a named standard"
+    },
+    {
+      "claim": "vet recommended",
+      "rule": "requires_disclosure",
+      "authority": "needs the survey and its sample"
+    }
+  ],
+  "forbidden": [
+    "a veterinary health claim",
+    "a vet-recommended figure with no survey"
+  ]
+}

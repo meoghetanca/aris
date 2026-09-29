@@ -1,0 +1,46 @@
+{
+  "sector": "freelance-talent",
+  "extends": "marketplace",
+  "aliases": [
+    "freelance platform",
+    "talent marketplace",
+    "gig platform",
+    "hiring marketplace"
+  ],
+  "status": "covered",
+  "communities": [
+    {
+      "platform": "reddit",
+      "handle": "r/freelance"
+    },
+    {
+      "platform": "reddit",
+      "handle": "r/Upwork"
+    },
+    {
+      "platform": "facebook",
+      "handle": "VN freelancer groups"
+    }
+  ],
+  "regulatedClaims": [
+    {
+      "claim": "freelancer earnings or client spend",
+      "rule": "requires_disclosure",
+      "authority": "typical, not top-decile"
+    },
+    {
+      "claim": "vetting, screening or top-talent claims",
+      "rule": "requires_disclosure",
+      "authority": "the selection method and acceptance rate must be stated"
+    },
+    {
+      "claim": "payment protection or escrow",
+      "rule": "requires_disclosure",
+      "authority": "conditions and exclusions must be stated"
+    }
+  ],
+  "forbidden": [
+    "an acceptance rate with no method",
+    "an earnings figure from the top percentile presented as typical"
+  ]
+}

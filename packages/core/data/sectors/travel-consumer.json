@@ -1,0 +1,59 @@
+{
+  "sector": "travel-consumer",
+  "extends": "consumer-app",
+  "aliases": [
+    "travel app",
+    "booking app",
+    "trip planning",
+    "tourism"
+  ],
+  "status": "covered",
+  "reviewPlatforms": [
+    {
+      "name": "Tripadvisor",
+      "url": "https://www.tripadvisor.com",
+      "coverage": "high"
+    },
+    {
+      "name": "App Store",
+      "url": "https://apps.apple.com",
+      "coverage": "high"
+    }
+  ],
+  "communities": [
+    {
+      "platform": "reddit",
+      "handle": "r/travel and destination subreddits"
+    },
+    {
+      "platform": "facebook",
+      "handle": "destination and backpacker groups"
+    }
+  ],
+  "regulatedClaims": [
+    {
+      "claim": "price, availability or total cost",
+      "rule": "requires_disclosure",
+      "authority": "price-transparency rules: taxes and fees must be included"
+    },
+    {
+      "claim": "refundable, flexible or protected bookings",
+      "rule": "requires_disclosure",
+      "authority": "the exact conditions must be stated"
+    },
+    {
+      "claim": "ATOL / IATA / travel-protection status",
+      "rule": "requires_disclosure",
+      "authority": "the scheme and number must be named"
+    }
+  ],
+  "forbidden": [
+    "a headline price excluding compulsory fees",
+    "scarcity messaging not tied to real inventory",
+    "destination imagery not of the property being sold"
+  ],
+  "seasonality": [
+    "booking windows precede travel by 1-6 months",
+    "Tet and summer peaks in SEA"
+  ]
+}

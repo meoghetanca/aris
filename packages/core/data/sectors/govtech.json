@@ -1,0 +1,32 @@
+{
+  "sector": "govtech",
+  "extends": "public-sector",
+  "aliases": [
+    "government software",
+    "civic tech",
+    "public sector software",
+    "digital government"
+  ],
+  "status": "covered",
+  "regulatedClaims": [
+    {
+      "claim": "accessibility conformance",
+      "rule": "requires_disclosure",
+      "authority": "WCAG level, scope and audit date"
+    },
+    {
+      "claim": "data residency and sovereignty",
+      "rule": "requires_disclosure",
+      "authority": "often a statutory requirement"
+    },
+    {
+      "claim": "security clearance or assurance level",
+      "rule": "requires_disclosure",
+      "authority": "the scheme must be named"
+    }
+  ],
+  "forbidden": [
+    "implying endorsement by a government body",
+    "citizen data in a screenshot"
+  ]
+}

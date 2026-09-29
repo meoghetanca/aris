@@ -1,0 +1,60 @@
+{
+  "sector": "real-estate-brokerage",
+  "extends": "services",
+  "aliases": [
+    "estate agent",
+    "realtor",
+    "property sales",
+    "brokerage",
+    "leasing"
+  ],
+  "status": "covered",
+  "reviewPlatforms": [
+    {
+      "name": "Google reviews",
+      "url": "https://maps.google.com",
+      "coverage": "high"
+    },
+    {
+      "name": "portal agent reviews",
+      "url": "",
+      "coverage": "medium"
+    }
+  ],
+  "communities": [
+    {
+      "platform": "facebook",
+      "handle": "local property groups - dominant in VN"
+    },
+    {
+      "platform": "reddit",
+      "handle": "r/RealEstate"
+    }
+  ],
+  "regulatedClaims": [
+    {
+      "claim": "valuation, price or investment return",
+      "rule": "requires_disclosure",
+      "authority": "property investment claims are regulated in many jurisdictions"
+    },
+    {
+      "claim": "licensing and registration",
+      "rule": "requires_disclosure",
+      "authority": "the registration number must be shown"
+    },
+    {
+      "claim": "property details, size or legal status",
+      "rule": "requires_disclosure",
+      "authority": "misdescription rules apply and carry liability"
+    }
+  ],
+  "forbidden": [
+    "a property image not of the property listed",
+    "a yield projection with no method",
+    "legal status described without documentation"
+  ],
+  "seasonality": [
+    "spring and autumn listing peaks",
+    "post-Tet activity surge in VN"
+  ]
+}

@@ -1,0 +1,58 @@
+{
+  "sector": "beauty-cosmetics",
+  "extends": "physical-goods",
+  "aliases": [
+    "skincare",
+    "cosmetics",
+    "beauty",
+    "makeup",
+    "haircare"
+  ],
+  "status": "covered",
+  "communities": [
+    {
+      "platform": "reddit",
+      "handle": "r/SkincareAddiction"
+    },
+    {
+      "platform": "tiktok",
+      "handle": "beauty creator content"
+    },
+    {
+      "platform": "facebook",
+      "handle": "VN beauty review groups"
+    }
+  ],
+  "regulatedClaims": [
+    {
+      "claim": "anti-ageing, acne, or any skin condition claim",
+      "rule": "forbidden",
+      "authority": "a therapeutic claim makes it a regulated product"
+    },
+    {
+      "claim": "dermatologist tested or approved",
+      "rule": "requires_disclosure",
+      "authority": "needs the test, the panel size and what was tested"
+    },
+    {
+      "claim": "clinically proven results",
+      "rule": "requires_disclosure",
+      "authority": "needs a published trial; panel self-assessment is not proof"
+    },
+    {
+      "claim": "natural, clean or non-toxic",
+      "rule": "requires_disclosure",
+      "authority": "unregulated terms; the basis must be stated"
+    }
+  ],
+  "forbidden": [
+    "retouched before-and-after imagery",
+    "a percentage of users who agreed, with no panel size",
+    "an ingredient benefit claim with no concentration"
+  ],
+  "seasonality": [
+    "gifting seasons",
+    "seasonal skin concerns",
+    "VN: Tet gifting"
+  ]
+}

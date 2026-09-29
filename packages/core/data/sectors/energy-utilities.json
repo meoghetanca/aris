@@ -1,0 +1,34 @@
+{
+  "sector": "energy-utilities",
+  "extends": "industrial-b2b",
+  "aliases": [
+    "energy",
+    "solar",
+    "utility",
+    "power",
+    "renewables"
+  ],
+  "status": "covered",
+  "regulatedClaims": [
+    {
+      "claim": "savings, payback period or generation",
+      "rule": "requires_disclosure",
+      "authority": "needs the site conditions, tariff and assumptions"
+    },
+    {
+      "claim": "subsidy, feed-in tariff or incentive eligibility",
+      "rule": "requires_disclosure",
+      "authority": "policy-dependent and changes"
+    },
+    {
+      "claim": "carbon or emissions reduction",
+      "rule": "requires_disclosure",
+      "authority": "the measurement standard must be stated"
+    }
+  ],
+  "forbidden": [
+    "a payback figure with no tariff assumption",
+    "a generation figure with no site conditions",
+    "an incentive presented as guaranteed"
+  ]
+}

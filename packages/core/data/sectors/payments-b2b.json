@@ -1,0 +1,66 @@
+{
+  "sector": "payments-b2b",
+  "extends": "regulated-finance",
+  "aliases": [
+    "payment gateway",
+    "psp",
+    "merchant acquiring",
+    "payment api",
+    "checkout"
+  ],
+  "status": "covered",
+  "communities": [
+    {
+      "platform": "reddit",
+      "handle": "r/stripe"
+    },
+    {
+      "platform": "reddit",
+      "handle": "r/ecommerce"
+    },
+    {
+      "platform": "forum",
+      "handle": "merchant and PSP forums"
+    }
+  ],
+  "buyingCommittee": [
+    {
+      "role": "engineering lead",
+      "influence": "champion"
+    },
+    {
+      "role": "CFO or finance",
+      "influence": "economic"
+    },
+    {
+      "role": "Compliance and fraud",
+      "influence": "veto"
+    }
+  ],
+  "regulatedClaims": [
+    {
+      "claim": "processing rates",
+      "rule": "requires_disclosure",
+      "authority": "the full effective rate including interchange, scheme and FX"
+    },
+    {
+      "claim": "settlement or payout timing",
+      "rule": "requires_disclosure",
+      "authority": "must state the conditions and holds"
+    },
+    {
+      "claim": "PCI DSS compliance",
+      "rule": "requires_disclosure",
+      "authority": "the level and the scope must be stated"
+    },
+    {
+      "claim": "approval or acceptance rates",
+      "rule": "requires_disclosure",
+      "authority": "needs the merchant mix and the period"
+    }
+  ],
+  "forbidden": [
+    "a headline rate excluding interchange",
+    "an approval-rate figure with no merchant mix"
+  ]
+}

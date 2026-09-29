@@ -1,0 +1,68 @@
+{
+  "sector": "nonprofit",
+  "extends": "public-sector",
+  "aliases": [
+    "charity",
+    "ngo",
+    "foundation",
+    "social enterprise",
+    "fundraising"
+  ],
+  "status": "covered",
+  "communities": [
+    {
+      "platform": "reddit",
+      "handle": "r/nonprofit"
+    },
+    {
+      "platform": "linkedin",
+      "handle": "fundraising and development groups"
+    },
+    {
+      "platform": "facebook",
+      "handle": "cause communities"
+    }
+  ],
+  "channelNorms": {
+    "effective": [
+      "storytelling with consent",
+      "email",
+      "peer-to-peer fundraising",
+      "grant relationships",
+      "earned media",
+      "community events"
+    ],
+    "ineffective": [
+      "aggressive paid acquisition",
+      "urgency unconnected to a real deadline"
+    ],
+    "reason": "Donors give to trust and to story, and scrutinise overheads. Tactics that read as commercial pressure damage the relationship that drives repeat giving."
+  },
+  "regulatedClaims": [
+    {
+      "claim": "how donations are used",
+      "rule": "requires_disclosure",
+      "authority": "charity regulators require accuracy; overhead ratios are scrutinised"
+    },
+    {
+      "claim": "impact or outcomes",
+      "rule": "requires_disclosure",
+      "authority": "must distinguish outputs delivered from outcomes changed"
+    },
+    {
+      "claim": "tax deductibility",
+      "rule": "requires_disclosure",
+      "authority": "jurisdictional and status-dependent"
+    }
+  ],
+  "forbidden": [
+    "beneficiary images or stories without documented consent",
+    "conflating output with impact",
+    "a cost-per-beneficiary figure with no method"
+  ],
+  "seasonality": [
+    "year-end giving dominates",
+    "Giving Tuesday",
+    "disaster-response spikes"
+  ]
+}

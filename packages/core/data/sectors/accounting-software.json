@@ -1,0 +1,74 @@
+{
+  "sector": "accounting-software",
+  "extends": "b2b-saas",
+  "aliases": [
+    "bookkeeping",
+    "accounting",
+    "invoicing",
+    "tax software",
+    "erp finance"
+  ],
+  "status": "covered",
+  "reviewPlatforms": [
+    {
+      "name": "G2",
+      "url": "https://www.g2.com/categories/accounting",
+      "coverage": "high"
+    },
+    {
+      "name": "Capterra",
+      "url": "https://www.capterra.com",
+      "coverage": "high"
+    }
+  ],
+  "communities": [
+    {
+      "platform": "reddit",
+      "handle": "r/Accounting"
+    },
+    {
+      "platform": "reddit",
+      "handle": "r/smallbusiness"
+    },
+    {
+      "platform": "facebook",
+      "handle": "VN accountant groups - primary"
+    }
+  ],
+  "buyingCommittee": [
+    {
+      "role": "bookkeeper or accountant",
+      "influence": "champion"
+    },
+    {
+      "role": "owner or CFO",
+      "influence": "economic"
+    },
+    {
+      "role": "External auditor",
+      "influence": "veto"
+    }
+  ],
+  "regulatedClaims": [
+    {
+      "claim": "tax compliance or filing correctness",
+      "rule": "requires_disclosure",
+      "authority": "tax law is jurisdictional and changes; a blanket guarantee is unsupportable"
+    },
+    {
+      "claim": "certified by a tax authority",
+      "rule": "requires_disclosure",
+      "authority": "the authority's register must list the product"
+    }
+  ],
+  "forbidden": [
+    "real ledger or client financial data in a screenshot",
+    "a guarantee of tax outcome",
+    "implying the product removes the need for an accountant"
+  ],
+  "seasonality": [
+    "tax filing deadlines dominate",
+    "year-end close",
+    "VN: quarterly VAT cycles"
+  ]
+}

@@ -1,0 +1,45 @@
+{
+  "sector": "creator-tools",
+  "extends": "consumer-app",
+  "aliases": [
+    "creator economy",
+    "content tools",
+    "video editing",
+    "newsletter platform"
+  ],
+  "status": "covered",
+  "communities": [
+    {
+      "platform": "reddit",
+      "handle": "r/NewTubers"
+    },
+    {
+      "platform": "reddit",
+      "handle": "r/Blogging"
+    },
+    {
+      "platform": "twitter",
+      "handle": "creator communities"
+    },
+    {
+      "platform": "discord",
+      "handle": "creator servers"
+    }
+  ],
+  "regulatedClaims": [
+    {
+      "claim": "earnings a creator can expect",
+      "rule": "requires_disclosure",
+      "authority": "earnings claims need a typical figure, not a top performer's"
+    },
+    {
+      "claim": "reach or algorithmic performance",
+      "rule": "forbidden",
+      "authority": "no tool controls a platform's algorithm"
+    }
+  ],
+  "forbidden": [
+    "an earnings figure from a top creator presented as typical",
+    "implying a platform partnership that does not exist"
+  ]
+}

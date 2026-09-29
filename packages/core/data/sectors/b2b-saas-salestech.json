@@ -1,5 +1,6 @@
 {
   "sector": "b2b-saas-salestech",
+  "extends": "b2b-saas",
   "aliases": [
     "salestech",
     "martech",

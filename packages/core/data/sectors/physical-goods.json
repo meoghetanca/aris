@@ -1,0 +1,172 @@
+{
+  "sector": "physical-goods",
+  "aliases": [
+    "product",
+    "consumer goods",
+    "retail",
+    "hardware",
+    "brand"
+  ],
+  "catchAll": [
+    "apparel",
+    "brand",
+    "cosmetics",
+    "device",
+    "drink",
+    "electronics",
+    "fashion",
+    "food",
+    "furniture",
+    "gift",
+    "goods",
+    "hardware",
+    "jewellery",
+    "merch",
+    "packaging",
+    "product",
+    "retail",
+    "shop",
+    "sports equipment",
+    "stationery",
+    "toys"
+  ],
+  "status": "covered",
+  "reviewPlatforms": [
+    {
+      "name": "Amazon reviews",
+      "url": "https://www.amazon.com",
+      "coverage": "high"
+    },
+    {
+      "name": "Trustpilot",
+      "url": "https://www.trustpilot.com",
+      "coverage": "high"
+    },
+    {
+      "name": "Google reviews",
+      "url": "https://maps.google.com",
+      "coverage": "high"
+    },
+    {
+      "name": "Shopee / Lazada reviews",
+      "url": "https://shopee.vn",
+      "coverage": "high"
+    }
+  ],
+  "communities": [
+    {
+      "platform": "reddit",
+      "handle": "the category subreddit"
+    },
+    {
+      "platform": "tiktok",
+      "handle": "unboxing and review content"
+    },
+    {
+      "platform": "instagram",
+      "handle": "comment sections of category creators"
+    },
+    {
+      "platform": "facebook",
+      "handle": "enthusiast and buy-sell groups"
+    }
+  ],
+  "buyingCommittee": [
+    {
+      "role": "the shopper",
+      "influence": "champion"
+    },
+    {
+      "role": "the shopper",
+      "influence": "economic"
+    },
+    {
+      "role": "household or gift recipient",
+      "influence": "champion"
+    }
+  ],
+  "channelNorms": {
+    "effective": [
+      "Meta paid social",
+      "TikTok",
+      "creator partnerships",
+      "email",
+      "Google Shopping",
+      "SEO on category terms",
+      "marketplace presence"
+    ],
+    "ineffective": [
+      "LinkedIn",
+      "webinars",
+      "whitepapers",
+      "long nurture sequences"
+    ],
+    "reason": "Decided on visual proof and social validation, in a short window. Creative quality dominates channel choice, and unit economics are decided by shipping and returns rather than by messaging."
+  },
+  "priceBands": {
+    "currency": null,
+    "low": null,
+    "mid": null,
+    "high": null,
+    "unit": "",
+    "sourceIds": [],
+    "note": "Uncited. Derive the ladder from live competitor pricing in this run and cite it."
+  },
+  "cacBenchmarks": {
+    "note": "Uncited. Cite a published benchmark or leave unknown. Never use a prior."
+  },
+  "salesCycleDays": {
+    "consumer": "0-14"
+  },
+  "regulatedClaims": [
+    {
+      "claim": "a health, weight, skin or wellness benefit",
+      "rule": "forbidden",
+      "authority": "FTC / EU consumer law / VN advertising law: health claims on non-medical goods need substantiation"
+    },
+    {
+      "claim": "sustainable, eco-friendly, recyclable or carbon neutral",
+      "rule": "requires_disclosure",
+      "authority": "EU Green Claims and FTC Green Guides: the basis must be stated"
+    },
+    {
+      "claim": "was-now pricing, limited stock or a sale",
+      "rule": "requires_disclosure",
+      "authority": "pricing-practice rules: a reference price must genuinely have been charged"
+    },
+    {
+      "claim": "handmade, organic, or country of origin",
+      "rule": "requires_disclosure",
+      "authority": "labelling law; several of these are certified terms"
+    }
+  ],
+  "forbidden": [
+    "a before-and-after image with no disclosure",
+    "an incentivised review presented as organic",
+    "urgency that resets on reload",
+    "a review score with no review count",
+    "a product image that misrepresents size, colour or contents"
+  ],
+  "reservedTerms": [
+    {
+      "term": "organic",
+      "meaning": "a certified agricultural standard."
+    },
+    {
+      "term": "handmade",
+      "meaning": "made by hand, not assembled from kits."
+    }
+  ],
+  "requiredDisclosures": [
+    "paid partnership on every creator post",
+    "shipping, delivery and returns terms",
+    "the basis of any sustainability claim",
+    "full price including shipping"
+  ],
+  "seasonality": [
+    "Q4 peak: Black Friday through December",
+    "Tet and Lunar New Year",
+    "post-holiday January returns",
+    "9.9 / 10.10 / 11.11 in SEA"
+  ]
+}

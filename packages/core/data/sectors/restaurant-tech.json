@@ -1,0 +1,73 @@
+{
+  "sector": "restaurant-tech",
+  "extends": "b2b-saas",
+  "aliases": [
+    "pos",
+    "restaurant software",
+    "f&b software",
+    "kitchen display",
+    "hospitality pos"
+  ],
+  "status": "covered",
+  "reviewPlatforms": [
+    {
+      "name": "Capterra",
+      "url": "https://www.capterra.com",
+      "coverage": "high"
+    },
+    {
+      "name": "Google reviews",
+      "url": "https://maps.google.com",
+      "coverage": "high"
+    }
+  ],
+  "communities": [
+    {
+      "platform": "reddit",
+      "handle": "r/restaurateur"
+    },
+    {
+      "platform": "reddit",
+      "handle": "r/KitchenConfidential"
+    },
+    {
+      "platform": "facebook",
+      "handle": "VN F&B owner groups - primary"
+    }
+  ],
+  "buyingCommittee": [
+    {
+      "role": "owner or operator",
+      "influence": "economic"
+    },
+    {
+      "role": "floor or kitchen manager",
+      "influence": "champion"
+    },
+    {
+      "role": "accountant, on reporting",
+      "influence": "veto"
+    }
+  ],
+  "regulatedClaims": [
+    {
+      "claim": "food safety or hygiene compliance",
+      "rule": "requires_disclosure",
+      "authority": "enforced by local inspection, not by software"
+    },
+    {
+      "claim": "payment processing rates",
+      "rule": "requires_disclosure",
+      "authority": "the full effective rate must be shown, not the headline"
+    }
+  ],
+  "forbidden": [
+    "a labour-saving figure with no baseline",
+    "a hygiene compliance guarantee"
+  ],
+  "seasonality": [
+    "Tet closures in VN",
+    "tourist season",
+    "December peak trading"
+  ]
+}

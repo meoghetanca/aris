@@ -1,0 +1,186 @@
+{
+  "sector": "services",
+  "aliases": [
+    "service business",
+    "agency",
+    "consultancy",
+    "firm",
+    "studio",
+    "practice"
+  ],
+  "catchAll": [
+    "accounting",
+    "agency",
+    "architecture",
+    "barber",
+    "catering",
+    "cleaning",
+    "coaching",
+    "consultancy",
+    "consulting",
+    "contractor",
+    "design",
+    "electrician",
+    "firm",
+    "freelance",
+    "installation",
+    "landscaping",
+    "legal",
+    "maintenance",
+    "outsourcing",
+    "photographer",
+    "photography",
+    "plumbing",
+    "practice",
+    "recruitment",
+    "removals",
+    "repair",
+    "salon",
+    "security",
+    "service",
+    "spa",
+    "staffing",
+    "studio",
+    "tutor",
+    "wash",
+    "wedding"
+  ],
+  "status": "covered",
+  "reviewPlatforms": [
+    {
+      "name": "Google reviews",
+      "url": "https://maps.google.com",
+      "coverage": "high"
+    },
+    {
+      "name": "Clutch",
+      "url": "https://clutch.co",
+      "coverage": "medium"
+    },
+    {
+      "name": "Trustpilot",
+      "url": "https://www.trustpilot.com",
+      "coverage": "medium"
+    },
+    {
+      "name": "Facebook reviews",
+      "url": "https://facebook.com",
+      "coverage": "high"
+    }
+  ],
+  "communities": [
+    {
+      "platform": "linkedin",
+      "handle": "buyer-side professional networks"
+    },
+    {
+      "platform": "facebook",
+      "handle": "local and trade groups - primary in VN"
+    },
+    {
+      "platform": "reddit",
+      "handle": "the trade or buyer subreddit"
+    }
+  ],
+  "buyingCommittee": [
+    {
+      "role": "the person with the problem",
+      "influence": "champion"
+    },
+    {
+      "role": "whoever holds the budget",
+      "influence": "economic"
+    },
+    {
+      "role": "Procurement or finance",
+      "influence": "veto"
+    },
+    {
+      "role": "Legal, on IP and liability terms",
+      "influence": "veto"
+    }
+  ],
+  "channelNorms": {
+    "effective": [
+      "referral",
+      "local SEO and Google Business",
+      "case studies",
+      "directory presence",
+      "LinkedIn",
+      "partnerships",
+      "reputation and reviews"
+    ],
+    "ineffective": [
+      "paid social at scale",
+      "discount positioning",
+      "mass cold outbound"
+    ],
+    "reason": "Trust and proof of prior work dominate. The strongest asset is a verifiable case study or review; competing on price signals commodity capability and attracts the worst clients."
+  },
+  "priceBands": {
+    "currency": null,
+    "low": null,
+    "mid": null,
+    "high": null,
+    "unit": "",
+    "sourceIds": [],
+    "note": "Uncited. Derive the ladder from live competitor pricing in this run and cite it."
+  },
+  "cacBenchmarks": {
+    "note": "Uncited. Cite a published benchmark or leave unknown. Never use a prior."
+  },
+  "salesCycleDays": {
+    "smb": "7-45",
+    "midmarket": "45-120",
+    "enterprise": "120-365"
+  },
+  "regulatedClaims": [
+    {
+      "claim": "named client work",
+      "rule": "requires_disclosure",
+      "authority": "NDAs and MSAs routinely prohibit naming clients or describing the work"
+    },
+    {
+      "claim": "team size, seniority or capability",
+      "rule": "requires_disclosure",
+      "authority": "must reflect actual staff, not a bench or a partner network"
+    },
+    {
+      "claim": "certified, licensed or accredited",
+      "rule": "requires_disclosure",
+      "authority": "the certifying body must list the firm"
+    },
+    {
+      "claim": "a client outcome or result",
+      "rule": "requires_disclosure",
+      "authority": "needs the baseline and the period, and usually the client's permission"
+    }
+  ],
+  "forbidden": [
+    "a client logo used without written permission",
+    "a case study describing work under NDA",
+    "presenting subcontracted work as in-house",
+    "an outcome metric with no baseline",
+    "stock photography presented as the team"
+  ],
+  "reservedTerms": [
+    {
+      "term": "partner",
+      "meaning": "a formal certified relationship. Not a client."
+    },
+    {
+      "term": "team",
+      "meaning": "employed staff. Not a freelancer bench."
+    }
+  ],
+  "requiredDisclosures": [
+    "where delivery actually happens",
+    "what is and is not included in scope",
+    "IP ownership terms"
+  ],
+  "seasonality": [
+    "Q4 budget for Q1 starts",
+    "Tet shutdown in VN delivery",
+    "European summer slowdown"
+  ]
+}

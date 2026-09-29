@@ -1,0 +1,51 @@
+{
+  "sector": "fitness-wellness",
+  "extends": "consumer-app",
+  "aliases": [
+    "fitness app",
+    "workout",
+    "wellness app",
+    "nutrition app",
+    "meditation"
+  ],
+  "status": "covered",
+  "communities": [
+    {
+      "platform": "reddit",
+      "handle": "r/fitness"
+    },
+    {
+      "platform": "reddit",
+      "handle": "r/loseit"
+    },
+    {
+      "platform": "tiktok",
+      "handle": "fitness creator comment sections"
+    }
+  ],
+  "regulatedClaims": [
+    {
+      "claim": "weight loss, body composition or health outcomes",
+      "rule": "forbidden",
+      "authority": "health claims need substantiation; this is where consumer fitness apps get sanctioned"
+    },
+    {
+      "claim": "calorie or nutrition accuracy",
+      "rule": "requires_disclosure",
+      "authority": "needs the database and its method"
+    },
+    {
+      "claim": "medically approved or clinically backed",
+      "rule": "requires_disclosure",
+      "authority": "needs a published, citable trial"
+    }
+  ],
+  "forbidden": [
+    "before-and-after body imagery",
+    "a weight-loss figure presented as typical",
+    "a testimonial describing a health outcome"
+  ],
+  "seasonality": [
+    "January is the entire year's acquisition peak, and its churn peak"
+  ]
+}

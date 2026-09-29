@@ -1,5 +1,6 @@
 {
   "sector": "consumer-media-streaming",
+  "extends": "consumer-app",
   "aliases": [
     "music app",
     "streaming",

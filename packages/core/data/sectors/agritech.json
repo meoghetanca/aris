@@ -1,0 +1,64 @@
+{
+  "sector": "agritech",
+  "extends": "b2b-saas",
+  "aliases": [
+    "agriculture software",
+    "farm management",
+    "agtech",
+    "precision farming"
+  ],
+  "status": "covered",
+  "communities": [
+    {
+      "platform": "reddit",
+      "handle": "r/farming"
+    },
+    {
+      "platform": "facebook",
+      "handle": "regional farming groups - primary in VN"
+    },
+    {
+      "platform": "youtube",
+      "handle": "farm equipment channels"
+    }
+  ],
+  "buyingCommittee": [
+    {
+      "role": "farmer or farm manager",
+      "influence": "economic"
+    },
+    {
+      "role": "agronomist",
+      "influence": "champion"
+    },
+    {
+      "role": "cooperative or buyer",
+      "influence": "veto"
+    }
+  ],
+  "regulatedClaims": [
+    {
+      "claim": "yield improvement",
+      "rule": "requires_disclosure",
+      "authority": "needs trial conditions, crop, region and season"
+    },
+    {
+      "claim": "organic or certification status",
+      "rule": "requires_disclosure",
+      "authority": "the certifying body must be named"
+    },
+    {
+      "claim": "pesticide or input efficacy",
+      "rule": "forbidden",
+      "authority": "a regulated claim requiring product registration"
+    }
+  ],
+  "forbidden": [
+    "a yield figure with no trial conditions",
+    "implying certification the farm does not hold"
+  ],
+  "seasonality": [
+    "planting and harvest windows dominate everything",
+    "monsoon cycles in SEA"
+  ]
+}

@@ -12,6 +12,9 @@
   "commands": [
     "./commands"
   ],
+  "agents": [
+    "./agents/mkt-sector-researcher.md"
+  ],
   "skills": [
     "./skills"
   ],

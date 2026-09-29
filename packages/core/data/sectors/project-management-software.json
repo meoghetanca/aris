@@ -1,0 +1,41 @@
+{
+  "sector": "project-management-software",
+  "extends": "b2b-saas",
+  "aliases": [
+    "pm tool",
+    "work management",
+    "task management",
+    "collaboration software"
+  ],
+  "status": "covered",
+  "communities": [
+    {
+      "platform": "reddit",
+      "handle": "r/projectmanagement"
+    },
+    {
+      "platform": "reddit",
+      "handle": "r/productivity"
+    }
+  ],
+  "buyingCommittee": [
+    {
+      "role": "team lead or PM",
+      "influence": "champion"
+    },
+    {
+      "role": "department head",
+      "influence": "economic"
+    }
+  ],
+  "forbidden": [
+    "a productivity gain figure with no study",
+    "a screenshot of a real client project"
+  ],
+  "reservedTerms": [
+    {
+      "term": "agile",
+      "meaning": "a named methodology, not a synonym for fast."
+    }
+  ]
+}

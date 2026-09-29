@@ -92,17 +92,53 @@ mkt makes that **mechanically impossible**:
 
 ## It knows your field
 
-Marketing an HR tool is not like marketing a music app. mkt ships knowledge for nine
-fields — **HR software, consumer media, fintech & wealth, sales tech, edtech, DTC
-ecommerce, developer tools, healthtech, professional services** — covering where that
-field's customers actually talk, who can veto a purchase, which channels it has
-repeatedly failed with, and **which claims it is not legally allowed to make**.
+Marketing an HR tool is not like marketing a music app. mkt ships **53 specific fields
+across 9 families**, covering where that field's customers actually talk, who can veto a
+purchase, which channels it has repeatedly failed with, and **which claims it is not
+legally allowed to make**.
+
+| Family | Covers |
+|:--|:--|
+| `b2b-saas` | HR, sales tech, dev tools, security, legal, accounting, BI, support, PM, martech, proptech, logistics, restaurant, construction, agri, edtech |
+| `consumer-app` | streaming, gaming, fitness, dating, travel, creator tools |
+| `marketplace` | food delivery, mobility, freelance, and two-sided platforms generally |
+| `regulated-finance` | wealth, banking, insurance, payments, lending, crypto |
+| `regulated-health` | telehealth, mental health, medical devices |
+| `physical-goods` | DTC, beauty, fashion, food & drink, pet, home & hardware |
+| `services` | agencies, hospitality, real estate, events, tutoring |
+| `industrial-b2b` | manufacturing, freight, energy, telecom |
+| `public-sector` | govtech, nonprofit |
 
 A fintech product can never promise a return. A health product can never say it treats
-anything. mkt enforces that automatically.
+anything. A food brand can never make a health claim. mkt enforces that automatically,
+naming the authority behind each rule.
 
-If your field isn't covered it **stops and says so** rather than guessing, and
-`/mkt-sector <name>` researches a new one.
+**Fields inherit.** Pet insurance isn't listed, but it resolves to `insurance`, which
+inherits every constraint of `regulated-finance`. A field nobody has researched still
+lands on its family and says so loudly — so coverage is "any B2B SaaS, any consumer app,
+any regulated-finance product", not a list of 53. Only something no family can honestly
+claim fails closed, and `/mkt-sector <name>` researches it properly.
+
+## The specialists
+
+Nine roles, dispatched in parallel, each seeing only its own slice:
+
+| | |
+|:--|:--|
+| `mkt-miner` | one per platform — mines the public voice. No Write. |
+| `mkt-competitor-analyst` | one per competitor — never sees another's profile |
+| `mkt-sizing-analyst` | one per sizing factor — so nobody completes the chain to make the arithmetic work |
+| `mkt-demand-analyst` | one per demand signal — measures, never concludes |
+| `mkt-channel-analyst` | one per channel — argues its case, never ranks the others |
+| `mkt-evaluator` | one per persona — tests the messaging against that persona's evidence |
+| `mkt-copywriter` | one per asset — the only one with Write, and it cannot invent a claim |
+| `mkt-compliance-reviewer` | the regulated-claims lens, and it never sees who wrote the copy |
+| `mkt-sector-researcher` | bootstraps a field the base doesn't cover |
+
+Seven of the nine have **no Write or Edit**, deliberately. A reviewer who rewrites has
+already decided how to resolve the finding, and that decision isn't theirs: "clinically
+proven" can be fixed by citing a trial or by deleting the claim, and those are
+completely different products.
 
 ---
 
@@ -144,9 +180,10 @@ which fans out one researcher per platform so the raw pages never enter your mai
 conversation. Everything after that is written to disk, so re-running a step or
 changing a decision is cheap.
 
-Just having mkt installed costs roughly **1,300 tokens** of context — it loads the
-step descriptions, not the step instructions. A step's full instructions load only
-when that step runs.
+Just having mkt installed costs roughly **2,000 tokens** of context — it loads the step
+and specialist *descriptions*, not their instructions. A step's full instructions load
+only when that step runs, and the 62 sector files are read by script and never enter
+context at all.
 
 ## For developers
 
@@ -180,7 +217,7 @@ Four packages: `mkt-core` (state, sectors, decisions, gates, the publish hook),
 ./test/run.sh
 ```
 
-29 assertions, run in a temp directory. Both directions: a clean package must pass,
+31 assertions, run in a temp directory. Both directions: a clean package must pass,
 and **each gate must refuse when its defect is planted** — a pain below threshold, an
 unevidenced persona attribute, a size that doesn't recompute, an uncited claim, an
 unsupported superlative, a fabricated testimonial, an invented pre-launch baseline, a

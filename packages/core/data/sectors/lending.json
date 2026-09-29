@@ -1,0 +1,48 @@
+{
+  "sector": "lending",
+  "extends": "regulated-finance",
+  "aliases": [
+    "loan",
+    "credit",
+    "bnpl",
+    "financing",
+    "mortgage"
+  ],
+  "status": "covered",
+  "communities": [
+    {
+      "platform": "reddit",
+      "handle": "r/personalfinance"
+    },
+    {
+      "platform": "reddit",
+      "handle": "r/creditcards"
+    },
+    {
+      "platform": "facebook",
+      "handle": "VN borrower groups"
+    }
+  ],
+  "regulatedClaims": [
+    {
+      "claim": "APR, rate or repayment",
+      "rule": "requires_disclosure",
+      "authority": "representative example rules: the full cost of credit must be shown"
+    },
+    {
+      "claim": "guaranteed approval or no credit check",
+      "rule": "forbidden",
+      "authority": "a hallmark of predatory lending and restricted almost everywhere"
+    },
+    {
+      "claim": "interest-free or 0%",
+      "rule": "requires_disclosure",
+      "authority": "all fees and the consequence of late payment must be stated"
+    }
+  ],
+  "forbidden": [
+    "a monthly payment shown without the APR",
+    "urgency applied to a credit decision",
+    "targeting by financial vulnerability"
+  ]
+}

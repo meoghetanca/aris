@@ -1,0 +1,69 @@
+{
+  "sector": "analytics-bi",
+  "extends": "b2b-saas",
+  "aliases": [
+    "business intelligence",
+    "bi",
+    "data platform",
+    "dashboards",
+    "analytics software"
+  ],
+  "status": "covered",
+  "reviewPlatforms": [
+    {
+      "name": "G2",
+      "url": "https://www.g2.com/categories/business-intelligence",
+      "coverage": "high"
+    },
+    {
+      "name": "Gartner Peer Insights",
+      "url": "https://www.gartner.com/reviews",
+      "coverage": "high"
+    }
+  ],
+  "communities": [
+    {
+      "platform": "reddit",
+      "handle": "r/dataengineering"
+    },
+    {
+      "platform": "reddit",
+      "handle": "r/analytics"
+    },
+    {
+      "platform": "slack",
+      "handle": "dbt and Locally Optimistic communities"
+    }
+  ],
+  "buyingCommittee": [
+    {
+      "role": "analyst or data lead",
+      "influence": "champion"
+    },
+    {
+      "role": "Head of Data or CTO",
+      "influence": "economic"
+    },
+    {
+      "role": "Security, on warehouse access",
+      "influence": "veto"
+    }
+  ],
+  "regulatedClaims": [
+    {
+      "claim": "query performance or scale figures",
+      "rule": "requires_disclosure",
+      "authority": "needs the dataset, hardware and configuration"
+    },
+    {
+      "claim": "a connector or integration list",
+      "rule": "requires_disclosure",
+      "authority": "must reflect what is generally available, not roadmap"
+    }
+  ],
+  "forbidden": [
+    "a benchmark with no reproducible method",
+    "real customer data in a dashboard screenshot",
+    "listing a roadmap connector as available"
+  ]
+}

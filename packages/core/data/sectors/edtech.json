@@ -1,5 +1,6 @@
 {
   "sector": "edtech",
+  "extends": "b2b-saas",
   "aliases": [
     "education",
     "e-learning",

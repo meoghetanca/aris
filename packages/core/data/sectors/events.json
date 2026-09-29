@@ -1,0 +1,48 @@
+{
+  "sector": "events",
+  "extends": "services",
+  "aliases": [
+    "conference",
+    "event agency",
+    "exhibition",
+    "festival",
+    "venue hire"
+  ],
+  "status": "covered",
+  "communities": [
+    {
+      "platform": "linkedin",
+      "handle": "industry event groups"
+    },
+    {
+      "platform": "reddit",
+      "handle": "r/eventplanning"
+    }
+  ],
+  "regulatedClaims": [
+    {
+      "claim": "attendance or audience figures",
+      "rule": "requires_disclosure",
+      "authority": "needs the definition: registered, attended, or unique"
+    },
+    {
+      "claim": "speaker or sponsor lineup",
+      "rule": "requires_disclosure",
+      "authority": "only confirmed participants may be listed"
+    },
+    {
+      "claim": "refund and cancellation terms",
+      "rule": "requires_disclosure",
+      "authority": "consumer law; must be stated at purchase"
+    }
+  ],
+  "forbidden": [
+    "an unconfirmed speaker in the lineup",
+    "an attendance figure counting registrations as attendance",
+    "photography from a different event presented as this one"
+  ],
+  "seasonality": [
+    "the industry event calendar governs everything",
+    "booking lead times of 3-9 months"
+  ]
+}

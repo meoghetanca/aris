@@ -1,0 +1,53 @@
+{
+  "sector": "dating-social",
+  "extends": "consumer-app",
+  "aliases": [
+    "dating app",
+    "social app",
+    "community app",
+    "matching app"
+  ],
+  "status": "covered",
+  "communities": [
+    {
+      "platform": "reddit",
+      "handle": "r/dating_advice"
+    },
+    {
+      "platform": "reddit",
+      "handle": "the app's own subreddit"
+    },
+    {
+      "platform": "tiktok",
+      "handle": "dating app review content"
+    }
+  ],
+  "regulatedClaims": [
+    {
+      "claim": "verified profiles or safety screening",
+      "rule": "requires_disclosure",
+      "authority": "the check must be described; a badge with no method creates liability"
+    },
+    {
+      "claim": "match or success rates",
+      "rule": "requires_disclosure",
+      "authority": "needs the cohort and the definition of success"
+    },
+    {
+      "claim": "user counts",
+      "rule": "requires_disclosure",
+      "authority": "must state active, not registered"
+    }
+  ],
+  "forbidden": [
+    "fake or seeded profiles shown as real users",
+    "a success rate with no definition",
+    "a safety claim with no described process"
+  ],
+  "reservedTerms": [
+    {
+      "term": "verified",
+      "meaning": "a named identity check was performed."
+    }
+  ]
+}

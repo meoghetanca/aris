@@ -16,6 +16,15 @@ exist, and the sector entry resolves.
 
 ## 1. Score the channels
 
+Draw the candidate list from the sector's `channelNorms` and from the platforms the
+coded quotes actually came from. Then dispatch **one `mkt-channel-analyst` per
+candidate, concurrently** — each argues its own channel's case from evidence, and none
+ranks the others. An analyst who ranks has ranked against whichever channel they
+happened to think about.
+
+You decide the mix when every case is in front of you. That is the step that needs the
+whole picture.
+
 For each candidate: `audienceEvidence` (the quote ids and platforms the evidence
 actually came from), `competitorPresence` (from the ad libraries — how long has it been
 running), `cost` in effort, and a **cited** `cacBenchmark` or `unknown`.

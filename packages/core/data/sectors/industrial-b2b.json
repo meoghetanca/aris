@@ -1,0 +1,174 @@
+{
+  "sector": "industrial-b2b",
+  "aliases": [
+    "industrial",
+    "manufacturing",
+    "enterprise b2b",
+    "heavy industry",
+    "supply chain"
+  ],
+  "catchAll": [
+    "aviation",
+    "chemical",
+    "construction",
+    "energy",
+    "equipment",
+    "factory",
+    "freight",
+    "industrial",
+    "logistics",
+    "machinery",
+    "manufacturing",
+    "marine",
+    "mining",
+    "packaging",
+    "printing",
+    "rail",
+    "recycling",
+    "supply",
+    "telecom",
+    "utility",
+    "warehouse",
+    "waste",
+    "water"
+  ],
+  "status": "covered",
+  "reviewPlatforms": [
+    {
+      "name": "G2",
+      "url": "https://www.g2.com",
+      "coverage": "low"
+    },
+    {
+      "name": "Trade publications",
+      "url": "",
+      "coverage": "medium"
+    },
+    {
+      "name": "Glassdoor",
+      "url": "https://www.glassdoor.com",
+      "coverage": "medium"
+    }
+  ],
+  "communities": [
+    {
+      "platform": "linkedin",
+      "handle": "industry and trade groups - the dominant channel"
+    },
+    {
+      "platform": "forum",
+      "handle": "trade forums, often decades old and very detailed"
+    },
+    {
+      "platform": "reddit",
+      "handle": "r/manufacturing and trade-specific subreddits"
+    },
+    {
+      "platform": "youtube",
+      "handle": "equipment and process channels"
+    }
+  ],
+  "buyingCommittee": [
+    {
+      "role": "plant, operations or site manager",
+      "influence": "champion"
+    },
+    {
+      "role": "engineering lead",
+      "influence": "champion"
+    },
+    {
+      "role": "procurement",
+      "influence": "economic"
+    },
+    {
+      "role": "Health and safety",
+      "influence": "veto"
+    },
+    {
+      "role": "Finance, on capex",
+      "influence": "veto"
+    },
+    {
+      "role": "Works council or union",
+      "influence": "veto"
+    }
+  ],
+  "channelNorms": {
+    "effective": [
+      "trade publications",
+      "trade shows and events",
+      "field sales",
+      "distributor and dealer networks",
+      "technical content",
+      "referrals within the industry"
+    ],
+    "ineffective": [
+      "paid social",
+      "Product Hunt",
+      "growth loops",
+      "self-serve trials",
+      "TikTok"
+    ],
+    "reason": "Long capex cycles, small buyer populations, and relationships that predate the product. The trade show and the distributor are genuine channels here, unlike in software - and this workflow cannot run either, which biases any plan it produces."
+  },
+  "priceBands": {
+    "currency": null,
+    "low": null,
+    "mid": null,
+    "high": null,
+    "unit": "",
+    "sourceIds": [],
+    "note": "Uncited. Derive the ladder from live competitor pricing in this run and cite it."
+  },
+  "cacBenchmarks": {
+    "note": "Uncited. Cite a published benchmark or leave unknown. Never use a prior."
+  },
+  "salesCycleDays": {
+    "midmarket": "120-270",
+    "enterprise": "180-720"
+  },
+  "regulatedClaims": [
+    {
+      "claim": "a safety rating, certification or standard",
+      "rule": "requires_disclosure",
+      "authority": "the standard and certifying body must be named; safety claims carry liability"
+    },
+    {
+      "claim": "efficiency, throughput or uptime figures",
+      "rule": "requires_disclosure",
+      "authority": "needs the test conditions and the configuration"
+    },
+    {
+      "claim": "emissions or environmental performance",
+      "rule": "requires_disclosure",
+      "authority": "measurement standard must be stated"
+    }
+  ],
+  "forbidden": [
+    "a performance figure with no test conditions",
+    "a safety claim with no certification",
+    "site photography showing identifiable client operations without permission",
+    "a capability the installed base has not demonstrated"
+  ],
+  "reservedTerms": [
+    {
+      "term": "certified",
+      "meaning": "assessed by a named body against a named standard."
+    },
+    {
+      "term": "uptime",
+      "meaning": "a measured availability figure over a stated period."
+    }
+  ],
+  "requiredDisclosures": [
+    "applicable standards and certifications",
+    "installation and commissioning requirements",
+    "service and warranty terms"
+  ],
+  "seasonality": [
+    "capex approved annually",
+    "trade show calendar drives the year",
+    "plant shutdown periods"
+  ]
+}

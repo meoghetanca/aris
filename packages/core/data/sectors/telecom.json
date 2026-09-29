@@ -1,0 +1,34 @@
+{
+  "sector": "telecom",
+  "extends": "industrial-b2b",
+  "aliases": [
+    "telco",
+    "connectivity",
+    "isp",
+    "network",
+    "mobile operator"
+  ],
+  "status": "covered",
+  "regulatedClaims": [
+    {
+      "claim": "speed, coverage or availability",
+      "rule": "requires_disclosure",
+      "authority": "advertised speeds must be typical, not maximum, in most jurisdictions"
+    },
+    {
+      "claim": "unlimited data or usage",
+      "rule": "requires_disclosure",
+      "authority": "fair-use policy must be stated"
+    },
+    {
+      "claim": "contract terms and early termination",
+      "rule": "requires_disclosure",
+      "authority": "consumer law"
+    }
+  ],
+  "forbidden": [
+    "a maximum speed advertised as typical",
+    "unlimited used without the fair-use policy",
+    "a coverage map not based on measurement"
+  ]
+}

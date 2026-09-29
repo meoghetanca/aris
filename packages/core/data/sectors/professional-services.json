@@ -1,5 +1,6 @@
 {
   "sector": "professional-services",
+  "extends": "services",
   "aliases": [
     "agency",
     "consultancy",

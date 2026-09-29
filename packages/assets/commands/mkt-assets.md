@@ -26,6 +26,18 @@ writing twelve social posts for a channel the mix dropped.
 
 ## 2. Write, one asset at a time
 
+Dispatch **one `mkt-copywriter` per asset in the agreed scope, concurrently**. Each gets
+the messaging library, the claim registry, the glossary and the sector's language
+constraints — and one asset to write.
+
+One writer per asset keeps a landing brief's register from bleeding into ad copy, and
+keeps each asset's claim ids honest: a writer holding six assets starts reusing a claim
+where it nearly fits.
+
+A copywriter that reports needing a claim the registry does not hold is doing its job.
+**Do not write that sentence yourself.** Either source the claim and add it to the
+registry, or cut the sentence.
+
 Per the structures in `copy.md`. Every asset draws its copy from `messages.json` — this
 step does not invent new messaging, it renders the library into forms.
 
@@ -45,6 +57,14 @@ unmissable. A quote this workflow wrote is fabricated evidence.
 /mkt-verify --only claims
 /mkt-verify --only language
 ```
+
+First, dispatch the **`mkt-compliance-reviewer`** — one per sector in scope, including
+secondary sectors — with the sector entry and the finished assets, and nothing else. It
+must not see the brief or the positioning: a reviewer who knows why a claim was made
+finds reasons to let it stand.
+
+Fix every `blocker` before running the scripts. Those are the findings that produce a
+regulator's letter, not a style note.
 
 `no_uncited_assertions` fires most often and is usually right. When it flags a sentence
 that only reads like a claim, rewrite the sentence rather than attaching a marker to a

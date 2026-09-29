@@ -1,0 +1,56 @@
+{
+  "sector": "logistics-software",
+  "extends": "b2b-saas",
+  "aliases": [
+    "tms",
+    "wms",
+    "fleet software",
+    "supply chain software",
+    "last mile"
+  ],
+  "status": "covered",
+  "communities": [
+    {
+      "platform": "reddit",
+      "handle": "r/logistics"
+    },
+    {
+      "platform": "reddit",
+      "handle": "r/supplychain"
+    },
+    {
+      "platform": "linkedin",
+      "handle": "supply chain groups"
+    }
+  ],
+  "buyingCommittee": [
+    {
+      "role": "operations or warehouse manager",
+      "influence": "champion"
+    },
+    {
+      "role": "COO",
+      "influence": "economic"
+    },
+    {
+      "role": "Health and safety",
+      "influence": "veto"
+    }
+  ],
+  "regulatedClaims": [
+    {
+      "claim": "delivery time, cost or emissions savings",
+      "rule": "requires_disclosure",
+      "authority": "needs the route set, period and baseline"
+    },
+    {
+      "claim": "customs or trade compliance",
+      "rule": "requires_disclosure",
+      "authority": "jurisdictional; cannot be guaranteed by software"
+    }
+  ],
+  "forbidden": [
+    "a savings figure with no baseline",
+    "real consignee data in a screenshot"
+  ]
+}

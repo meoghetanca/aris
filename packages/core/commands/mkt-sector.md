@@ -26,6 +26,11 @@ it is, say so and stop — a duplicate entry will drift from the original.
 
 ## 2. Research the structure, not the numbers
 
+Dispatch the **`mkt-sector-researcher`** with the field name and an example product. It
+returns a profile and, separately, what it could not establish — read that second list
+carefully, because the platform list is the part a human should check first.
+
+
 Establish, each with a source:
 
 - **`reviewPlatforms`** — which review sites actually carry this field, and how well.

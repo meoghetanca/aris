@@ -1,0 +1,46 @@
+{
+  "sector": "food-delivery",
+  "extends": "marketplace",
+  "aliases": [
+    "delivery app",
+    "food delivery",
+    "quick commerce",
+    "grocery delivery"
+  ],
+  "status": "covered",
+  "communities": [
+    {
+      "platform": "reddit",
+      "handle": "r/doordash_drivers and rider subreddits - the supply side complains in detail"
+    },
+    {
+      "platform": "facebook",
+      "handle": "VN: driver and shipper groups are the richest source"
+    }
+  ],
+  "regulatedClaims": [
+    {
+      "claim": "delivery time guarantees",
+      "rule": "requires_disclosure",
+      "authority": "must state the conditions and the remedy"
+    },
+    {
+      "claim": "rider or driver earnings",
+      "rule": "requires_disclosure",
+      "authority": "needs a typical figure, net of costs"
+    },
+    {
+      "claim": "food safety and handling",
+      "rule": "requires_disclosure",
+      "authority": "responsibility sits with the restaurant; the split must be clear"
+    }
+  ],
+  "forbidden": [
+    "a driver earnings figure gross of vehicle and fuel costs",
+    "menu prices shown without platform markup"
+  ],
+  "seasonality": [
+    "weather drives demand spikes and supply shortages simultaneously",
+    "Tet supply collapse in VN"
+  ]
+}

@@ -1,0 +1,69 @@
+{
+  "sector": "martech",
+  "extends": "b2b-saas",
+  "aliases": [
+    "marketing software",
+    "email platform",
+    "cdp",
+    "marketing automation",
+    "seo tool"
+  ],
+  "status": "covered",
+  "reviewPlatforms": [
+    {
+      "name": "G2",
+      "url": "https://www.g2.com/categories/marketing-automation",
+      "coverage": "high"
+    },
+    {
+      "name": "Product Hunt",
+      "url": "https://www.producthunt.com",
+      "coverage": "medium"
+    }
+  ],
+  "communities": [
+    {
+      "platform": "reddit",
+      "handle": "r/marketing"
+    },
+    {
+      "platform": "reddit",
+      "handle": "r/SEO"
+    },
+    {
+      "platform": "slack",
+      "handle": "marketing operations communities"
+    }
+  ],
+  "buyingCommittee": [
+    {
+      "role": "marketing manager",
+      "influence": "champion"
+    },
+    {
+      "role": "CMO",
+      "influence": "economic"
+    },
+    {
+      "role": "Legal, on consent and data",
+      "influence": "veto"
+    }
+  ],
+  "regulatedClaims": [
+    {
+      "claim": "contact data provision or enrichment",
+      "rule": "requires_disclosure",
+      "authority": "GDPR lawful basis, CAN-SPAM, PDPD: the basis must be stated"
+    },
+    {
+      "claim": "deliverability or open-rate figures",
+      "rule": "requires_disclosure",
+      "authority": "needs the sample and the period"
+    }
+  ],
+  "forbidden": [
+    "an open-rate benchmark with no sample",
+    "implying consent is not required",
+    "real prospect data in a screenshot"
+  ]
+}

@@ -1,0 +1,82 @@
+{
+  "sector": "hospitality-fnb",
+  "extends": "services",
+  "aliases": [
+    "restaurant",
+    "cafe",
+    "hotel",
+    "bar",
+    "venue",
+    "hospitality"
+  ],
+  "status": "covered",
+  "reviewPlatforms": [
+    {
+      "name": "Google reviews",
+      "url": "https://maps.google.com",
+      "coverage": "high"
+    },
+    {
+      "name": "Tripadvisor",
+      "url": "https://www.tripadvisor.com",
+      "coverage": "high"
+    },
+    {
+      "name": "Foody / local review apps",
+      "url": "https://www.foody.vn",
+      "coverage": "high"
+    }
+  ],
+  "communities": [
+    {
+      "platform": "facebook",
+      "handle": "local food and area groups - dominant in VN"
+    },
+    {
+      "platform": "instagram",
+      "handle": "location tags and local food creators"
+    }
+  ],
+  "channelNorms": {
+    "effective": [
+      "local SEO and Google Business",
+      "Instagram and TikTok location content",
+      "local creators",
+      "reviews",
+      "loyalty"
+    ],
+    "ineffective": [
+      "national campaigns",
+      "LinkedIn",
+      "long email sequences"
+    ],
+    "reason": "Demand is geographically bounded. A venue competes within a few kilometres, so anything not local is wasted spend."
+  },
+  "regulatedClaims": [
+    {
+      "claim": "food safety, hygiene rating or allergens",
+      "rule": "requires_disclosure",
+      "authority": "allergen information is mandatory and safety-critical"
+    },
+    {
+      "claim": "awards, stars or rankings",
+      "rule": "requires_disclosure",
+      "authority": "the awarding body and year must be named"
+    },
+    {
+      "claim": "alcohol promotion",
+      "rule": "requires_disclosure",
+      "authority": "restricted in most jurisdictions"
+    }
+  ],
+  "forbidden": [
+    "food photography that misrepresents the dish served",
+    "an award claim with no year",
+    "an allergen omission"
+  ],
+  "seasonality": [
+    "weekly and daily peaks dominate",
+    "Tet closures",
+    "tourist season"
+  ]
+}

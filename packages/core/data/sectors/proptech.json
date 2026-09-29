@@ -1,0 +1,67 @@
+{
+  "sector": "proptech",
+  "extends": "b2b-saas",
+  "aliases": [
+    "real estate software",
+    "property management",
+    "proptech",
+    "listing software"
+  ],
+  "status": "covered",
+  "reviewPlatforms": [
+    {
+      "name": "Capterra",
+      "url": "https://www.capterra.com",
+      "coverage": "high"
+    },
+    {
+      "name": "G2",
+      "url": "https://www.g2.com",
+      "coverage": "high"
+    }
+  ],
+  "communities": [
+    {
+      "platform": "reddit",
+      "handle": "r/realestateinvesting"
+    },
+    {
+      "platform": "facebook",
+      "handle": "landlord and property manager groups"
+    },
+    {
+      "platform": "linkedin",
+      "handle": "property management groups"
+    }
+  ],
+  "buyingCommittee": [
+    {
+      "role": "property or portfolio manager",
+      "influence": "champion"
+    },
+    {
+      "role": "owner or asset manager",
+      "influence": "economic"
+    },
+    {
+      "role": "Legal, on tenancy law",
+      "influence": "veto"
+    }
+  ],
+  "regulatedClaims": [
+    {
+      "claim": "compliance with tenancy or housing law",
+      "rule": "requires_disclosure",
+      "authority": "jurisdictional and frequently amended"
+    },
+    {
+      "claim": "yield, occupancy or valuation figures",
+      "rule": "requires_disclosure",
+      "authority": "needs the portfolio, period and method"
+    }
+  ],
+  "forbidden": [
+    "tenant names or addresses in a screenshot",
+    "a yield figure with no portfolio or period"
+  ]
+}

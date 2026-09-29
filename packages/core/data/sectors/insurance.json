@@ -1,0 +1,62 @@
+{
+  "sector": "insurance",
+  "extends": "regulated-finance",
+  "aliases": [
+    "insurtech",
+    "insurance",
+    "cover",
+    "policy",
+    "claims"
+  ],
+  "status": "covered",
+  "reviewPlatforms": [
+    {
+      "name": "Trustpilot",
+      "url": "https://www.trustpilot.com",
+      "coverage": "high"
+    },
+    {
+      "name": "comparison sites",
+      "url": "",
+      "coverage": "medium"
+    }
+  ],
+  "communities": [
+    {
+      "platform": "reddit",
+      "handle": "r/Insurance"
+    },
+    {
+      "platform": "forum",
+      "handle": "claim experience forums"
+    }
+  ],
+  "regulatedClaims": [
+    {
+      "claim": "cover, exclusions or claim outcomes",
+      "rule": "requires_disclosure",
+      "authority": "the policy document governs; marketing may not contradict it"
+    },
+    {
+      "claim": "claims paid percentage",
+      "rule": "requires_disclosure",
+      "authority": "needs the period and the definition"
+    },
+    {
+      "claim": "cheapest or best cover",
+      "rule": "forbidden",
+      "authority": "comparative insurance claims are tightly restricted"
+    }
+  ],
+  "forbidden": [
+    "a claim-acceptance figure with no definition",
+    "cover described without its exclusions",
+    "a testimonial about a claim outcome"
+  ],
+  "reservedTerms": [
+    {
+      "term": "covered",
+      "meaning": "within the policy wording, subject to its exclusions."
+    }
+  ]
+}

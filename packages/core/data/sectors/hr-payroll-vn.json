@@ -1,0 +1,45 @@
+{
+  "sector": "hr-payroll-vn",
+  "extends": "b2b-saas-hr",
+  "aliases": [
+    "payroll vietnam",
+    "bhxh",
+    "vietnam hr",
+    "luong",
+    "cham cong"
+  ],
+  "status": "covered",
+  "communities": [
+    {
+      "platform": "facebook",
+      "handle": "Cong dong Nhan su Viet Nam and similar groups - the primary source"
+    },
+    {
+      "platform": "forum",
+      "handle": "webketoan.vn"
+    }
+  ],
+  "regulatedClaims": [
+    {
+      "claim": "social insurance or BHXH compliance",
+      "rule": "requires_disclosure",
+      "authority": "Vietnamese labour and social insurance law changes frequently"
+    },
+    {
+      "claim": "PIT calculation correctness",
+      "rule": "requires_disclosure",
+      "authority": "tax authority rules govern; software cannot guarantee outcome"
+    }
+  ],
+  "forbidden": [
+    "a compliance guarantee for Vietnamese labour law",
+    "real employee salary data in a screenshot"
+  ],
+  "requiredDisclosures": [
+    "which decree version the calculations follow"
+  ],
+  "seasonality": [
+    "Tet bonus cycle dominates Q1",
+    "annual PIT finalisation"
+  ]
+}

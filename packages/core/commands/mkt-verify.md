@@ -19,6 +19,11 @@ That runs the six gates and the eleven cross-asset checks, then writes
 
 ## What it checks
 
+Scripts only. The **`mkt-compliance-reviewer`** runs inside `/mkt-assets`, where the copy
+is still being written and a blocker is cheap to fix — not here, where it would be found
+after everything downstream already used the sentence.
+
+
 **Gates** — pains meet threshold, persona attributes are evidenced, formulas
 recompute, claims resolve to sources, language passes the sector lens, the spine
 has no dangling ids.

@@ -1,0 +1,43 @@
+{
+  "sector": "mobility",
+  "extends": "marketplace",
+  "aliases": [
+    "ride hailing",
+    "taxi app",
+    "scooter sharing",
+    "car sharing",
+    "transport app"
+  ],
+  "status": "covered",
+  "communities": [
+    {
+      "platform": "reddit",
+      "handle": "r/uberdrivers and equivalents"
+    },
+    {
+      "platform": "facebook",
+      "handle": "VN: Grab and Be driver groups"
+    }
+  ],
+  "regulatedClaims": [
+    {
+      "claim": "driver earnings",
+      "rule": "requires_disclosure",
+      "authority": "must be net of vehicle costs and state the hours"
+    },
+    {
+      "claim": "licensing and insurance of drivers",
+      "rule": "requires_disclosure",
+      "authority": "the cover and its limits must be stated"
+    },
+    {
+      "claim": "fare or surge pricing",
+      "rule": "requires_disclosure",
+      "authority": "the pricing mechanism must be disclosed before booking"
+    }
+  ],
+  "forbidden": [
+    "an hourly earnings figure gross of costs",
+    "a safety claim with no described vetting process"
+  ]
+}

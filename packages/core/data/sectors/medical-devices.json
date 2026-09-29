@@ -1,0 +1,51 @@
+{
+  "sector": "medical-devices",
+  "extends": "regulated-health",
+  "aliases": [
+    "device",
+    "diagnostic",
+    "wearable medical",
+    "medtech"
+  ],
+  "status": "covered",
+  "buyingCommittee": [
+    {
+      "role": "clinician",
+      "influence": "champion"
+    },
+    {
+      "role": "hospital procurement",
+      "influence": "economic"
+    },
+    {
+      "role": "Regulatory affairs",
+      "influence": "veto"
+    },
+    {
+      "role": "Biomedical engineering",
+      "influence": "veto"
+    }
+  ],
+  "regulatedClaims": [
+    {
+      "claim": "any clinical indication or intended use",
+      "rule": "requires_disclosure",
+      "authority": "must match the regulatory clearance exactly, and nothing beyond it"
+    },
+    {
+      "claim": "FDA cleared / CE marked",
+      "rule": "requires_disclosure",
+      "authority": "the class, the clearance number and the indication must be stated"
+    },
+    {
+      "claim": "accuracy or sensitivity",
+      "rule": "requires_disclosure",
+      "authority": "needs the study, the population and the comparator"
+    }
+  ],
+  "forbidden": [
+    "a claim beyond the cleared indication",
+    "accuracy figures with no study population",
+    "consumer marketing of a prescription device"
+  ]
+}

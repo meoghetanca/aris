@@ -1,0 +1,28 @@
+{
+  "sector": "manufacturing",
+  "extends": "industrial-b2b",
+  "aliases": [
+    "factory",
+    "production",
+    "oem",
+    "industrial equipment",
+    "machining"
+  ],
+  "status": "covered",
+  "regulatedClaims": [
+    {
+      "claim": "tolerances, capacity or output",
+      "rule": "requires_disclosure",
+      "authority": "needs the conditions and the material"
+    },
+    {
+      "claim": "certification to a standard",
+      "rule": "requires_disclosure",
+      "authority": "standard, body and scope must be named"
+    }
+  ],
+  "forbidden": [
+    "a capability the installed base has not demonstrated",
+    "client production data without permission"
+  ]
+}

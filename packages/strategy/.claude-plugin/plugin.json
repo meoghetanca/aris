@@ -14,7 +14,8 @@
     "./commands"
   ],
   "agents": [
-    "./agents/mkt-evaluator.md"
+    "./agents/mkt-evaluator.md",
+    "./agents/mkt-channel-analyst.md"
   ],
   "keywords": [
     "marketing",

@@ -1,5 +1,6 @@
 {
   "sector": "b2b-saas-hr",
+  "extends": "b2b-saas",
   "aliases": [
     "hr tech",
     "hris",

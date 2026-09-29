@@ -1,0 +1,189 @@
+{
+  "sector": "b2b-saas",
+  "aliases": [
+    "software",
+    "saas",
+    "b2b software",
+    "business software",
+    "enterprise software",
+    "platform",
+    "internal tool"
+  ],
+  "catchAll": [
+    "api",
+    "automation",
+    "b2b",
+    "booking",
+    "crm",
+    "dashboard",
+    "database",
+    "email",
+    "erp",
+    "hosting",
+    "hr",
+    "infrastructure",
+    "inventory",
+    "payroll",
+    "platform",
+    "pos",
+    "saas",
+    "scheduling",
+    "software",
+    "suite",
+    "system",
+    "tool",
+    "workflow"
+  ],
+  "status": "covered",
+  "reviewPlatforms": [
+    {
+      "name": "G2",
+      "url": "https://www.g2.com",
+      "coverage": "high"
+    },
+    {
+      "name": "Capterra",
+      "url": "https://www.capterra.com",
+      "coverage": "high"
+    },
+    {
+      "name": "TrustRadius",
+      "url": "https://www.trustradius.com",
+      "coverage": "medium"
+    },
+    {
+      "name": "GetApp",
+      "url": "https://www.getapp.com",
+      "coverage": "medium"
+    }
+  ],
+  "communities": [
+    {
+      "platform": "reddit",
+      "handle": "r/SaaS"
+    },
+    {
+      "platform": "linkedin",
+      "handle": "practitioner groups for the function"
+    },
+    {
+      "platform": "slack",
+      "handle": "function-specific communities"
+    },
+    {
+      "platform": "facebook",
+      "handle": "Vietnam: function groups are usually the primary channel, not Reddit"
+    }
+  ],
+  "buyingCommittee": [
+    {
+      "role": "the practitioner who feels the pain",
+      "influence": "champion"
+    },
+    {
+      "role": "their department head",
+      "influence": "economic"
+    },
+    {
+      "role": "Finance",
+      "influence": "veto"
+    },
+    {
+      "role": "IT and Security",
+      "influence": "veto"
+    },
+    {
+      "role": "Legal (data processing terms)",
+      "influence": "veto"
+    }
+  ],
+  "channelNorms": {
+    "effective": [
+      "SEO on problem terms",
+      "LinkedIn",
+      "content marketing",
+      "review-site presence",
+      "partner integrations",
+      "webinars",
+      "free tier or trial"
+    ],
+    "ineffective": [
+      "TikTok",
+      "display advertising",
+      "mass cold outbound",
+      "print"
+    ],
+    "reason": "Considered purchase with a security and finance veto. Buyers research in professional channels and arrive via peer recommendation and review sites. Consumer-style paid social reaches the wrong person, and the person it reaches cannot sign."
+  },
+  "priceBands": {
+    "currency": null,
+    "low": null,
+    "mid": null,
+    "high": null,
+    "unit": "",
+    "sourceIds": [],
+    "note": "Uncited. Derive the ladder from live competitor pricing in this run and cite it."
+  },
+  "cacBenchmarks": {
+    "note": "Uncited. Cite a published benchmark or leave unknown. Never use a prior."
+  },
+  "salesCycleDays": {
+    "self-serve": "0-7",
+    "smb": "14-60",
+    "midmarket": "60-120",
+    "enterprise": "120-365"
+  },
+  "regulatedClaims": [
+    {
+      "claim": "GDPR compliant / fully compliant",
+      "rule": "requires_disclosure",
+      "authority": "compliance is a property of the deployment and the contract, not of software"
+    },
+    {
+      "claim": "SOC 2 / ISO 27001 certified",
+      "rule": "requires_disclosure",
+      "authority": "the report must exist and the auditor be nameable"
+    },
+    {
+      "claim": "a named customer or logo",
+      "rule": "requires_disclosure",
+      "authority": "logo use needs written permission; most contracts require it"
+    },
+    {
+      "claim": "a performance or savings figure",
+      "rule": "requires_disclosure",
+      "authority": "must state the sample, the period and the baseline it improved on"
+    }
+  ],
+  "forbidden": [
+    "a comparison table that misstates a competitor's current feature set",
+    "customer logos without written permission",
+    "an ROI or time-saved figure with no baseline and no sample size",
+    "real customer data in a screenshot",
+    "a security claim the product cannot evidence"
+  ],
+  "reservedTerms": [
+    {
+      "term": "integration",
+      "meaning": "a supported two-way connection. Not a CSV export."
+    },
+    {
+      "term": "real-time",
+      "meaning": "a stated latency bound. Not 'fast'."
+    },
+    {
+      "term": "enterprise",
+      "meaning": "a tier with SSO, audit and a contract. Not 'big'."
+    }
+  ],
+  "requiredDisclosures": [
+    "where data is stored",
+    "sub-processor list",
+    "what the free tier limits"
+  ],
+  "seasonality": [
+    "Q4 budget cycles for a January start",
+    "summer slowdown",
+    "December change freeze"
+  ]
+}

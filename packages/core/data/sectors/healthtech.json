@@ -1,5 +1,6 @@
 {
   "sector": "healthtech",
+  "extends": "regulated-health",
   "aliases": [
     "health",
     "medical",

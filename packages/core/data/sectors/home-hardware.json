@@ -1,0 +1,34 @@
+{
+  "sector": "home-hardware",
+  "extends": "physical-goods",
+  "aliases": [
+    "furniture",
+    "appliance",
+    "home goods",
+    "diy",
+    "consumer hardware"
+  ],
+  "status": "covered",
+  "regulatedClaims": [
+    {
+      "claim": "energy efficiency rating",
+      "rule": "requires_disclosure",
+      "authority": "the rating scheme and the class must be stated"
+    },
+    {
+      "claim": "safety certification",
+      "rule": "requires_disclosure",
+      "authority": "the standard and certifying body must be named"
+    },
+    {
+      "claim": "battery life, capacity or performance",
+      "rule": "requires_disclosure",
+      "authority": "needs the test conditions"
+    }
+  ],
+  "forbidden": [
+    "a battery or performance figure with no test conditions",
+    "a safety claim with no certification",
+    "renders presented as product photography"
+  ]
+}

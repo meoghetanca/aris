@@ -1,0 +1,47 @@
+{
+  "sector": "mental-health",
+  "extends": "regulated-health",
+  "aliases": [
+    "therapy app",
+    "counselling",
+    "mental wellness",
+    "mindfulness"
+  ],
+  "status": "covered",
+  "communities": [
+    {
+      "platform": "reddit",
+      "handle": "r/therapy"
+    },
+    {
+      "platform": "reddit",
+      "handle": "r/mentalhealth - mine with particular care"
+    }
+  ],
+  "regulatedClaims": [
+    {
+      "claim": "treats anxiety, depression or any condition",
+      "rule": "forbidden",
+      "authority": "makes the product a regulated medical device"
+    },
+    {
+      "claim": "therapist credentials",
+      "rule": "requires_disclosure",
+      "authority": "the licensing body must be named"
+    },
+    {
+      "claim": "crisis or emergency support",
+      "rule": "requires_disclosure",
+      "authority": "must state clearly what it is not"
+    }
+  ],
+  "forbidden": [
+    "a testimonial describing recovery",
+    "crisis imagery or language used for urgency",
+    "implying the product replaces a clinician"
+  ],
+  "requiredDisclosures": [
+    "what to do in a crisis, prominently",
+    "that it does not replace professional care"
+  ]
+}

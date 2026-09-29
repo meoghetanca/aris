@@ -1,0 +1,44 @@
+{
+  "sector": "food-beverage",
+  "extends": "physical-goods",
+  "aliases": [
+    "fmcg",
+    "food brand",
+    "drinks",
+    "snacks",
+    "supplement"
+  ],
+  "status": "covered",
+  "regulatedClaims": [
+    {
+      "claim": "health, nutrition or functional benefit",
+      "rule": "forbidden",
+      "authority": "permitted health claims are a closed list in the EU and restricted elsewhere"
+    },
+    {
+      "claim": "organic, natural or free-from",
+      "rule": "requires_disclosure",
+      "authority": "several are certified terms with legal definitions"
+    },
+    {
+      "claim": "allergen information",
+      "rule": "requires_disclosure",
+      "authority": "mandatory and safety-critical"
+    },
+    {
+      "claim": "supplement efficacy",
+      "rule": "forbidden",
+      "authority": "unless an authorised health claim applies"
+    }
+  ],
+  "forbidden": [
+    "a health benefit claim on a food product",
+    "imagery implying a serving size that differs from the pack",
+    "an allergen omission of any kind"
+  ],
+  "seasonality": [
+    "Tet and festive gifting",
+    "summer beverage peak",
+    "harvest-linked supply"
+  ]
+}

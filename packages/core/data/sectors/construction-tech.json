@@ -1,0 +1,51 @@
+{
+  "sector": "construction-tech",
+  "extends": "b2b-saas",
+  "aliases": [
+    "construction software",
+    "bim",
+    "site management",
+    "contractor software"
+  ],
+  "status": "covered",
+  "communities": [
+    {
+      "platform": "reddit",
+      "handle": "r/Construction"
+    },
+    {
+      "platform": "linkedin",
+      "handle": "construction and BIM groups"
+    }
+  ],
+  "buyingCommittee": [
+    {
+      "role": "site or project manager",
+      "influence": "champion"
+    },
+    {
+      "role": "director or owner",
+      "influence": "economic"
+    },
+    {
+      "role": "Health and safety",
+      "influence": "veto"
+    }
+  ],
+  "regulatedClaims": [
+    {
+      "claim": "safety compliance or incident reduction",
+      "rule": "requires_disclosure",
+      "authority": "safety claims carry liability; needs the study"
+    },
+    {
+      "claim": "building code conformance",
+      "rule": "requires_disclosure",
+      "authority": "jurisdictional and cannot be guaranteed by software"
+    }
+  ],
+  "forbidden": [
+    "a safety improvement figure with no study",
+    "site imagery identifying a client project without permission"
+  ]
+}

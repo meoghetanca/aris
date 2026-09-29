@@ -1,5 +1,6 @@
 {
   "sector": "fintech-wealth",
+  "extends": "regulated-finance",
   "aliases": [
     "wealth management",
     "family office",

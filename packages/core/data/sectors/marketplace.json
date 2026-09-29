@@ -1,0 +1,145 @@
+{
+  "sector": "marketplace",
+  "aliases": [
+    "two-sided marketplace",
+    "platform business",
+    "booking platform",
+    "gig platform",
+    "aggregator"
+  ],
+  "catchAll": [
+    "aggregator",
+    "auction",
+    "booking",
+    "classifieds",
+    "courses",
+    "delivery",
+    "gig",
+    "listing",
+    "marketplace",
+    "matching",
+    "rental",
+    "reseller",
+    "secondhand",
+    "services marketplace",
+    "tickets",
+    "two-sided"
+  ],
+  "status": "covered",
+  "reviewPlatforms": [
+    {
+      "name": "App Store",
+      "url": "https://apps.apple.com",
+      "coverage": "high"
+    },
+    {
+      "name": "Google Play",
+      "url": "https://play.google.com",
+      "coverage": "high"
+    },
+    {
+      "name": "Trustpilot",
+      "url": "https://www.trustpilot.com",
+      "coverage": "high"
+    }
+  ],
+  "communities": [
+    {
+      "platform": "reddit",
+      "handle": "separate subreddits exist for buyers and for sellers - mine BOTH"
+    },
+    {
+      "platform": "facebook",
+      "handle": "supply-side groups (drivers, hosts, sellers) are the richest source"
+    },
+    {
+      "platform": "youtube",
+      "handle": "how-much-I-earn content from the supply side"
+    }
+  ],
+  "buyingCommittee": [
+    {
+      "role": "the demand side",
+      "influence": "champion"
+    },
+    {
+      "role": "the supply side",
+      "influence": "champion"
+    },
+    {
+      "role": "whichever side is scarce",
+      "influence": "economic"
+    }
+  ],
+  "channelNorms": {
+    "effective": [
+      "SEO on long-tail inventory",
+      "referral on both sides",
+      "supply-side recruiting",
+      "local density campaigns",
+      "creator partnerships"
+    ],
+    "ineffective": [
+      "a single undifferentiated campaign for both sides",
+      "national launches before local density"
+    ],
+    "reason": "Two audiences with opposite incentives and separate funnels. The scarce side is the real constraint and almost always needs its own positioning, its own channels and its own economics; marketing to the abundant side first burns money."
+  },
+  "priceBands": {
+    "currency": null,
+    "low": null,
+    "mid": null,
+    "high": null,
+    "unit": "",
+    "sourceIds": [],
+    "note": "Uncited. Derive the ladder from live competitor pricing in this run and cite it."
+  },
+  "cacBenchmarks": {
+    "note": "Uncited. Cite a published benchmark or leave unknown. Never use a prior."
+  },
+  "salesCycleDays": {
+    "demand": "0-3",
+    "supply": "7-30"
+  },
+  "regulatedClaims": [
+    {
+      "claim": "earnings a supplier can expect",
+      "rule": "requires_disclosure",
+      "authority": "FTC earnings-claim rules and equivalents: needs a typical figure, not a top-decile one"
+    },
+    {
+      "claim": "vetted / verified / background-checked",
+      "rule": "requires_disclosure",
+      "authority": "the check must be described; 'verified' with no method is meaningless and creates liability"
+    },
+    {
+      "claim": "insured or guaranteed transactions",
+      "rule": "requires_disclosure",
+      "authority": "the cover, its limits and its exclusions must be stated"
+    }
+  ],
+  "forbidden": [
+    "an earnings figure drawn from top performers presented as typical",
+    "inventory or listing counts that include inactive listings",
+    "a safety or vetting claim with no described process",
+    "reviews from one side displayed as if they came from the other"
+  ],
+  "reservedTerms": [
+    {
+      "term": "verified",
+      "meaning": "a named check was performed. Never a badge with no method."
+    },
+    {
+      "term": "active user",
+      "meaning": "a stated action in a stated window."
+    }
+  ],
+  "requiredDisclosures": [
+    "how the scarce side is vetted",
+    "fees taken from each side",
+    "what happens when a transaction fails"
+  ],
+  "seasonality": [
+    "demand peaks are category-specific and usually invert the supply peak"
+  ]
+}

@@ -1,5 +1,6 @@
 {
   "sector": "ecommerce-dtc",
+  "extends": "physical-goods",
   "aliases": [
     "dtc",
     "d2c",

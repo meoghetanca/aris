@@ -17,6 +17,10 @@ Stop unless `intel/category.json` and `intel/sources.json` exist.
 
 ## The five signals
 
+Dispatch **one `mkt-demand-analyst` per signal, concurrently**. Each measures its own
+signal and returns a measurement, not a verdict — weighing them together is this
+command's job, and an analyst who concludes gets their single signal read as an answer.
+
 | `type` | What to collect | Why it means something |
 |:--|:--|:--|
 | `search_volume` | trend on the problem's terms, not the brand's | rising queries mean rising awareness |

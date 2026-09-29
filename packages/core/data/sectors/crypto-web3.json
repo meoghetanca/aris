@@ -1,0 +1,54 @@
+{
+  "sector": "crypto-web3",
+  "extends": "regulated-finance",
+  "aliases": [
+    "crypto",
+    "web3",
+    "blockchain",
+    "token",
+    "defi",
+    "exchange"
+  ],
+  "status": "covered",
+  "communities": [
+    {
+      "platform": "reddit",
+      "handle": "r/CryptoCurrency"
+    },
+    {
+      "platform": "discord",
+      "handle": "project servers"
+    },
+    {
+      "platform": "twitter",
+      "handle": "the project and sector accounts"
+    }
+  ],
+  "regulatedClaims": [
+    {
+      "claim": "token price, return or yield",
+      "rule": "forbidden",
+      "authority": "financial promotion rules apply to crypto in most major jurisdictions"
+    },
+    {
+      "claim": "regulated, licensed or approved",
+      "rule": "requires_disclosure",
+      "authority": "the regulator and registration must be named"
+    },
+    {
+      "claim": "audited smart contracts",
+      "rule": "requires_disclosure",
+      "authority": "the auditor, the scope and the date must be named"
+    },
+    {
+      "claim": "safe, secure or insured custody",
+      "rule": "requires_disclosure",
+      "authority": "the custodian and the cover must be named"
+    }
+  ],
+  "forbidden": [
+    "any yield or APY without full risk disclosure",
+    "celebrity or influencer endorsement of a token",
+    "presenting an audit as a guarantee of safety"
+  ]
+}

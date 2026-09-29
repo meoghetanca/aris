@@ -1,0 +1,89 @@
+{
+  "sector": "gaming",
+  "extends": "consumer-app",
+  "aliases": [
+    "game",
+    "mobile game",
+    "video game",
+    "studio",
+    "f2p"
+  ],
+  "status": "covered",
+  "reviewPlatforms": [
+    {
+      "name": "Steam reviews",
+      "url": "https://store.steampowered.com",
+      "coverage": "high"
+    },
+    {
+      "name": "App Store",
+      "url": "https://apps.apple.com",
+      "coverage": "high"
+    },
+    {
+      "name": "Metacritic",
+      "url": "https://www.metacritic.com",
+      "coverage": "medium"
+    }
+  ],
+  "communities": [
+    {
+      "platform": "reddit",
+      "handle": "the game and genre subreddits"
+    },
+    {
+      "platform": "discord",
+      "handle": "the game's own server and genre servers"
+    },
+    {
+      "platform": "twitch",
+      "handle": "stream chat and clips"
+    },
+    {
+      "platform": "youtube",
+      "handle": "review and let's-play comments"
+    }
+  ],
+  "channelNorms": {
+    "effective": [
+      "creator and streamer partnerships",
+      "Discord community",
+      "store featuring",
+      "genre subreddits",
+      "wishlist campaigns"
+    ],
+    "ineffective": [
+      "LinkedIn",
+      "email nurture",
+      "whitepapers"
+    ],
+    "reason": "Discovery is creator-led and community-led. A single streamer can outperform an entire paid campaign, and the community judges authenticity instantly."
+  },
+  "regulatedClaims": [
+    {
+      "claim": "loot boxes or randomised rewards",
+      "rule": "requires_disclosure",
+      "authority": "gambling regulators in several jurisdictions; odds disclosure is mandatory in some"
+    },
+    {
+      "claim": "age rating",
+      "rule": "requires_disclosure",
+      "authority": "the rating body and rating must be shown"
+    },
+    {
+      "claim": "in-game purchases",
+      "rule": "requires_disclosure",
+      "authority": "must be declared on the store listing"
+    }
+  ],
+  "forbidden": [
+    "pre-rendered footage presented as gameplay",
+    "a review score with no source",
+    "implying content that is not in the shipped build"
+  ],
+  "seasonality": [
+    "Q4 holiday release window",
+    "summer sales",
+    "platform showcase events"
+  ]
+}

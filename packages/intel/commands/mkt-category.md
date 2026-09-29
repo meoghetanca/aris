@@ -18,6 +18,20 @@ Check and **stop** if any fail, naming the one that failed:
 
 ## 1. Find the players
 
+Identify the players first — the obvious leaders plus at least two adjacent or smaller
+ones. A map of only the leaders makes every gap look like whitespace when it is really
+a deliberate choice.
+
+Then dispatch **one `mkt-competitor-analyst` per player, in a single message so they
+run concurrently.** Each gets one company and nothing else. None sees another's
+profile: an analyst who has read the market leader describes everyone else as a
+variation of it, and the feature matrix then reflects the reading order rather than
+the market.
+
+Do not profile any competitor yourself in parallel with them. Wait for the returns,
+then assemble the matrix — that is the step that needs every profile at once, and it
+is yours.
+
 From the sector entry's `reviewPlatforms`, plus a search on the category. Include
 the obvious leaders and at least two adjacent or smaller players — a map of only the
 leaders makes every gap look like whitespace when it is really a deliberate choice.

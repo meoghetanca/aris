@@ -1,5 +1,6 @@
 {
   "sector": "developer-tools",
+  "extends": "b2b-saas",
   "aliases": [
     "devtools",
     "api",

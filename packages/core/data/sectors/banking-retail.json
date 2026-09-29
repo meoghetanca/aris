@@ -1,0 +1,43 @@
+{
+  "sector": "banking-retail",
+  "extends": "regulated-finance",
+  "aliases": [
+    "neobank",
+    "digital bank",
+    "retail banking",
+    "current account",
+    "e-wallet"
+  ],
+  "status": "covered",
+  "communities": [
+    {
+      "platform": "reddit",
+      "handle": "r/banking and country-specific personal finance subreddits"
+    },
+    {
+      "platform": "facebook",
+      "handle": "VN e-wallet user groups"
+    }
+  ],
+  "regulatedClaims": [
+    {
+      "claim": "deposit protection",
+      "rule": "requires_disclosure",
+      "authority": "the scheme, the limit and the licensed entity must be named"
+    },
+    {
+      "claim": "free banking or no fees",
+      "rule": "requires_disclosure",
+      "authority": "every fee and FX spread must be disclosed"
+    },
+    {
+      "claim": "interest rates",
+      "rule": "requires_disclosure",
+      "authority": "AER/APY, conditions and duration"
+    }
+  ],
+  "forbidden": [
+    "an interest rate shown without its conditions",
+    "implying a banking licence held by a partner rather than the product"
+  ]
+}

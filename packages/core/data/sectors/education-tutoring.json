@@ -1,0 +1,61 @@
+{
+  "sector": "education-tutoring",
+  "extends": "services",
+  "aliases": [
+    "tutoring",
+    "training",
+    "coaching",
+    "bootcamp",
+    "language school"
+  ],
+  "status": "covered",
+  "reviewPlatforms": [
+    {
+      "name": "Google reviews",
+      "url": "https://maps.google.com",
+      "coverage": "high"
+    },
+    {
+      "name": "Trustpilot",
+      "url": "https://www.trustpilot.com",
+      "coverage": "high"
+    }
+  ],
+  "communities": [
+    {
+      "platform": "facebook",
+      "handle": "parent and learner groups - primary in VN"
+    },
+    {
+      "platform": "reddit",
+      "handle": "r/languagelearning and subject subreddits"
+    }
+  ],
+  "regulatedClaims": [
+    {
+      "claim": "outcomes, grades, scores or job placement",
+      "rule": "requires_disclosure",
+      "authority": "outcome claims need cohort data and a defined period"
+    },
+    {
+      "claim": "accreditation or certification",
+      "rule": "requires_disclosure",
+      "authority": "the accrediting body must be named and verifiable"
+    },
+    {
+      "claim": "guaranteed results or money back",
+      "rule": "requires_disclosure",
+      "authority": "the exact conditions must be stated"
+    }
+  ],
+  "forbidden": [
+    "a placement or score figure with no cohort size",
+    "a learner's face or work without written consent",
+    "implying accreditation that is not held"
+  ],
+  "seasonality": [
+    "enrolment peaks before academic terms",
+    "exam season",
+    "summer intensives"
+  ]
+}

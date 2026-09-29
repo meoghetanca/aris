@@ -1,0 +1,68 @@
+{
+  "sector": "customer-support-software",
+  "extends": "b2b-saas",
+  "aliases": [
+    "helpdesk",
+    "ticketing",
+    "cx software",
+    "contact centre",
+    "live chat"
+  ],
+  "status": "covered",
+  "reviewPlatforms": [
+    {
+      "name": "G2",
+      "url": "https://www.g2.com/categories/help-desk",
+      "coverage": "high"
+    },
+    {
+      "name": "Capterra",
+      "url": "https://www.capterra.com",
+      "coverage": "high"
+    }
+  ],
+  "communities": [
+    {
+      "platform": "reddit",
+      "handle": "r/CustomerService"
+    },
+    {
+      "platform": "slack",
+      "handle": "Support Driven"
+    },
+    {
+      "platform": "linkedin",
+      "handle": "CX leader groups"
+    }
+  ],
+  "buyingCommittee": [
+    {
+      "role": "support lead",
+      "influence": "champion"
+    },
+    {
+      "role": "COO or Head of CX",
+      "influence": "economic"
+    },
+    {
+      "role": "IT, on integration",
+      "influence": "veto"
+    }
+  ],
+  "regulatedClaims": [
+    {
+      "claim": "resolution time or CSAT improvement",
+      "rule": "requires_disclosure",
+      "authority": "needs baseline, sample and period"
+    },
+    {
+      "claim": "AI answers customers correctly",
+      "rule": "requires_disclosure",
+      "authority": "needs the accuracy measure and the escalation path"
+    }
+  ],
+  "forbidden": [
+    "a real customer conversation in a screenshot",
+    "a CSAT uplift with no baseline"
+  ]
+}

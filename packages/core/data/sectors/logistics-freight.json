@@ -1,0 +1,33 @@
+{
+  "sector": "logistics-freight",
+  "extends": "industrial-b2b",
+  "aliases": [
+    "freight",
+    "shipping",
+    "3pl",
+    "customs",
+    "forwarding"
+  ],
+  "status": "covered",
+  "regulatedClaims": [
+    {
+      "claim": "transit times",
+      "rule": "requires_disclosure",
+      "authority": "needs the lane, the period and the reliability figure"
+    },
+    {
+      "claim": "customs clearance guarantees",
+      "rule": "forbidden",
+      "authority": "clearance is a sovereign decision, not a service guarantee"
+    },
+    {
+      "claim": "insurance and liability cover",
+      "rule": "requires_disclosure",
+      "authority": "the convention limits apply and must be stated"
+    }
+  ],
+  "forbidden": [
+    "a transit time with no reliability figure",
+    "a clearance guarantee"
+  ]
+}

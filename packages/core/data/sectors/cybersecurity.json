@@ -1,0 +1,85 @@
+{
+  "sector": "cybersecurity",
+  "extends": "b2b-saas",
+  "aliases": [
+    "security software",
+    "infosec",
+    "secops",
+    "siem",
+    "edr",
+    "appsec"
+  ],
+  "status": "covered",
+  "reviewPlatforms": [
+    {
+      "name": "Gartner Peer Insights",
+      "url": "https://www.gartner.com/reviews",
+      "coverage": "high"
+    },
+    {
+      "name": "G2",
+      "url": "https://www.g2.com/categories/security",
+      "coverage": "high"
+    }
+  ],
+  "communities": [
+    {
+      "platform": "reddit",
+      "handle": "r/netsec"
+    },
+    {
+      "platform": "reddit",
+      "handle": "r/cybersecurity"
+    },
+    {
+      "platform": "slack",
+      "handle": "local DEF CON and OWASP chapters"
+    }
+  ],
+  "buyingCommittee": [
+    {
+      "role": "CISO",
+      "influence": "economic"
+    },
+    {
+      "role": "security engineer",
+      "influence": "champion"
+    },
+    {
+      "role": "Compliance and audit",
+      "influence": "veto"
+    }
+  ],
+  "regulatedClaims": [
+    {
+      "claim": "unbreakable, unhackable or 100% protection",
+      "rule": "forbidden",
+      "authority": "no security product can claim this; it invites both breach liability and ridicule"
+    },
+    {
+      "claim": "detection or block rate",
+      "rule": "requires_disclosure",
+      "authority": "needs the test set, the vendor-independent lab and the date"
+    },
+    {
+      "claim": "zero trust / compliant with a framework",
+      "rule": "requires_disclosure",
+      "authority": "the framework and the scope must be named"
+    }
+  ],
+  "forbidden": [
+    "a detection rate from a vendor-run test",
+    "naming a breach victim as an example",
+    "fear-based copy citing an incident the product would not have prevented"
+  ],
+  "reservedTerms": [
+    {
+      "term": "zero-day",
+      "meaning": "a vulnerability with no available patch. Not 'new'."
+    }
+  ],
+  "seasonality": [
+    "budget follows the audit cycle",
+    "RSA and Black Hat drive the calendar"
+  ]
+}

@@ -1,0 +1,32 @@
+{
+  "sector": "telehealth",
+  "extends": "regulated-health",
+  "aliases": [
+    "telemedicine",
+    "virtual care",
+    "online doctor",
+    "remote consultation"
+  ],
+  "status": "covered",
+  "regulatedClaims": [
+    {
+      "claim": "clinician licensing and jurisdiction",
+      "rule": "requires_disclosure",
+      "authority": "practice is licensed per territory"
+    },
+    {
+      "claim": "prescribing",
+      "rule": "requires_disclosure",
+      "authority": "prescribing rules are jurisdictional and restricted"
+    },
+    {
+      "claim": "wait times or availability",
+      "rule": "requires_disclosure",
+      "authority": "needs the period and the measure"
+    }
+  ],
+  "forbidden": [
+    "implying access to care not licensed in the user's territory",
+    "a wait-time figure with no period"
+  ]
+}

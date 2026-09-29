@@ -1,0 +1,80 @@
+{
+  "sector": "legaltech",
+  "extends": "b2b-saas",
+  "aliases": [
+    "legal software",
+    "law firm software",
+    "contract management",
+    "clm",
+    "e-discovery"
+  ],
+  "status": "covered",
+  "reviewPlatforms": [
+    {
+      "name": "G2",
+      "url": "https://www.g2.com/categories/contract-management",
+      "coverage": "high"
+    },
+    {
+      "name": "Capterra",
+      "url": "https://www.capterra.com",
+      "coverage": "high"
+    }
+  ],
+  "communities": [
+    {
+      "platform": "reddit",
+      "handle": "r/LawFirm"
+    },
+    {
+      "platform": "linkedin",
+      "handle": "legal operations groups"
+    },
+    {
+      "platform": "forum",
+      "handle": "bar association communities"
+    }
+  ],
+  "buyingCommittee": [
+    {
+      "role": "General counsel or managing partner",
+      "influence": "economic"
+    },
+    {
+      "role": "legal ops",
+      "influence": "champion"
+    },
+    {
+      "role": "Risk and professional indemnity",
+      "influence": "veto"
+    }
+  ],
+  "regulatedClaims": [
+    {
+      "claim": "legal advice",
+      "rule": "forbidden",
+      "authority": "practising law without a licence; the product assists, it does not advise"
+    },
+    {
+      "claim": "accuracy of automated review",
+      "rule": "requires_disclosure",
+      "authority": "needs the benchmark and the error rate"
+    },
+    {
+      "claim": "privilege or confidentiality preserved",
+      "rule": "requires_disclosure",
+      "authority": "depends on deployment and jurisdiction"
+    }
+  ],
+  "forbidden": [
+    "implying the software replaces a lawyer",
+    "client matter names or documents in a screenshot",
+    "an accuracy figure with no benchmark"
+  ],
+  "reservedTerms": [
+    {
+      "term": "advice",
+      "meaning": "a regulated activity performed by a licensed lawyer."
+    }
+  ]
+}

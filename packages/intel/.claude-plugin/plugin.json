@@ -13,7 +13,10 @@
     "./commands"
   ],
   "agents": [
-    "./agents/mkt-miner.md"
+    "./agents/mkt-miner.md",
+    "./agents/mkt-competitor-analyst.md",
+    "./agents/mkt-sizing-analyst.md",
+    "./agents/mkt-demand-analyst.md"
   ],
   "keywords": [
     "marketing",

@@ -1,0 +1,53 @@
+{
+  "sector": "fashion-apparel",
+  "extends": "physical-goods",
+  "aliases": [
+    "clothing",
+    "apparel",
+    "fashion",
+    "footwear",
+    "accessories"
+  ],
+  "status": "covered",
+  "communities": [
+    {
+      "platform": "reddit",
+      "handle": "r/femalefashionadvice and r/malefashionadvice"
+    },
+    {
+      "platform": "tiktok",
+      "handle": "haul and review content"
+    },
+    {
+      "platform": "facebook",
+      "handle": "VN fashion buy-sell groups"
+    }
+  ],
+  "regulatedClaims": [
+    {
+      "claim": "sustainable, recycled or ethical production",
+      "rule": "requires_disclosure",
+      "authority": "greenwashing rules; the certification and share must be stated"
+    },
+    {
+      "claim": "fabric composition and origin",
+      "rule": "requires_disclosure",
+      "authority": "labelling law"
+    },
+    {
+      "claim": "fit or sizing guarantees",
+      "rule": "requires_disclosure",
+      "authority": "must state the returns route"
+    }
+  ],
+  "forbidden": [
+    "a sustainability claim with no certification",
+    "imagery that misrepresents fit or colour",
+    "a model's size not disclosed on a fit claim"
+  ],
+  "seasonality": [
+    "seasonal collections",
+    "Q4 gifting",
+    "end-of-season markdown cycles"
+  ]
+}

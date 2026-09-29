@@ -15,6 +15,19 @@ Stop unless `intel/category.json` exists — the ARPU factor comes from the pric
 
 ## 1. Factors, each with a source
 
+Decide which factors the calculation needs — typically a count of entities in scope, a
+penetration proxy, and an ARPU from the price ladder. Then dispatch **one
+`mkt-sizing-analyst` per factor, concurrently**, each given only its own factor and the
+market definition.
+
+Separating them is what stops the chain being completed to make the arithmetic work. An
+analyst holding all three factors will find a value for the missing one that multiplies
+out to a sensible market size, and a sensible-looking size is exactly how invented
+sizing enters a package unchallenged.
+
+A factor an analyst could not establish stays `unknown` and the calculation does not
+run. Say what would establish it.
+
 Typically: a public count of the entities in scope, a penetration proxy, and an ARPU
 from the competitor ladder. Each is an `F-` id with a `value` and a `sourceId`.
 
