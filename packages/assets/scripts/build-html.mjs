@@ -16,7 +16,7 @@
  *   14  demand is stamped inferred_not_tested whatever the artifact says
  *   15  launch-ready is impossible over a failed verification
  *
- *   build-html.mjs [--out <path>] [--force] [--no-open]
+ *   build-html.mjs [--out <path>] [--force] [--open]
  *
  * --force writes the page over a failed verification. It never writes a
  * launch-ready one; nothing does.
@@ -206,6 +206,28 @@ fs.mkdirSync(path.dirname(out), { recursive: true });
 fs.writeFileSync(out, html);
 
 /**
+ * A second build for publishing as an Artifact.
+ *
+ * The Artifact runtime wraps the file it is given in its own
+ * <!doctype html><head></head><body> skeleton, so handing it a complete document
+ * nests one inside another. This emits the same page as a fragment: title, style,
+ * markup and scripts, with the document wrapper removed.
+ *
+ * Both builds come from one template, so the offline file and the shared link can
+ * never drift.
+ */
+const frag = (() => {
+  const t0 = html.indexOf("<title>");
+  const s1 = html.indexOf("</style>") + "</style>".length;
+  const b0 = html.indexOf("<body>") + "<body>".length;
+  const b1 = html.lastIndexOf("</body>");
+  if (t0 === -1 || s1 < 8 || b0 < 6 || b1 === -1) return null;
+  return html.slice(t0, s1) + "\n" + html.slice(b0, b1).trim() + "\n";
+})();
+const fragPath = out.replace(/\.html$/, ".artifact.html");
+if (frag) fs.writeFileSync(fragPath, frag);
+
+/**
  * Open the finished page.
  *
  * A path printed in a terminal is not a delivered package: the reader has to notice it,
@@ -229,6 +251,7 @@ function openInBrowser(file) {
 
 const kb = (n) => `${(n / 1024).toFixed(0)} KB`;
 process.stdout.write(`built  ${path.relative(root, out)}  (${kb(Buffer.byteLength(html))})\n`);
+if (frag) process.stdout.write(`       ${path.relative(root, fragPath)}  (${kb(Buffer.byteLength(frag))})  for publishing\n`);
 process.stdout.write(
   `       ${(DATA.sources.sources ?? []).length} sources, ${(DATA.pains.pains ?? []).length} pains, ` +
     `${(DATA.claims.claims ?? []).length} claims, ${Object.keys(DATA.assets).length} assets\n`
@@ -237,8 +260,13 @@ process.stdout.write(`       verification: ${DATA.verify ? (passed ? "passed" : 
 for (const n of notes) warn(n);
 if (!passed) process.stdout.write(`\nThe publish gate stays closed while verification fails.\n`);
 
-if (!process.argv.includes("--no-open")) {
+// Opt in, not out. A window that appears on every programmatic rebuild is noise, and
+// this script runs many times during a session. /aris-package passes --open because
+// that is the one moment a person is waiting to look at the result.
+if (process.argv.includes("--open")) {
   process.stdout.write(openInBrowser(out)
     ? `\nopened in your browser\n`
     : `\ncould not open a browser here. The file is at:\n  ${out}\n`);
+} else {
+  process.stdout.write(`\n${out}\n`);
 }

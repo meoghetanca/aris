@@ -6,703 +6,874 @@
 <title>Launch package</title>
 <style>
 :root{
-  --bg:#fbfaf8; --panel:#ffffff; --ink:#16151a; --muted:#6a6772; --line:#e4e1dc;
-  --accent:#3a4a7a; --accent-soft:#eef0f7;
-  --ok:#2f6b4a; --warn:#8a5a10; --bad:#9a2b2b; --unk:#6a6772;
-  --ok-bg:#e9f2ec; --warn-bg:#faf1de; --bad-bg:#f9eaea; --unk-bg:#f0efec;
-  --mono:ui-monospace,SFMono-Regular,Menlo,Consolas,monospace;
-  --sans:-apple-system,BlinkMacSystemFont,"Segoe UI",Inter,Roboto,Helvetica,Arial,sans-serif;
+  --ground:#fbfcfb; --surface:#ffffff; --raise:#f3f7f4;
+  --ink:#14191b; --muted:#56655f; --faint:#85938c;
+  --line:#e3e8e5; --line-strong:#c9d4ce;
+  --accent:#15684a; --accent-soft:#e7f1eb;
+  --warn:#8a5e10; --warn-soft:#fbf3e2;
+  --bad:#9e2f2f; --bad-soft:#fbeceb;
+  --ok:#15684a; --ok-soft:#e7f1eb;
+  --serif:"Iowan Old Style","Palatino Linotype",Palatino,Georgia,"Times New Roman",serif;
+  --sans:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,Helvetica,Arial,sans-serif;
+  --mono:ui-monospace,SFMono-Regular,Menlo,Consolas,"Liberation Mono",monospace;
+  --measure:66ch;
+  --band:#11161a; --band-ink:#dfe6e2; --band-dim:#8b9a93; --band-line:#26302c;
+  --band-accent:#6fcf97; --band-bad:#f0908c;
 }
 @media (prefers-color-scheme:dark){:root:not([data-theme="light"]){
-  --bg:#141317; --panel:#1c1b20; --ink:#ece9e4; --muted:#9a96a0; --line:#2e2c34;
-  --accent:#93a6d8; --accent-soft:#232635;
-  --ok:#7fc09a; --warn:#d9ad63; --bad:#e08b8b; --unk:#9a96a0;
-  --ok-bg:#1b2a22; --warn-bg:#2b2416; --bad-bg:#2c1c1c; --unk-bg:#26252b;
+  --ground:#0f1412; --surface:#151b18; --raise:#1c2420;
+  --ink:#e8eeea; --muted:#9daba4; --faint:#6d7b74;
+  --line:#242e29; --line-strong:#35423b;
+  --accent:#6fcf97; --accent-soft:#16241d;
+  --warn:#d3a355; --warn-soft:#241d10;
+  --bad:#e08585; --bad-soft:#241414;
+  --ok:#6fcf97; --ok-soft:#16241d;
 }}
 :root[data-theme="dark"]{
-  --bg:#141317; --panel:#1c1b20; --ink:#ece9e4; --muted:#9a96a0; --line:#2e2c34;
-  --accent:#93a6d8; --accent-soft:#232635;
-  --ok:#7fc09a; --warn:#d9ad63; --bad:#e08b8b; --unk:#9a96a0;
-  --ok-bg:#1b2a22; --warn-bg:#2b2416; --bad-bg:#2c1c1c; --unk-bg:#26252b;
+  --ground:#0f1412; --surface:#151b18; --raise:#1c2420;
+  --ink:#e8eeea; --muted:#9daba4; --faint:#6d7b74;
+  --line:#242e29; --line-strong:#35423b;
+  --accent:#6fcf97; --accent-soft:#16241d;
+  --warn:#d3a355; --warn-soft:#241d10;
+  --bad:#e08585; --bad-soft:#241414;
+  --ok:#6fcf97; --ok-soft:#16241d;
 }
 *{box-sizing:border-box}
-body{margin:0;background:var(--bg);color:var(--ink);font:14px/1.55 var(--sans)}
-a{color:var(--accent)}
-.wrap{display:grid;grid-template-columns:232px minmax(0,1fr);min-height:100vh}
-nav{border-right:1px solid var(--line);padding:18px 0 40px;position:sticky;top:0;height:100vh;overflow:auto;background:var(--panel)}
-nav h1{font-size:13px;letter-spacing:.09em;text-transform:uppercase;color:var(--muted);margin:0 18px 4px;font-weight:600}
-nav .prod{margin:0 18px 14px;font-size:16px;font-weight:650;line-height:1.25}
-nav ol{list-style:none;margin:0;padding:0}
-nav a{display:flex;gap:9px;padding:6px 18px;text-decoration:none;color:var(--ink);font-size:13px;border-left:2px solid transparent}
-nav a .n{color:var(--muted);font:11px/1.6 var(--mono);min-width:16px}
-nav a:hover{background:var(--accent-soft)}
-nav a.on{border-left-color:var(--accent);background:var(--accent-soft);font-weight:600}
-nav .tools{margin:16px 18px 0;padding-top:14px;border-top:1px solid var(--line);display:flex;flex-direction:column;gap:7px}
-nav button,.btn{font:inherit;font-size:12px;padding:6px 9px;border:1px solid var(--line);background:var(--panel);color:var(--ink);border-radius:6px;cursor:pointer;text-align:left}
-nav button:hover,.btn:hover{border-color:var(--accent)}
-main{padding:26px 30px 90px;max-width:1080px;min-width:0}
-section{margin:0 0 54px;scroll-margin-top:16px}
-section>h2{font-size:12px;letter-spacing:.1em;text-transform:uppercase;color:var(--muted);margin:0 0 10px;font-weight:650;display:flex;gap:8px;align-items:baseline}
-section>h2 .n{font-family:var(--mono);font-size:11px}
-h3{font-size:16px;margin:22px 0 8px}
-h4{font-size:13px;margin:16px 0 6px;color:var(--muted);letter-spacing:.03em;text-transform:uppercase}
-p{margin:0 0 10px}
-.card{background:var(--panel);border:1px solid var(--line);border-radius:9px;padding:15px 17px;margin:0 0 12px;min-width:0}
-.grid{display:grid;gap:12px;grid-template-columns:repeat(auto-fill,minmax(248px,1fr))}
-.kv{display:grid;grid-template-columns:auto 1fr;gap:3px 14px;font-size:13px}
-.kv dt{color:var(--muted)}
-.kv dd{margin:0;min-width:0;overflow-wrap:anywhere}
-.big{font:650 30px/1.1 var(--sans);letter-spacing:-.02em}
-.mono{font-family:var(--mono);font-size:12px;overflow-wrap:anywhere}
-.muted{color:var(--muted)}
-.badge{display:inline-flex;align-items:center;gap:4px;font:600 10.5px/1 var(--mono);padding:3px 6px;border-radius:4px;text-transform:uppercase;letter-spacing:.04em;vertical-align:1px;white-space:nowrap}
-.b-verified{background:var(--ok-bg);color:var(--ok)}
-.b-inferred{background:var(--warn-bg);color:var(--warn)}
-.b-assumption{background:var(--warn-bg);color:var(--warn)}
-.b-unknown{background:var(--unk-bg);color:var(--unk)}
-.b-bad{background:var(--bad-bg);color:var(--bad)}
-.b-ok{background:var(--ok-bg);color:var(--ok)}
-.warnbox{border:1px solid var(--warn);background:var(--warn-bg);color:var(--warn);border-radius:9px;padding:13px 15px;margin:0 0 14px}
-.badbox{border:1px solid var(--bad);background:var(--bad-bg);color:var(--bad);border-radius:9px;padding:13px 15px;margin:0 0 14px}
-.warnbox b,.badbox b{display:block;margin-bottom:4px;letter-spacing:.02em}
-table{border-collapse:collapse;width:100%;font-size:13px}
-th,td{text-align:left;padding:7px 10px;border-bottom:1px solid var(--line);vertical-align:top}
-th{color:var(--muted);font-size:11px;text-transform:uppercase;letter-spacing:.06em;font-weight:650}
-.scroll{overflow-x:auto;max-width:100%}
-.bar{height:7px;border-radius:4px;background:var(--line);overflow:hidden;margin:7px 0}
-.bar>i{display:block;height:100%;background:var(--accent)}
-.chip{display:inline-block;font:600 11px/1 var(--mono);padding:4px 7px;border:1px solid var(--line);border-radius:20px;margin:0 5px 5px 0;cursor:pointer;color:var(--accent);background:var(--panel)}
+body{margin:0;background:var(--ground);color:var(--ink);font:16px/1.6 var(--sans);
+  -webkit-font-smoothing:antialiased}
+a{color:var(--accent);text-underline-offset:2px}
+:focus-visible{outline:2px solid var(--accent);outline-offset:2px;border-radius:3px}
+@media (prefers-reduced-motion:reduce){*{transition:none!important;animation:none!important}}
+code{font-family:var(--mono);font-size:.88em;background:var(--raise);padding:1px 5px;border-radius:4px}
+
+.wrap{max-width:940px;margin:0 auto;padding-inline:clamp(18px,4vw,40px)}
+
+header{background:var(--band);color:var(--band-ink);border-bottom:1px solid var(--band-line)}
+header .inner{padding-block:24px 0}
+.mast{display:flex;align-items:baseline;gap:14px;flex-wrap:wrap}
+.mast .mark{font:400 21px/1 var(--serif);color:var(--band-accent);letter-spacing:-.01em}
+.mast .mark::after{content:"";display:inline-block;width:5px;height:5px;background:var(--band-accent);
+  transform:rotate(45deg) translateY(-6px);margin-left:5px}
+.mast .name{font:600 27px/1.1 var(--sans);letter-spacing:-.02em;color:#fff}
+.mast .kicker{font:600 10.5px/1 var(--mono);letter-spacing:.14em;text-transform:uppercase;
+  color:var(--band-dim);align-self:center}
+.toolbar{display:flex;gap:7px;margin-left:auto}
+.toolbar button{font:inherit;font-size:12px;padding:6px 11px;border:1px solid var(--band-line);
+  background:transparent;color:var(--band-dim);border-radius:7px;cursor:pointer}
+.toolbar button:hover{border-color:var(--band-accent);color:#fff}
+
+.stats{display:flex;gap:34px;flex-wrap:wrap;margin:22px 0 0;padding:0 0 22px}
+.stat{min-width:0}
+.stat .k{font:600 10px/1 var(--mono);letter-spacing:.13em;text-transform:uppercase;
+  color:var(--band-dim);display:block;margin-bottom:7px}
+.stat .v{font:400 20px/1.15 var(--serif);color:#fff;display:block}
+.stat .v small{font:400 13px/1 var(--sans);color:var(--band-dim);margin-left:3px}
+.stat.flag .v{color:var(--band-bad)}
+.stat.flag.ok .v{color:var(--band-accent)}
+
+.tabs{display:flex;margin:0;border-top:1px solid var(--band-line)}
+.tabs button{border:none;background:none;font:600 14.5px/1 var(--sans);padding:15px 0;margin-right:30px;
+  cursor:pointer;color:var(--band-dim);border-bottom:2px solid transparent;margin-bottom:-1px}
+.tabs button:hover{color:#fff}
+.tabs button.on{color:#fff;border-bottom-color:var(--band-accent)}
+@media(max-width:560px){.tabs button{font-size:13px;margin-right:18px}.stats{gap:22px}}
+
+.thesis-wrap{background:var(--surface);border-bottom:1px solid var(--line)}
+.thesis-wrap .inner{padding-block:26px 30px}
+.status{display:flex;gap:14px;align-items:flex-start;padding:12px 15px;border-radius:9px;
+  margin:0 0 20px;border:1px solid var(--line);background:var(--raise)}
+.status.blocked{background:var(--bad-soft);border-color:var(--bad)}
+.status.ready{background:var(--ok-soft);border-color:var(--accent)}
+.status.warn{background:var(--warn-soft);border-color:var(--warn)}
+.status .mark{font:600 10.5px/1 var(--mono);letter-spacing:.1em;padding:6px 8px;border-radius:5px;
+  white-space:nowrap;background:var(--surface);color:var(--muted)}
+.status.blocked .mark{color:var(--bad)} .status.ready .mark{color:var(--ok)} .status.warn .mark{color:var(--warn)}
+.status b{display:block;margin-bottom:2px}
+.status p{margin:0;font-size:14.5px;color:var(--muted)}
+
+.thesis{font:400 20px/1.5 var(--serif);max-width:58ch;margin:0 0 8px;letter-spacing:-.005em;text-wrap:pretty}
+.thesis .k{color:var(--faint);font-family:var(--mono);font-size:11px;letter-spacing:.08em;
+  text-transform:uppercase;display:inline-block;transform:translateY(-3px);margin-right:1px}
+.facts{display:grid;margin:22px 0 0;border-top:1px solid var(--line)}
+.fact{display:grid;grid-template-columns:152px minmax(0,1fr);gap:18px;padding:10px 0;
+  border-bottom:1px solid var(--line);align-items:baseline}
+.fact dt{color:var(--faint);font-size:13.5px}
+.fact dd{margin:0;font-size:15px}
+@media(max-width:560px){.fact{grid-template-columns:1fr;gap:1px}.fact dd{padding-bottom:2px}}
+
+
+.panel{padding-block:8px 88px}
+.panel[hidden]{display:none}
+.block{padding-block:32px;border-top:1px solid var(--line)}
+.block:first-child{border-top:none}
+h2{font:500 25px/1.25 var(--serif);margin:0 0 8px;letter-spacing:-.01em;text-wrap:balance}
+h3{font:600 15px/1.35 var(--sans);margin:26px 0 9px}
+h4{font:600 11px/1 var(--sans);letter-spacing:.09em;text-transform:uppercase;color:var(--faint);margin:20px 0 8px}
+p{margin:0 0 12px;max-width:var(--measure)}
+.lede{color:var(--muted);max-width:var(--measure);margin:0 0 18px;font-size:15px}
+ul,ol{max-width:var(--measure);padding-left:19px;margin:0 0 12px}
+li{margin:0 0 6px}
+.mono{font-family:var(--mono);font-size:12.5px;overflow-wrap:anywhere}
+.muted{color:var(--muted)} .faint{color:var(--faint)}
+.tnum{font-variant-numeric:tabular-nums}
+.gap{color:var(--faint);font-style:italic;font-size:14.5px;max-width:var(--measure)}
+
+.badge{display:inline-flex;align-items:center;font:600 10px/1 var(--mono);padding:4px 6px;border-radius:4px;
+  letter-spacing:.05em;text-transform:uppercase;vertical-align:1px;white-space:nowrap}
+.b-verified,.b-ok{background:var(--ok-soft);color:var(--ok)}
+.b-inferred,.b-assumption{background:var(--warn-soft);color:var(--warn)}
+.b-unknown{background:var(--raise);color:var(--faint)}
+.b-bad{background:var(--bad-soft);color:var(--bad)}
+.chip{display:inline-block;font:500 11px/1 var(--mono);padding:4px 7px;border-radius:20px;
+  border:1px solid var(--line);color:var(--accent);background:var(--surface);cursor:pointer;margin:0 3px 3px 0}
 .chip:hover{border-color:var(--accent)}
-.quote{border-left:2px solid var(--line);padding:2px 0 2px 12px;margin:9px 0;color:var(--ink);font-size:13px}
-.quote cite{display:block;color:var(--muted);font-size:11.5px;font-style:normal;margin-top:4px;font-family:var(--mono)}
-.tabs{display:flex;gap:4px;flex-wrap:wrap;border-bottom:1px solid var(--line);margin:0 0 14px;padding-bottom:0}
-.tabs button{border:1px solid transparent;border-bottom:none;border-radius:6px 6px 0 0;background:none;font:inherit;font-size:12.5px;padding:7px 11px;cursor:pointer;color:var(--muted)}
-.tabs button.on{background:var(--panel);border-color:var(--line);color:var(--ink);font-weight:650;margin-bottom:-1px}
-pre{background:var(--panel);border:1px solid var(--line);border-radius:8px;padding:13px;overflow:auto;font-family:var(--mono);font-size:12px;line-height:1.5;white-space:pre-wrap;word-break:break-word;margin:0}
-.empty{color:var(--muted);font-family:var(--mono);font-size:13px}
-.dash{display:grid;gap:10px;grid-template-columns:repeat(auto-fill,minmax(150px,1fr))}
-.metric{border:1px solid var(--line);border-radius:8px;padding:11px 13px;background:var(--panel)}
-.metric .v{font:650 24px/1 var(--mono);color:var(--muted)}
-.metric .l{font-size:11.5px;color:var(--muted);margin-top:5px}
-#drawer{position:fixed;inset:0 0 0 auto;width:min(430px,94vw);background:var(--panel);border-left:1px solid var(--line);box-shadow:-14px 0 44px rgba(0,0,0,.14);padding:20px 22px;overflow:auto;transform:translateX(100%);transition:transform .16s ease;z-index:40}
+
+.copy{border-left:2px solid var(--accent);padding:1px 0 1px 15px;margin:0 0 18px;max-width:var(--measure)}
+.copy .line{font:400 18px/1.45 var(--serif);margin:0 0 5px;text-wrap:pretty}
+.copy .sub{color:var(--muted);font-size:14px;margin:0 0 3px}
+.copy .meta{font-family:var(--mono);font-size:11px;color:var(--faint);margin:6px 0 0}
+.copy .meta b{color:var(--muted)}
+
+.cards{display:grid;gap:12px;grid-template-columns:repeat(auto-fit,minmax(248px,1fr));margin:0 0 14px}
+.card{background:var(--surface);border:1px solid var(--line);border-radius:10px;padding:15px 16px;min-width:0}
+.card.primary{border-color:var(--accent)}
+.card h3{margin:0 0 3px;font-size:15px}
+.card p{font-size:14px;margin:0 0 7px}
+
+table{border-collapse:collapse;width:100%;font-size:14px}
+th,td{text-align:left;padding:9px 14px 9px 0;border-bottom:1px solid var(--line);vertical-align:top}
+th{color:var(--faint);font:600 10.5px/1 var(--sans);text-transform:uppercase;letter-spacing:.07em}
+.scroll{overflow-x:auto;max-width:100%;margin:0 0 14px}
+table.grid th,table.grid td{text-align:center;padding:9px 10px}
+table.grid th:first-child,table.grid td:first-child{text-align:left;padding-left:0;min-width:180px}
+.m{display:inline-block;font-size:15px;line-height:1}
+.m-y{color:var(--accent)} .m-n{color:var(--faint)} .m-p{color:var(--warn)} .m-u{color:var(--line-strong)}
+.m-soft{opacity:.45}
+
+.atabs{display:flex;gap:2px;flex-wrap:wrap;border-bottom:1px solid var(--line);margin:0 0 14px}
+.atabs button{border:none;background:none;font:inherit;font-size:13px;padding:8px 10px;cursor:pointer;
+  color:var(--muted);border-bottom:2px solid transparent;margin-bottom:-1px}
+.atabs button.on{color:var(--ink);font-weight:600;border-bottom-color:var(--accent)}
+pre{background:var(--surface);border:1px solid var(--line);border-radius:9px;padding:16px 18px;overflow:auto;
+  font-family:var(--mono);font-size:12.5px;line-height:1.7;white-space:pre-wrap;word-break:break-word;
+  margin:0;max-height:540px}
+
+.todo{list-style:none;padding:0;max-width:var(--measure)}
+.todo li{display:grid;grid-template-columns:19px minmax(0,1fr);gap:11px;padding:10px 0;
+  border-bottom:1px solid var(--line);margin:0;align-items:start}
+.todo .box{width:15px;height:15px;border:1.5px solid var(--line-strong);border-radius:4px;margin-top:4px}
+.todo li.block{padding-block:10px;border-top:none}
+.todo li.block .box{border-color:var(--bad)}
+.todo .who{font-family:var(--mono);font-size:11px;color:var(--faint);display:block;margin-top:3px}
+
+.bet{padding:15px 0;border-bottom:1px solid var(--line);max-width:var(--measure)}
+.bet .top{display:flex;gap:12px;align-items:baseline;justify-content:space-between}
+.bet .stmt{font-weight:600}
+.conf{display:flex;align-items:center;gap:8px;white-space:nowrap}
+.conf .bar{width:52px;height:5px;border-radius:3px;background:var(--line);overflow:hidden}
+.conf .bar i{display:block;height:100%;background:var(--warn)}
+.conf .n{font-family:var(--mono);font-size:11.5px;color:var(--muted)}
+.bet .why{color:var(--muted);font-size:14.5px;margin:6px 0 0}
+.bet .cost{font-size:13.5px;margin:6px 0 0;color:var(--bad)}
+
+.dash{display:grid;gap:10px;grid-template-columns:repeat(auto-fit,minmax(155px,1fr));margin:0 0 10px}
+.metric{border:1px solid var(--line);border-radius:9px;padding:13px 14px;background:var(--surface)}
+.metric .v{font:500 26px/1 var(--mono);color:var(--faint)}
+.metric .l{font-size:13px;margin-top:6px}
+.metric .t{font:400 11px/1 var(--mono);color:var(--faint);margin-top:4px}
+
+.rule{border:1px solid var(--line);border-left:3px solid var(--warn);border-radius:0 9px 9px 0;
+  padding:13px 16px;margin:0 0 10px;background:var(--surface);max-width:var(--measure)}
+.rule .if{font-family:var(--mono);font-size:12.5px;margin:0 0 8px}
+.rule .if b{color:var(--warn)}
+.rule ul{margin:0;font-size:14px}
+
+details{border-top:1px solid var(--line);padding:13px 0;max-width:100%}
+summary{cursor:pointer;font-weight:600;font-size:15px;list-style:none;display:flex;
+  justify-content:space-between;align-items:center;gap:12px}
+summary::-webkit-details-marker{display:none}
+summary::after{content:"+";font-family:var(--mono);color:var(--faint);font-size:17px}
+details[open] summary::after{content:"\2212"}
+details .body{padding-top:14px}
+
+#drawer{position:fixed;inset:0 0 0 auto;width:min(440px,94vw);background:var(--surface);
+  border-left:1px solid var(--line);box-shadow:-16px 0 46px rgba(0,0,0,.14);padding:22px 24px;
+  overflow:auto;transform:translateX(101%);transition:transform .17s ease;z-index:40}
 #drawer.on{transform:none}
 #drawer h3{margin-top:0}
-#drawer .x{position:absolute;top:13px;right:15px;border:none;background:none;font-size:20px;cursor:pointer;color:var(--muted);line-height:1}
-#search{position:fixed;inset:0;background:rgba(0,0,0,.4);display:none;z-index:50;padding:9vh 16px}
-#search.on{display:block}
-#search .box{max-width:620px;margin:0 auto;background:var(--panel);border:1px solid var(--line);border-radius:11px;overflow:hidden}
-#search input{width:100%;border:none;border-bottom:1px solid var(--line);padding:14px 16px;font:inherit;font-size:15px;background:none;color:var(--ink);outline:none}
-#search .res{max-height:52vh;overflow:auto}
-#search .res a{display:block;padding:9px 16px;text-decoration:none;color:var(--ink);border-bottom:1px solid var(--line);font-size:13px}
-#search .res a:hover{background:var(--accent-soft)}
-#search .res .k{font-family:var(--mono);font-size:11px;color:var(--muted);margin-right:7px}
-footer{border-top:1px solid var(--line);padding:16px 0 0;color:var(--muted);font-size:12px;font-family:var(--mono)}
-@media(max-width:820px){
-  .wrap{grid-template-columns:1fr}
-  nav{position:static;height:auto;border-right:none;border-bottom:1px solid var(--line)}
-  nav ol{display:flex;flex-wrap:wrap;padding:0 12px}
-  nav a{border-left:none;border-bottom:2px solid transparent;padding:6px 9px}
-  nav a.on{border-left:none;border-bottom-color:var(--accent)}
-  main{padding:20px 16px 70px}
-}
+#drawer .x{position:absolute;top:13px;right:16px;border:none;background:none;font-size:21px;
+  cursor:pointer;color:var(--faint);line-height:1}
+.quote{border-left:2px solid var(--line);padding:2px 0 2px 13px;margin:10px 0;font-size:14.5px}
+.quote cite{display:block;color:var(--faint);font:11.5px/1.5 var(--mono);font-style:normal;margin-top:5px}
+
+footer{color:var(--faint);font:12.5px/1.7 var(--mono);padding-top:22px;margin-top:10px;
+  border-top:1px solid var(--line);max-width:var(--measure)}
 </style>
 </head>
 <body>
-<div class="wrap">
-  <nav>
-    <h1>Launch package</h1>
-    <div class="prod" id="navprod"></div>
-    <ol id="navlist"></ol>
-    <div class="tools">
-      <button id="btn-search">Search  <span class="muted">/</span></button>
-      <button id="btn-theme">Toggle theme</button>
-      <button data-export="package">Download package JSON</button>
-      <button data-export="evidence">Download evidence</button>
-      <button data-export="assets">Download assets</button>
+<header>
+  <div class="wrap inner">
+    <div class="mast">
+      <span class="mark">aris</span>
+      <span class="kicker">launch package</span>
+      <span class="name" id="prodname"></span>
+      <span class="toolbar">
+        <button id="btn-theme">Theme</button>
+        <button data-export="package">Download</button>
+      </span>
     </div>
-  </nav>
-  <main id="main"></main>
+    <div class="stats" id="stats"></div>
+    <div class="tabs" role="tablist">
+      <button data-tab="know" class="on">What we know</button>
+      <button data-tab="do">What we do</button>
+      <button data-tab="after">What happens after</button>
+    </div>
+  </div>
+</header>
+<div class="thesis-wrap"><div class="wrap inner" id="answer"></div></div>
+<div class="wrap">
+  <div class="panel" id="p-know"></div>
+  <div class="panel" id="p-do" hidden></div>
+  <div class="panel" id="p-after" hidden></div>
 </div>
-
-<aside id="drawer"><button class="x" id="drawer-x">&times;</button><div id="drawer-body"></div></aside>
-<div id="search"><div class="box"><input id="q" placeholder="Search competitors, pains, personas, claims, assets, sources"><div class="res" id="res"></div></div></div>
+<aside id="drawer"><button class="x" id="drawer-x" aria-label="Close">&times;</button><div id="drawer-body"></div></aside>
 
 <script id="aris-data" type="application/json">/*__ARIS_DATA__*/</script>
 <script>
 const DATA = JSON.parse(document.getElementById('aris-data').textContent);
 const E = (s) => String(s ?? '').replace(/[&<>"']/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
 const has = (x) => Array.isArray(x) ? x.length > 0 : (x && typeof x === 'object' ? Object.keys(x).length > 0 : x != null && x !== '');
-const nf = (n) => Number.isFinite(Number(n)) ? Number(n).toLocaleString() : '—';
-const dash = (v) => has(v) ? E(v) : '<span class="empty">—</span>';
-
-/* Every material statement carries one of four states. `unknown` is a shippable value:
-   the failure this page exists to prevent is `unknown` quietly reading as `verified`. */
-function badge(status){
-  const s = String(status || 'unknown').toLowerCase();
-  const map = {verified:'verified', inferred:'inferred', assumption:'assumption', unknown:'unknown',
-               inferred_not_tested:'inferred', unsupported:'bad', passed:'ok', failed:'bad'};
-  const cls = map[s] || 'unknown';
-  const label = s === 'inferred_not_tested' ? 'inferred' : s;
-  return `<span class="badge b-${cls}">${E(label)}</span>`;
-}
-function fv(f){ // a { value, sourceIds, status } field
-  if (f == null) return dash(null);
-  if (typeof f !== 'object' || Array.isArray(f)) return dash(f);
-  const v = has(f.value) ? E(f.value) : '<span class="empty">unknown</span>';
-  const ids = (f.sourceIds || []).map(srcChip).join('');
-  return `${v} ${badge(f.status || (has(f.value) ? 'unknown' : 'unknown'))} ${ids}`;
-}
-/* Stored objects are data, not display. Render them as pairs rather than dumping JSON
-   at a reader who is deciding whether to launch. */
-function pairs(o, sep = ' \u00b7 '){
-  if (o == null) return '';
-  if (typeof o !== 'object') return E(o);
-  if (Array.isArray(o)) return o.map(x => pairs(x, sep)).join(sep);
-  return Object.entries(o)
-    .filter(([, v]) => v != null && v !== '')
-    .map(([k, v]) => `<span class="muted">${E(k.replace(/([a-z])([A-Z])/g, '$1 $2').toLowerCase())}</span> ${typeof v === 'object' ? pairs(v, ' ') : E(v)}`)
-    .join(sep);
-}
-function money(o){
-  if (o == null) return '\u2014';
-  if (typeof o !== 'object') return E(o);
-  const amt = o.amount ?? o.value ?? o.price;
-  const cur = o.currency ?? '';
-  const unit = o.unit ?? o.per ?? '';
-  if (amt == null) return pairs(o);
-  const sym = {USD: '$', EUR: '\u20ac', GBP: '\u00a3', VND: '\u20ab'}[cur] ?? '';
-  return `${sym}${E(amt)}${sym ? '' : ' ' + E(cur)}${unit ? ' <span class="muted">' + E(unit) + '</span>' : ''}`;
-}
-function riskBadge(r){
-  const cls = r === 'high' ? 'b-bad' : r === 'medium' ? 'b-inferred' : 'b-unknown';
-  return `<span class="badge ${cls}">${E(r ?? 'unknown')}</span>`;
-}
-const srcChip = (id) => `<span class="chip" data-src="${E(id)}">${E(id)}</span>`;
-const claimChip = (id) => `<span class="chip" data-claim="${E(id)}">${E(id)}</span>`;
-
 const S = {
-  sources: DATA.sources?.sources ?? [],
-  category: DATA.category, pains: DATA.pains?.pains ?? [], personas: DATA.personas?.personas ?? [],
-  sizing: DATA.sizing, demand: DATA.demand, positioning: DATA.positioning, messages: DATA.messages,
-  gtm: DATA.gtm, claims: DATA.claims?.claims ?? [], verify: DATA.verify, metrics: DATA.metrics?.metrics ?? [],
-  dashboard: DATA.dashboard, rules: DATA.playbook?.rules ?? [], assets: DATA.assets ?? {},
-  assumptions: DATA.assumptions?.assumptions ?? [], cuts: DATA.cutSteps?.cuts ?? [],
-  state: DATA.state ?? {}, manifest: DATA.manifest ?? {}
+  state: DATA.state ?? {}, manifest: DATA.manifest ?? {},
+  sources: DATA.sources?.sources ?? [], category: DATA.category,
+  pains: DATA.pains?.pains ?? [], personas: DATA.personas?.personas ?? [],
+  sizing: DATA.sizing, demand: DATA.demand, positioning: DATA.positioning,
+  messages: DATA.messages, gtm: DATA.gtm, claims: DATA.claims?.claims ?? [],
+  verify: DATA.verify, metrics: DATA.metrics?.metrics ?? [], dashboard: DATA.dashboard,
+  rules: DATA.playbook?.rules ?? [], assets: DATA.assets ?? {},
+  assumptions: DATA.assumptions?.assumptions ?? [], cuts: DATA.cutSteps?.cuts ?? []
 };
 const srcById = new Map(S.sources.map(s => [s.id, s]));
 const painById = new Map(S.pains.map(p => [p.id, p]));
 const quoteById = new Map();
 for (const p of S.pains) for (const q of p.quotes ?? []) quoteById.set(q.id, {...q, painId: p.id});
-const msgById = new Map();
-for (const pm of S.messages?.personaMessages ?? []) for (const m of pm.messageHierarchy ?? []) if (m.id) msgById.set(m.id, {...m, personaId: pm.personaId});
+const allMsgs = [...(S.messages?.personaMessages ?? []).flatMap(pm =>
+  (pm.messageHierarchy ?? []).map(m => ({...m, personaId: pm.personaId}))),
+  ...(S.messages?.unattachedMessages ?? [])];
 
-const missing = (cmd) => `<p class="empty">Not yet produced. Run <code>${E(cmd)}</code>.</p>`;
+/**
+ * Check names are written for the scripts that emit them. A reader deciding whether to
+ * launch needs the consequence, not the identifier.
+ */
+function plain(check){
+  return ({
+    messages_reach_a_persona:   'Nothing you plan to say has a customer behind it.',
+    citation_completeness:      'Some claims have no source.',
+    no_uncited_assertions:      'Some sentences state a fact with nothing behind them.',
+    no_fabricated_testimonials: 'A testimonial appears that nobody real said.',
+    required_disclosures_present:'Something the law expects you to state is missing.',
+    no_forbidden_claims:        'A claim appears that this field does not permit.',
+    no_unsupported_superlatives:'A superlative appears with no evidence.',
+    pricing_consistency:        'Two assets quote different prices.',
+    product_name_consistency:   'The product name is spelled more than one way.',
+    broken_links:               'A link is broken or a placeholder.',
+    tracking_present:           'Nothing is tracked, so the launch will produce traffic nobody can attribute.',
+    backward_links_resolve:     'Something references evidence that does not exist.',
+    date_consistency:           'A date has already passed.',
+    legal_links_present:        'No privacy or terms reference anywhere.',
+    every_marker_resolves:      'An asset cites a claim id that does not exist.',
+    every_attribute_has_evidence:'A persona has an attribute nobody actually said.',
+  })[check] ?? (check.replace(/_/g, ' ') + '.');
+}
 
-/* ---------- 01 executive summary ---------- */
-function sec01(){
-  const st = S.state, v = S.verify;
-  const need = ['intel/category.json','intel/pains.json','intel/personas.json','intel/tam-sam-som.json',
-    'intel/demand.json','strategy/positioning.json','strategy/messages.json','strategy/gtm.json',
-    'assets/claims.json','verification/verify.json','harness/metrics.json','playbook/growth-rules.json'];
-  const present = (S.manifest.artifacts ?? []).map(a => a.path);
-  const pct = Math.round(100 * need.filter(p => present.includes(p)).length / need.length);
-  // Requirement 15: readiness NEVER reads launch-ready over a failed verification.
-  const ready = v?.passed === true && st.status === 'launch-ready';
-  const label = !v ? 'NOT VERIFIED' : (v.passed ? (ready ? 'LAUNCH READY' : 'VERIFIED, NOT PACKAGED') : 'BLOCKED');
-  const cls = ready ? 'b-ok' : (v?.passed ? 'b-inferred' : 'b-bad');
+function badge(st){
+  const s = String(st || 'unknown').toLowerCase();
+  const cls = {verified:'verified', inferred:'inferred', inferred_not_tested:'inferred',
+    assumption:'assumption', unknown:'unknown', unsupported:'bad', passed:'ok', failed:'bad'}[s] || 'unknown';
+  return `<span class="badge b-${cls}">${E(s === 'inferred_not_tested' ? 'inferred' : s)}</span>`;
+}
+const claimChip = (id) => `<span class="chip" data-claim="${E(id)}">${E(id)}</span>`;
+const gap = (why) => `<p class="gap">${E(why)}</p>`;
+const money = (o) => {
+  if (o == null) return null;
+  if (typeof o !== 'object') return E(o);
+  const a = o.amount ?? o.value, cur = o.currency ?? '', unit = o.unit ?? '';
+  if (a == null) return null;
+  const sym = {USD:'$', EUR:'€', GBP:'£', VND:'₫'}[cur] ?? '';
+  return `${sym}${E(a)}${sym ? '' : ' ' + E(cur)}${unit ? ` <span class="muted">${E(unit)}</span>` : ''}`;
+};
+
+/* ---------- 1. the answer ---------- */
+function secAnswer(){
+  const v = S.verify, st = S.state;
   const sel = (S.positioning?.directions ?? []).find(d => d.id === S.positioning?.selected);
-  const topPain = [...S.pains].sort((a,b)=>(b.frequency?.quoteCount??0)-(a.frequency?.quoteCount??0))[0];
-  const chans = (S.gtm?.channels ?? []).filter(c => c.priority === 'primary').map(c => c.channel);
+  const blocking = v?.blockingIssues ?? [];
+  const ready = v?.passed === true && st.status === 'launch-ready';
 
-  let out = `<div class="card"><div style="display:flex;justify-content:space-between;gap:16px;flex-wrap:wrap;align-items:flex-start">
-    <div><div class="big">${E(st.product?.name || 'Unnamed product')}</div>
-    <p class="muted" style="max-width:52ch">${dash(st.product?.description)}</p></div>
-    <div style="text-align:right"><span class="badge ${cls}" style="font-size:12px">${label}</span>
-    <div class="mono muted" style="margin-top:7px">artifacts ${pct}%</div>
-    <div class="bar" style="width:150px"><i style="width:${pct}%"></i></div></div></div>
-    <dl class="kv" style="margin-top:14px">
-      <dt>Category</dt><dd>${dash(st.market?.category)}</dd>
-      <dt>Sector</dt><dd>${dash(st.market?.sector)} ${st.market?.sectorStatus === 'provisional' ? badge('assumption') + ' <span class="muted">provisional entry</span>' : ''}</dd>
-      <dt>Market</dt><dd>${dash((st.market?.geography ?? []).join(', '))} &middot; ${dash((st.market?.language ?? []).join(', '))}</dd>
-      <dt>Model</dt><dd>${dash(st.market?.model)}</dd>
-      <dt>Positioning</dt><dd>${sel ? E(sel.statement || sel.name) : '<span class="empty">—</span>'}</dd>
-      <dt>Core pain</dt><dd>${topPain ? `${E(topPain.statement)} <span class="mono muted">${topPain.frequency?.quoteCount ?? 0} quotes</span>` : '<span class="empty">—</span>'}</dd>
-      <dt>Price</dt><dd>${S.gtm?.pricing?.recommended ? money(S.gtm.pricing.recommended) + ' ' + badge('inferred') + ' <span class="muted">recommended, not committed</span>' : '<span class="empty">—</span>'}</dd>
-      <dt>Primary channels</dt><dd>${dash(chans.join(', '))}</dd>
-      <dt>Launch auth</dt><dd>${st.launchAuthorization ? 'granted' : '<b>not granted</b> — the publish gate is closed'}</dd>
-    </dl></div>`;
-
-  out += `<div class="warnbox"><b>Demand is inferred, not experimentally validated.</b>
-    This package mines the public record. It ran no interviews, no survey and no willingness-to-pay
-    test, so it finds what is wrong with competitors — not what nobody has articulated yet.</div>`;
-
-  if (S.cuts.length) {
-    out += `<h3>What this package could not know</h3><div class="scroll"><table><thead><tr><th>Deleted</th><th>Consequence</th><th>Risk</th></tr></thead><tbody>`;
-    for (const c of S.cuts) out += `<tr><td class="mono">${E(c.deleted)}</td><td>${E(c.consequence)}</td><td>${riskBadge(c.risk)}</td></tr>`;
-    out += `</tbody></table></div>`;
+  let out = '';
+  if (!v) {
+    out += `<div class="status warn"><span class="mark">NOT CHECKED</span><div>
+      <b>Nothing has been verified yet.</b><p>Run <code>/aris-verify</code> before acting on any of this.</p></div></div>`;
+  } else if (!v.passed) {
+    const causes = [...new Set(blocking.map(b => (b.match(/^\[([^\]]+)\]/) ?? [])[1]).filter(Boolean))];
+    out += `<div class="status blocked"><span class="mark">BLOCKED</span><div>
+      <b>Nothing publishes until this clears.</b>
+      <p>${causes.map(c => E(plain(c))).join(' ')} See <b>Do this first</b> under What we do.</p></div></div>`;
+  } else if (ready) {
+    out += `<div class="status ready"><span class="mark">READY</span><div>
+      <b>Every check passed.</b><p>Publishing still needs a person: <code>launchAuthorization</code> is
+      ${st.launchAuthorization ? 'granted' : '<b>not granted</b>'}.</p></div></div>`;
+  } else {
+    out += `<div class="status ready"><span class="mark">VERIFIED</span><div>
+      <b>Every check passed; the package is not assembled.</b><p>Run <code>/aris-package</code>.</p></div></div>`;
   }
+
+  if (sel) {
+    const t = sel.statement || '';
+    const parts = t.split(/\b(FOR|WHO|IS THE|THAT|UNLIKE|BECAUSE)\b/);
+    out += `<p class="thesis">` + (parts.length > 1
+      ? parts.map(x => /^(FOR|WHO|IS THE|THAT|UNLIKE|BECAUSE)$/.test(x)
+          ? `<span class="k">${E(x.toLowerCase())}</span>` : E(x)).join('')
+      : E(t)) + `</p>`;
+    out += `<p class="muted" style="max-width:var(--measure)">Everything below derives from this one
+      sentence. Change it and the messages, the channels and the copy all change with it.</p>`;
+  } else {
+    out += gap('No positioning has been selected. Run /aris-position — nothing downstream means anything without it.');
+  }
+
   return out;
 }
 
-/* ---------- 02 market ---------- */
-function sec02(){
-  const c = S.category;
-  if (!c) return missing('/aris-category');
-  let out = `<div class="card"><h4>Category</h4><p>${dash(c.category)}</p><p class="muted">${dash(c.definition)}</p></div>`;
-  const players = c.players ?? [];
-  if (players.length) {
-    out += `<h3>Competitive landscape <span class="muted mono">${players.length}</span></h3><div class="grid">`;
-    for (const p of players) out += `<div class="card"><b>${E(p.name)}</b> <span class="mono muted">${E(p.id)}</span>
-      <dl class="kv" style="margin-top:8px">
-      <dt>For</dt><dd>${dash(p.targetCustomer)}</dd>
-      <dt>Says</dt><dd>${dash((p.positioning ?? []).join(' &middot; '))}</dd>
-      <dt>Price</dt><dd>${dash((p.pricing ?? []).map(x => typeof x === 'object' ? JSON.stringify(x) : x).join(', '))}</dd>
-      <dt>Strong</dt><dd>${dash((p.strengths ?? []).join('; '))}</dd>
-      <dt>Weak</dt><dd>${dash((p.weaknesses ?? []).join('; '))}</dd>
-      </dl><div style="margin-top:8px">${(p.evidence ?? []).map(srcChip).join('')}</div></div>`;
-    out += `</div>`;
-  }
-  const fm = c.featureMatrix ?? {};
-  const rows = Object.keys(fm);
-  if (rows.length) {
-    const cols = [...new Set(rows.flatMap(r => Object.keys(fm[r] ?? {})))];
-    out += `<h3>Feature matrix</h3><p class="muted">Every cell carries its state. <code>unknown</code> is common and honest — absence on a marketing page is not evidence of absence.</p><div class="scroll"><table><thead><tr><th>Feature</th>${cols.map(x=>`<th>${E(x)}</th>`).join('')}</tr></thead><tbody>`;
-    for (const r of rows) {
-      out += `<tr><td>${E(r)}</td>`;
-      for (const cc of cols) {
-        const cell = fm[r]?.[cc];
-        if (cell == null) { out += `<td><span class="empty">—</span></td>`; continue; }
-        const val = typeof cell === 'object' ? cell.value : cell;
-        const stat = typeof cell === 'object' ? cell.status : 'unknown';
-        const ids = typeof cell === 'object' ? (cell.sourceIds ?? []).map(srcChip).join('') : '';
-        const mark = val === true || val === 'true' ? 'yes' : val === false || val === 'false' ? 'no' : (has(val) ? E(val) : 'unknown');
-        out += `<td>${mark} ${badge(stat)}${ids}</td>`;
-      }
-      out += `</tr>`;
-    }
-    out += `</tbody></table></div>`;
-  }
-  if (has(c.priceLadder)) out += `<h3>Price ladder</h3><pre>${E(JSON.stringify(c.priceLadder, null, 2))}</pre>`;
-  if (has(c.marketGaps)) {
-    out += `<h3>Gaps</h3><ul>`;
-    for (const g of c.marketGaps) out += `<li>${typeof g === 'object' ? fv(g) : E(g)}</li>`;
-    out += `</ul>`;
-  }
-  return out;
+/** The same rows, but in the tab where someone acts on them rather than in the header. */
+function secGlance(){
+  const st = S.state, chans = (S.gtm?.channels ?? []).filter(c => c.priority === 'primary').map(c => c.channel);
+  const price = money(S.gtm?.pricing?.recommended);
+  const topPain = [...S.pains].sort((a,b) => (b.frequency?.quoteCount ?? 0) - (a.frequency?.quoteCount ?? 0))[0];
+  const rows = [
+    ['Who it is for', E(st.market?.category ?? '')],
+    ['Where', `${E((st.market?.geography ?? []).join(', '))} <span class="muted">in ${E((st.market?.language ?? []).join(', '))}</span>`],
+    ['Price', price ? `${price} ${badge('inferred')} <span class="muted">recommended, not decided</span>` : '<span class="faint">not set</span>'],
+    ['First channels', chans.length ? E(chans.join(' \u00b7 ')) : '<span class="faint">none chosen</span>'],
+    ['Core pain', topPain ? `${E(topPain.statement)} <span class="mono faint">${topPain.frequency?.quoteCount ?? 0} quotes</span>`
+      : '<span class="faint">none \u2014 no customer research was run</span>'],
+    ['Out of scope', E((st.scope?.out_of_scope ?? []).join(', ')) || '<span class="faint">nothing stated</span>']
+  ];
+  return `<dl class="facts" style="margin-top:0;border-top:none">` + rows.map(([k, val]) =>
+    `<div class="fact"><dt>${E(k)}</dt><dd>${val}</dd></div>`).join('') + `</dl>`;
 }
 
-/* ---------- 03 pain ---------- */
-function sec03(){
-  if (!S.pains.length) return missing('/aris-voc');
-  const sorted = [...S.pains].sort((a,b)=>(b.frequency?.quoteCount??0)-(a.frequency?.quoteCount??0));
-  let out = `<p class="muted">Ranked by quote count. Click a pain for its quotes — the evidence is never hidden.</p><div class="scroll"><table><thead><tr><th></th><th>Pain</th><th>Quotes</th><th>Sources</th><th>Severity</th><th></th></tr></thead><tbody>`;
-  sorted.forEach((p, i) => {
-    out += `<tr><td class="mono muted">${String(i+1).padStart(2,'0')}</td>
-      <td><a href="#" data-pain="${E(p.id)}">${E(p.statement)}</a><div class="mono muted">${E(p.id)}</div></td>
-      <td class="mono">${p.frequency?.quoteCount ?? 0}</td><td class="mono">${p.frequency?.sourceCount ?? 0}</td>
-      <td>${E(p.severity ?? '—')}</td>
-      <td>${p.status === 'validated' ? badge('verified') : badge('unknown')} ${E(p.status ?? '')}</td></tr>`;
-  });
-  out += `</tbody></table></div>`;
-  const insuf = sorted.filter(p => p.status !== 'validated');
-  if (insuf.length) out += `<div class="warnbox"><b>${insuf.length} pain(s) below threshold.</b>
-    A pain is validated only at 8+ quotes from 3+ distinct sources. These are kept, not promoted, and
-    no persona attribute derives from them.</div>`;
-  return out;
-}
-
-/* ---------- 04 personas ---------- */
-function sec04(){
-  if (!S.personas.length) return missing('/aris-personas');
-  let out = `<p class="muted">Derived objects. Every attribute carries the quote ids behind it; an attribute with no evidence is stripped, not flagged.</p><div class="grid">`;
-  for (const p of S.personas) {
-    out += `<div class="card"><b>${E(p.name || p.id)}</b> <span class="mono muted">${E(p.id)}</span>
-      <p class="muted" style="margin-top:6px">${dash(p.jobToBeDone)}</p>
-      <h4>Pains</h4><div>${(p.pains ?? []).map(id => `<span class="chip" data-pain="${E(id)}">${E(id)}</span>`).join('') || '<span class="empty">—</span>'}</div>`;
-    if (has(p.attributes)) {
-      out += `<h4>Attributes</h4><ul style="padding-left:17px;margin:0">`;
-      for (const a of p.attributes) out += `<li>${E(a.attribute)} ${(a.evidence ?? []).map(id => `<span class="chip" data-quote="${E(id)}">${E(id)}</span>`).join('')}</li>`;
-      out += `</ul>`;
-    }
-    for (const [k, label] of [['motivations','Motivations'],['objections','Objections'],['buyingTriggers','Buying triggers'],['channels','Channels']])
-      if (has(p[k])) out += `<h4>${label}</h4><div>${(p[k]).map(x => E(typeof x === 'object' ? JSON.stringify(x) : x)).join(' &middot; ')}</div>`;
-    out += `</div>`;
-  }
-  return out + `</div>`;
-}
-
-/* ---------- 05 market size ---------- */
-function sec05(){
-  const s = S.sizing;
-  if (!s) return missing('/aris-size');
-  const fac = new Map((s.factors ?? []).map(f => [f.id, f]));
-  let out = `<div class="grid">`;
-  for (const k of ['tam','sam','som']) {
-    const c = s.calculations?.[k];
-    const r = c?.range;
-    const txt = Array.isArray(r) && r.length === 2 ? `${nf(r[0])} – ${nf(r[1])}` : '—';
-    out += `<div class="card"><h4>${k.toUpperCase()}</h4><div class="big">${txt}</div>
-      <div class="mono muted" style="margin-top:6px">${E(s.currency ?? '')}</div>
-      ${c?.formula ? `<div class="mono" style="margin-top:9px">${E(c.formula)}</div>` : ''}
-      ${badge('inferred')}</div>`;
-  }
-  out += `</div>`;
-  if (has(s.factors)) {
-    out += `<h3>The calculation</h3><p class="muted">Recomputed independently by <code>arithmetic-check.mjs</code>. A formula it cannot parse is one a reader cannot check either.</p><div class="scroll"><table><thead><tr><th>Factor</th><th>Name</th><th>Value</th><th>Source</th></tr></thead><tbody>`;
-    for (const f of s.factors) out += `<tr><td class="mono">${E(f.id)}</td><td>${E(f.name)}</td><td class="mono">${nf(f.value)}</td><td>${f.sourceId ? srcChip(f.sourceId) : badge('unknown')}</td></tr>`;
-    out += `</tbody></table></div>`;
-  }
-  out += `<div class="warnbox"><b>Ranges, not points.</b> Market size is derived from public factors and is
-    not independently validated. ${has(s.limitations) ? 'Limitations: ' + (s.limitations).map(E).join('; ') : 'No limitations recorded — every bottom-up estimate has them.'}</div>`;
-  return out;
-}
-
-/* ---------- 06 demand ---------- */
-function sec06(){
-  const d = S.demand;
-  if (!d) return missing('/aris-demand');
-  let out = `<div class="badbox"><b>INFERRED — NOT TESTED</b>
-    These are desk signals read off the public record. No customer was asked anything.</div>`;
-  if (has(d.signals)) {
-    out += `<div class="grid">`;
-    for (const s of d.signals) {
-      const v = s.value && typeof s.value === 'object' ? Object.entries(s.value).map(([k,x])=>`${k}: ${x}`).join(', ') : s.value;
-      out += `<div class="card"><h4>${E(String(s.type ?? '').replace(/_/g,' '))}</h4>
-        <div class="big" style="font-size:22px">${dash(v)}</div>
-        <div class="muted" style="margin-top:6px">${dash(s.metric)} ${s.period ? '&middot; ' + E(s.period) : ''}</div>
-        <div style="margin-top:8px">${s.sourceId ? srcChip(s.sourceId) : badge('unknown')}</div></div>`;
-    }
-    out += `</div>`;
-  }
-  if (has(d.conclusion)) out += `<div class="card"><h4>Conclusion</h4><p>${E(d.conclusion)} ${badge('inferred')}</p></div>`;
-  const dnp = d.doesNotProve ?? ['product-market fit','willingness to pay','conversion rate','demand for this product rather than the category'];
-  out += `<h3>What this does not prove</h3><ul>${dnp.map(x=>`<li>${E(x)}</li>`).join('')}</ul>`;
-  if (has(d.untestedQuestions)) out += `<h3>Untested questions</h3><p class="muted">The brief for the fieldwork a human would do next.</p><ul>${(d.untestedQuestions).map(x=>`<li>${E(x)}</li>`).join('')}</ul>`;
-  return out;
-}
-
-/* ---------- 07 positioning ---------- */
-function sec07(){
-  const p = S.positioning;
-  if (!p) return missing('/aris-position');
-  const rej = new Map((p.rejected ?? []).map(r => [r.id, r.reason]));
-  let out = `<p class="muted">Criteria declared before scoring: ${(p.criteria ?? []).map(c=>`<code>${E(c)}</code>`).join(' ')}</p><div class="grid">`;
-  for (const d of p.directions ?? []) {
-    const on = d.id === p.selected;
-    out += `<div class="card" style="${on ? 'border-color:var(--accent);border-width:2px' : 'opacity:.82'}">
-      <div style="display:flex;justify-content:space-between;gap:8px"><b>${E(d.name || d.id)}</b>
-      ${on ? '<span class="badge b-ok">selected</span>' : '<span class="badge b-unknown">rejected</span>'}</div>
-      <p style="margin-top:8px">${dash(d.statement)}</p>
-      <h4>Serves</h4><div>${(d.painIds ?? []).map(id=>`<span class="chip" data-pain="${E(id)}">${E(id)}</span>`).join('')}${(d.targetPersonaIds ?? []).map(id=>`<span class="chip">${E(id)}</span>`).join('')}</div>
-      ${has(d.whitespace) ? `<h4>Whitespace</h4><div>${(d.whitespace).map(E).join('; ')}</div>` : ''}
-      ${has(d.defensibility) ? `<h4>Defensibility ${badge('assumption')}</h4><div>${(d.defensibility).map(E).join('; ')}</div>` : ''}
-      ${has(d.score) ? `<h4>Score</h4><div>${pairs(d.score)}</div>` : ''}
-      ${!on && rej.has(d.id) ? `<h4>Rejected because</h4><div class="muted">${E(rej.get(d.id))}</div>` : ''}
-      </div>`;
-  }
-  out += `</div><p class="muted">All three are shown deliberately: the rejected directions are what let a reader judge whether the choice was right. Defensibility is the weakest score in any set — it depends on a roadmap this workflow does not own.</p>`;
-  return out;
-}
-
-/* ---------- 08 messaging ---------- */
-function sec08(){
+/* ---------- 2. what we say ---------- */
+function secSay(){
   const m = S.messages;
-  if (!m) return missing('/aris-messages');
-  let out = `<div class="card"><h4>USP</h4><p>${dash(m.usp)}</p><h4>Value proposition</h4><p>${dash(m.valueProposition)}</p></div>`;
-  if (has(m.elevatorPitch)) {
-    out += `<h3>Elevator pitch</h3><div class="grid">`;
-    for (const [k, v] of Object.entries(m.elevatorPitch)) out += `<div class="card"><h4>${E(k)}</h4><p>${dash(v)}</p></div>`;
-    out += `</div>`;
+  if (!m) return gap('No messaging yet. Run /aris-messages.');
+  let out = '';
+  if (has(m.usp)) out += `<div class="copy"><p class="line">${E(m.usp)}</p>
+    <p class="meta"><b>USP</b> · the one sentence everything else compresses to</p></div>`;
+  if (has(m.valueProposition)) out += `<div class="copy"><p class="line">${E(m.valueProposition)}</p>
+    <p class="meta"><b>Value proposition</b></p></div>`;
+
+  if (allMsgs.length) {
+    out += `<h3>Messages, in priority order</h3>`;
+    out += `<p class="lede">Lift these directly. Each carries the evidence it rests on.</p>`;
+    for (const x of allMsgs.slice().sort((a,b) => (a.priority ?? 9) - (b.priority ?? 9))) {
+      const unattached = !x.personaId;
+      out += `<div class="copy">
+        <p class="line">${E(x.message)}</p>
+        ${has(x.benefit) ? `<p class="sub">${E(x.benefit)}</p>` : ''}
+        ${has(x.proof) && x.proof !== 'unknown'
+          ? `<p class="sub faint">Proof: ${E(x.proof)}</p>`
+          : `<p class="sub faint">Proof: ${badge('unknown')} nothing established</p>`}
+        <p class="meta"><b>${E(x.id ?? '')}</b>
+          ${x.cta ? ` · CTA ${E(x.cta)}` : ''}
+          ${unattached ? ` · <span style="color:var(--bad)">attached to no persona</span>` : ` · ${E(x.personaId)}`}
+          ${(x.evidence ?? []).map(e => ' · ' + E(e)).join('')}</p></div>`;
+    }
   }
-  for (const pm of m.personaMessages ?? []) {
-    const per = S.personas.find(x => x.id === pm.personaId);
-    out += `<h3>${E(per?.name || pm.personaId)} <span class="mono muted">${E(pm.personaId)}</span></h3><div class="scroll"><table><thead><tr><th>#</th><th>Message</th><th>Benefit</th><th>Proof</th><th>Evidence</th></tr></thead><tbody>`;
-    for (const x of (pm.messageHierarchy ?? []).slice().sort((a,b)=>(a.priority??9)-(b.priority??9)))
-      out += `<tr><td class="mono">${x.priority ?? ''}</td><td><b>${E(x.message)}</b><div class="mono muted">${E(x.id ?? '')}</div></td>
-        <td>${dash(x.benefit)}</td><td>${has(x.proof) && x.proof !== 'unknown' ? E(x.proof) : badge('unknown')}</td>
-        <td>${(x.evidence ?? []).map(id => `<span class="chip" data-pain="${E(id)}">${E(id)}</span>`).join('')}</td></tr>`;
-    out += `</tbody></table></div>`;
+  if (has(m.elevatorPitch)) {
+    out += `<h3>Said out loud</h3>`;
+    for (const [k, val] of Object.entries(m.elevatorPitch))
+      out += `<h4>${E(k)}</h4><p>${E(val)}</p>`;
   }
   if (has(m.featureToBenefit)) {
-    out += `<h3>Feature to benefit</h3><div class="scroll"><table><thead><tr><th>Feature</th><th>Benefit</th></tr></thead><tbody>`;
-    for (const f of m.featureToBenefit) out += `<tr><td>${E(f.feature ?? f[0] ?? '')}</td><td>${E(f.benefit ?? f[1] ?? '')}</td></tr>`;
-    out += `</tbody></table></div>`;
+    out += `<h3>What each thing is for</h3><div class="scroll"><table><tbody>` +
+      m.featureToBenefit.map(f => `<tr><td style="width:34%"><b>${E(f.feature ?? '')}</b></td><td>${E(f.benefit ?? '')}</td></tr>`).join('') +
+      `</tbody></table></div>`;
   }
-  if (has(m.tone)) out += `<h3>Tone of voice</h3><div class="card">${pairs(m.tone, '<br>')}</div>`;
-  if (has(m.glossary)) out += `<h3>Glossary</h3><div class="scroll"><table><tbody>${(m.glossary).map(g=>`<tr><td class="mono">${E(g.term ?? g)}</td><td>${E(g.meaning ?? '')}</td></tr>`).join('')}</tbody></table></div>`;
+  if (has(m.tone?.avoid)) out += `<h4>Never write</h4><p class="muted">${(m.tone.avoid).map(E).join(' · ')}</p>`;
   return out;
 }
 
-/* ---------- 09 gtm ---------- */
-function sec09(){
+/* ---------- 3. where ---------- */
+function secWhere(){
   const g = S.gtm;
-  if (!g) return missing('/aris-gtm');
+  if (!g) return gap('No go-to-market plan yet. Run /aris-gtm.');
   let out = '';
-  if (has(g.channels)) {
-    out += `<h3>Channels</h3><p class="muted">A channel earns its place because the evidence came from there.</p><div class="grid">`;
-    for (const c of g.channels) out += `<div class="card"><div style="display:flex;justify-content:space-between"><b>${E(c.channel)}</b>
-      <span class="badge ${c.priority==='primary'?'b-ok':'b-unknown'}">${E(c.priority ?? '')}</span></div>
-      <dl class="kv" style="margin-top:8px"><dt>Role</dt><dd>${dash(c.role)}</dd>
-      <dt>Audience evidence</dt><dd>${(c.audienceEvidence ?? []).map(x=>`<span class="chip">${E(typeof x==='object'?JSON.stringify(x):x)}</span>`).join('') || badge('unknown')}</dd>
-      <dt>Competitors</dt><dd>${dash((c.competitorPresence ?? []).map(x=>typeof x==='object'?JSON.stringify(x):x).join(', '))}</dd>
-      <dt>Cost</dt><dd>${has(c.cost) ? pairs(c.cost) : dash(null)}</dd>
-      <dt>CAC benchmark</dt><dd>${has(c.cacBenchmark) ? pairs(c.cacBenchmark) + ' ' + badge('inferred') : badge('unknown')}</dd></dl></div>`;
-    out += `</div>`;
+  const order = {primary:0, secondary:1, test:2};
+  const chans = (g.channels ?? []).slice().sort((a,b) => (order[a.priority] ?? 9) - (order[b.priority] ?? 9));
+  if (chans.length) {
+    out += `<div class="cards">` + chans.map(c => {
+      const ev = (c.audienceEvidence ?? []).length;
+      return `<div class="card${c.priority === 'primary' ? ' primary' : ''}">
+        <h3>${E(c.channel)}</h3>
+        <p class="muted">${E(c.role ?? '')}${c.priority ? ' · ' + E(c.priority) : ''}</p>
+        <h4>Why here</h4>
+        <p>${(c.competitorPresence ?? []).map(E).join('; ') || '<span class="faint">no reason recorded</span>'}</p>
+        <p class="mono faint">${ev ? ev + ' pieces of audience evidence' : 'no audience evidence — ' +
+          (c.audienceEvidenceNote ? E(c.audienceEvidenceNote).slice(0, 90) : 'not established')}</p>
+        ${c.note ? `<p class="sub faint" style="font-size:13px">${E(c.note)}</p>` : ''}</div>`;
+    }).join('') + `</div>`;
   }
-  if (has(g.pricing)) out += `<h3>Price</h3><div class="card"><div class="big">${money(g.pricing.recommended)}</div>
-    ${badge('inferred')} <span class="muted">recommended, not committed — the workflow does not set price</span>
-    ${has(g.pricing.basis) ? `<h4>Basis</h4><div>${(g.pricing.basis).map(E).join('; ')}</div>` : ''}
-    ${has(g.pricing.confidence) ? `<div class="mono muted" style="margin-top:7px">confidence: ${E(g.pricing.confidence)}</div>` : ''}</div>`;
+  if (has(g.pricing)) {
+    out += `<h3>Price</h3><p style="font:400 22px/1.3 var(--serif)">${money(g.pricing.recommended) ?? 'not set'}</p>`;
+    out += `<p class="muted">${badge('inferred')} A recommendation. This workflow does not decide price${
+      g.pricing.confidence ? `, and confidence here is <b>${E(g.pricing.confidence)}</b>` : ''}.</p>`;
+    if (has(g.pricing.basis)) out += `<h4>Why that number</h4><ul>` + g.pricing.basis.map(b => `<li>${E(b)}</li>`).join('') + `</ul>`;
+  }
   if (has(g.budgetAllocation)) {
-    const tot = Object.values(g.budgetAllocation).reduce((a,b)=>a+(Number(b)||0),0);
-    out += `<h3>Budget allocation <span class="muted mono">${tot}%</span></h3><p class="muted">Percentages, never amounts. The workflow does not commit money.</p><div class="card">`;
-    for (const [k,v] of Object.entries(g.budgetAllocation))
-      out += `<div style="margin-bottom:9px"><div style="display:flex;justify-content:space-between"><span>${E(k)}</span><span class="mono">${E(v)}%</span></div><div class="bar"><i style="width:${Number(v)||0}%"></i></div></div>`;
-    out += `</div>`;
+    const tot = Object.values(g.budgetAllocation).reduce((a,b) => a + (Number(b) || 0), 0);
+    out += `<h3>Where the effort goes <span class="mono faint">${tot}%</span></h3><div class="scroll"><table><tbody>` +
+      Object.entries(g.budgetAllocation).map(([k, val]) =>
+        `<tr><td style="width:30%">${E(k)}</td><td class="tnum mono">${E(val)}%</td></tr>`).join('') + `</tbody></table></div>`;
   }
-  if (has(g.kpis)) {
-    out += `<h3>KPIs</h3><div class="scroll"><table><thead><tr><th>KPI</th><th>Target</th><th>Benchmark</th></tr></thead><tbody>`;
-    for (const k of g.kpis) out += `<tr><td>${E(k.name ?? k.metric ?? JSON.stringify(k))}</td><td class="mono">${dash(k.target)}</td><td>${has(k.benchmark) ? pairs(k.benchmark) : badge('unknown')}</td></tr>`;
-    out += `</tbody></table></div>`;
-  }
-  if (has(g.timeline)) out += `<h3>Timeline</h3><pre>${E(JSON.stringify(g.timeline, null, 2))}</pre>`;
   return out;
 }
 
-/* ---------- 10 assets ---------- */
-function sec10(){
+/* ---------- 4. what we publish ---------- */
+function secPublish(){
   const names = Object.keys(S.assets);
-  if (!names.length) return missing('/aris-assets');
-  const label = (n) => n.replace(/\.md$/,'').replace(/-/g,' ');
-  let out = `<div class="tabs" id="asset-tabs">` +
-    names.map((n,i)=>`<button data-a="${E(n)}" class="${i===0?'on':''}">${E(label(n))}</button>`).join('') + `</div><div id="asset-body"></div>`;
-  out += `<p class="muted" style="margin-top:14px">The landing page itself is not here: <code>landing-brief.md</code> is the copy deck, and <b>pica</b> builds the page from it. Claim ids are clickable.</p>`;
+  if (!names.length) return gap('No assets written yet. Run /aris-assets.');
+  const label = (n) => n.replace(/\.md$/, '').replace(/-/g, ' ');
+  let out = `<div class="atabs" id="asset-tabs">` + names.map((n, i) =>
+    `<button data-a="${E(n)}" class="${i === 0 ? 'on' : ''}">${E(label(n))}</button>`).join('') + `</div><div id="asset-body"></div>`;
+  out += `<p class="lede" style="margin-top:14px">The landing page itself is not here.
+    <code>landing-brief.md</code> is the copy deck; <b>pica</b> builds the page from it.</p>`;
   return out;
 }
 function renderAsset(name){
   const raw = S.assets[name] ?? '';
-  const withChips = E(raw).replace(/\[?(CLAIM-\d+)\]?/g, (m, id) => `<span class="chip" data-claim="${id}">${id}</span>`);
-  const flagged = withChips.replace(/\[TESTIMONIAL[^\]]*\]/gi, m => `<span class="badge b-bad">${m}</span>`)
-                           .replace(/\[UNASSIGNED\]/g, '<span class="badge b-unknown">UNASSIGNED</span>');
-  document.getElementById('asset-body').innerHTML = `<pre>${flagged}</pre>`;
+  const html = E(raw)
+    .replace(/\[?(CLAIM-\d+)\]?/g, (m, id) => `<span class="chip" data-claim="${id}">${id}</span>`)
+    .replace(/\[TESTIMONIAL[^\]]*\]/gi, m => `<span class="badge b-bad">${m}</span>`)
+    .replace(/\[UNASSIGNED\]/g, '<span class="badge b-unknown">UNASSIGNED</span>');
+  document.getElementById('asset-body').innerHTML = `<pre>${html}</pre>`;
 }
 
-/* ---------- 11 verification ---------- */
-function sec11(){
+/* ---------- 5. do this first ---------- */
+function secDo(){
   const v = S.verify;
-  if (!v) return `<div class="badbox"><b>Never verified.</b> Run <code>/aris-verify</code>. Nothing may be published until it passes.</div>`;
-  let out = `<div class="${v.passed ? 'card' : 'badbox'}"><b style="font-size:15px">${v.passed ? 'PASSED' : 'FAILED'}</b>
-    <div class="mono muted">${E(v.timestamp ?? '')} &middot; ${(v.blockingIssues ?? []).length} blocking, ${(v.warnings ?? []).length} warnings</div></div>`;
-  out += `<div class="scroll"><table><thead><tr><th></th><th>Check</th><th>Findings</th></tr></thead><tbody>`;
-  for (const c of v.checks ?? []) {
-    const b = c.status === 'passed' ? 'b-ok' : c.status === 'skipped' ? 'b-unknown' : 'b-bad';
-    out += `<tr><td><span class="badge ${b}">${E(c.status)}</span></td>
-      <td class="mono">${E(c.check)}${c.coverage != null ? ` <span class="muted">${Math.round(c.coverage*100)}%</span>` : ''}</td>
-      <td>${(c.errors ?? []).length ? `<ul style="margin:0;padding-left:17px">${(c.errors).slice(0,8).map(e=>`<li>${E(e)}</li>`).join('')}${c.errors.length>8?`<li class="muted">… ${c.errors.length-8} more</li>`:''}</ul>` : '<span class="empty">—</span>'}</td></tr>`;
-  }
-  out += `</tbody></table></div>`;
-  if (!v.passed) out += `<div class="warnbox"><b>The publish gate is closed.</b> The PreToolUse hook reads this file and denies any publish while it fails. Fix the cause; editing this file would break every guarantee in the workflow.</div>`;
-  return out;
-}
-
-/* ---------- 12 harness ---------- */
-function sec12(){
-  if (!S.metrics.length) return missing('/aris-harness');
-  const secs = S.dashboard?.sections ?? [{name:'Metrics', metrics: S.metrics.map(m=>m.name)}];
-  let out = `<div class="warnbox"><b>No data yet. This dashboard is deliberately empty.</b>
-    Em-dashes, not sample charts: a chart with plausible numbers before launch is the clearest example of
-    the failure this workflow exists to prevent.</div>`;
-  for (const s of secs) {
-    out += `<h3>${E(s.name)}</h3><div class="dash">`;
-    for (const mn of s.metrics ?? []) {
-      const m = S.metrics.find(x => x.name === mn || x.id === mn) ?? {name: mn};
-      out += `<div class="metric"><div class="v">—</div><div class="l">${E(m.name ?? mn)}</div>
-        ${m.target != null ? `<div class="l mono">target ${E(m.target)}</div>` : `<div class="l mono">no target</div>`}</div>`;
+  const blocking = v?.blockingIssues ?? [];
+  let out = '';
+  if (blocking.length) {
+    const byCause = new Map();
+    for (const b of blocking) {
+      const c = (b.match(/^\[([^\]]+)\]/) ?? [])[1] ?? 'other';
+      if (!byCause.has(c)) byCause.set(c, []);
+      byCause.get(c).push(b.replace(/^\[[^\]]+\]\s*/, ''));
     }
-    out += `</div>`;
+    out += `<h3>Blocking — nothing publishes until these clear</h3><ul class="todo">` +
+      [...byCause.entries()].map(([c, items]) =>
+        `<li class="block"><span class="box"></span><div><b>${E(plain(c))}</b>
+          <div class="muted" style="font-size:14px;margin-top:3px">${E(items[0])}</div>
+          ${items.length > 1 ? `<span class="who">and ${items.length - 1} more of the same</span>` : ''}</div></li>`).join('') +
+      `</ul>`;
   }
-  out += `<h3>The measurement contract</h3><div class="scroll"><table><thead><tr><th>Metric</th><th>Formula</th><th>Baseline</th><th>Target</th></tr></thead><tbody>`;
-  for (const m of S.metrics) out += `<tr><td>${E(m.name)}<div class="mono muted">${E(m.id ?? '')}</div></td><td class="mono">${dash(m.formula)}</td>
-    <td class="mono">${m.baseline == null ? 'null' : E(m.baseline)}</td><td class="mono">${m.target == null ? 'null' : E(m.target)}</td></tr>`;
-  out += `</tbody></table></div><p class="muted"><code>baseline: null</code> is correct before launch. Drop an export into <code>.aris/evidence/analytics/</code> and <code>analyze.mjs</code> populates this.</p>`;
+  const cl = S.assets['launch-checklist.md'] ?? DATA.checklist;
+  if (cl) {
+    const items = String(cl).split('\n').filter(l => /^-\s*\[ \]/.test(l));
+    if (items.length) {
+      out += `<h3>Then, before anything is published</h3><ul class="todo">` + items.map(l => {
+        const t = l.replace(/^-\s*\[ \]\s*/, '');
+        const who = (t.match(/\[([A-Z]+)\]\s*$/) ?? [])[1];
+        return `<li><span class="box"></span><div>${E(t.replace(/\s*-\s*\[[A-Z]+\]\s*$/, ''))}
+          ${who ? `<span class="who">owner: ${E(who.toLowerCase())}</span>` : ''}</div></li>`;
+      }).join('') + `</ul>`;
+    }
+  }
+  if (!out) out = gap('No checklist yet. Run /aris-package.');
   return out;
 }
 
-/* ---------- 13 playbook ---------- */
-function sec13(){
-  if (!S.rules.length) return missing('/aris-playbook');
-  let out = `<p class="muted">Written before the data. A rule written afterwards is a rationalisation of whatever happened.</p>`;
-  for (const r of S.rules) {
-    out += `<div class="card"><div class="mono muted">${E(r.id)} &middot; ${E(r.priority ?? '')}</div>
-      <p style="margin-top:7px"><b>IF</b> <code>${E(r.metric)} ${E(r.condition)}</code>
-      ${r.threshold == null ? badge('unknown') + ' <span class="muted">threshold unresolved — an invented threshold is worse than none</span>' : `<code>${E(r.threshold)}</code>`}
-      ${r.window ? `for <code>${E(r.window)}</code>` : ''}</p>
-      <p><b>THEN</b></p><ul style="margin:0;padding-left:17px">${(r.action ?? []).map(a=>`<li>${E(a)}</li>`).join('')}</ul></div>`;
+/* ---------- 6. what we are betting on ---------- */
+function secBets(){
+  let out = `<p class="lede">Every one of these could be wrong. They are ordered by what it costs if they are.</p>`;
+  const rank = {total:0, high:1, medium:2, low:3};
+  const sorted = [...S.assumptions].sort((a,b) =>
+    (rank[a.blastRadius] ?? 9) - (rank[b.blastRadius] ?? 9) || (a.confidence ?? 1) - (b.confidence ?? 1));
+  for (const a of sorted) {
+    const pct = Math.round((a.confidence ?? 0) * 100);
+    out += `<div class="bet">
+      <div class="top"><span class="stmt">${E(a.statement)}</span>
+        <span class="conf"><span class="bar"><i style="width:${pct}%"></i></span>
+        <span class="n tnum">${pct}%</span></span></div>
+      ${a.reason ? `<p class="why">${E(a.reason)}</p>` : ''}
+      <p class="cost">If wrong: ${E({total:'the whole package rebuilds',high:'several artifacts rebuild',
+        medium:'one artifact rebuilds',low:'fix it where it sits'}[a.blastRadius] ?? 'unknown')}
+        ${(a.producedArtifacts ?? []).length ? `<span class="mono faint"> · ${(a.producedArtifacts).map(E).join(', ')}</span>` : ''}</p>
+    </div>`;
+  }
+  if (S.cuts.length) {
+    out += `<h3>What this package could not know</h3>
+      <p class="lede">Deliberate omissions, not oversights. They are why some of the bets above are bets.</p>
+      <div class="scroll"><table><thead><tr><th>Not done</th><th>Consequence</th><th>Risk</th></tr></thead><tbody>` +
+      S.cuts.map(c => `<tr><td class="mono" style="width:22%">${E(c.deleted)}</td><td>${E(c.consequence)}</td>
+        <td><span class="badge b-${c.risk === 'high' ? 'bad' : c.risk === 'medium' ? 'inferred' : 'unknown'}">${E(c.risk ?? '')}</span></td></tr>`).join('') +
+      `</tbody></table></div>`;
   }
   return out;
 }
 
-/* ---------- 14 sources ---------- */
-function sec14(){
-  if (!S.sources.length) return missing('/aris-category');
+/* ---------- 7. after launch ---------- */
+function secAfter(){
+  if (!S.metrics.length && !S.rules.length) return gap('No measurement plan yet. Run /aris-harness and /aris-playbook.');
+  let out = '';
+  if (S.metrics.length) {
+    out += `<h3>What to watch</h3>
+      <p class="lede">Empty on purpose. A chart with plausible numbers before launch is the clearest way to
+      mislead yourself, so nothing is drawn until a real export lands in
+      <code>.aris/evidence/analytics/</code>.</p>`;
+    const secs = S.dashboard?.sections ?? [{name:'Metrics', metrics: S.metrics.map(m => m.name)}];
+    for (const s of secs) {
+      out += `<h4>${E(s.name)}</h4><div class="dash">` + (s.metrics ?? []).map(mn => {
+        const m = S.metrics.find(x => x.name === mn || x.id === mn) ?? {name: mn};
+        return `<div class="metric"><div class="v">—</div><div class="l">${E(m.name ?? mn)}</div>
+          <div class="t">${m.target != null ? 'target ' + E(m.target) : 'no target set'}</div></div>`;
+      }).join('') + `</div>`;
+    }
+    const defined = S.metrics.filter(m => has(m.definition));
+    if (defined.length) {
+      out += `<details><summary>How each is counted</summary><div class="body"><div class="scroll"><table><tbody>` +
+        defined.map(m => `<tr><td style="width:30%"><b>${E(m.name)}</b></td><td>${E(m.definition)}
+          <div class="mono faint">${E(m.formula ?? '')}</div></td></tr>`).join('') + `</tbody></table></div></div></details>`;
+    }
+  }
+  if (S.rules.length) {
+    out += `<h3>Decided in advance</h3>
+      <p class="lede">Written now, while nobody is defending a result. A rule written after the data arrives
+      is a rationalisation of whatever happened.</p>`;
+    for (const r of S.rules) {
+      out += `<div class="rule">
+        <p class="if"><b>IF</b> ${E(r.metric)} ${E(r.condition)}
+          ${r.threshold == null ? `<span class="badge b-unknown">threshold unset</span>` : `<b>${E(r.threshold)}</b>`}
+          ${r.window ? `for ${E(r.window)}` : ''}</p>
+        <ul>${(r.action ?? []).map(a => `<li>${E(a)}</li>`).join('')}</ul></div>`;
+    }
+  }
+  return out;
+}
+
+/**
+ * The price ladder, drawn.
+ *
+ * Only per-user-per-month prices are plotted. Bitrix24 charges per organisation and
+ * Zoho One per employee on payroll; putting them on the same axis would compare
+ * numbers that do not mean the same thing, so they are listed beside it instead.
+ */
+function priceLadder(){
+  const lad = S.category?.priceLadder ?? [];
+  if (!lad.length) return '';
+  const per = lad.filter(x => /per user/i.test(x.unit ?? '') && Number.isFinite(Number(x.amount)));
+  const other = lad.filter(x => !per.includes(x));
+  if (per.length < 2) return '';
+  const rec = S.gtm?.pricing?.recommended;
+  const recAmt = Number.isFinite(Number(rec?.amount)) && /per user/i.test(rec?.unit ?? '') ? Number(rec.amount) : null;
+  const vals = per.map(x => Number(x.amount)).concat(recAmt ?? []);
+  const lo = 0, hi = Math.ceil(Math.max(...vals) * 1.12);
+  const W = 640, H = 34 + per.length * 26 + 22, PAD = 112;
+  const x = (v) => PAD + (v - lo) / (hi - lo) * (W - PAD - 26);
+
+  let g = `<svg viewBox="0 0 ${W} ${H}" width="100%" style="max-width:${W}px;height:auto" role="img"
+    aria-label="Published prices per user per month">`;
+  for (const t of [0, hi/4, hi/2, hi*3/4, hi]) {
+    g += `<line x1="${x(t).toFixed(1)}" y1="26" x2="${x(t).toFixed(1)}" y2="${H-26}" stroke="var(--line)"/>`;
+    g += `<text x="${x(t).toFixed(1)}" y="18" text-anchor="middle" font-family="var(--mono)" font-size="10.5"
+      fill="var(--faint)">${t === 0 ? '0' : Math.round(t)}</text>`;
+  }
+  if (recAmt != null) {
+    g += `<rect x="${x(recAmt).toFixed(1)}" y="26" width="2" height="${H-52}" fill="var(--accent)"/>`;
+    g += `<text x="${x(recAmt).toFixed(1)}" y="${H-10}" text-anchor="middle" font-family="var(--mono)"
+      font-size="10.5" font-weight="600" fill="var(--accent)">you · ${recAmt}</text>`;
+  }
+  per.slice().sort((a,b) => Number(a.amount) - Number(b.amount)).forEach((it, i) => {
+    const y = 40 + i * 26;
+    g += `<text x="${PAD - 12}" y="${y + 4}" text-anchor="end" font-size="12.5" fill="var(--ink)">${E(it.player)}</text>`;
+    g += `<line x1="${PAD}" y1="${y}" x2="${x(Number(it.amount)).toFixed(1)}" y2="${y}" stroke="var(--line-strong)"/>`;
+    g += `<circle cx="${x(Number(it.amount)).toFixed(1)}" cy="${y}" r="4.5" fill="var(--ink)"/>`;
+    g += `<text x="${(x(Number(it.amount)) + 11).toFixed(1)}" y="${y + 4}" font-family="var(--mono)"
+      font-size="11" fill="var(--muted)">${E(it.currency === 'EUR' ? '€' : '$')}${E(it.amount)}</text>`;
+  });
+  g += `</svg>`;
+  let out = `<h3>What the field charges</h3>
+    <p class="lede">Per user, per month, as published. ${recAmt != null
+      ? 'The green line is the recommendation.' : ''}</p>${g}`;
+  if (other.length) out += `<p class="muted" style="font-size:14px">Priced differently, so not on the
+    same axis: ` + other.map(o => `<b>${E(o.player)}</b> ${o.amount != null
+      ? E((o.currency === 'EUR' ? '€' : '$') + o.amount) + ' ' + E(o.unit ?? '') : E(o.note ?? 'not published')}`).join('; ') + `.</p>`;
+  return out;
+}
+
+/** The feature matrix as a grid of marks, not prose in table cells. */
+function featureGrid(){
+  const fm = S.category?.featureMatrix ?? {};
+  const rows = Object.keys(fm);
+  if (!rows.length) return '';
+  const cols = [...new Set(rows.flatMap(r => Object.keys(fm[r] ?? {})))];
+  const cell = (c) => {
+    if (c == null) return `<span class="m m-u">?</span>`;
+    const v = typeof c === 'object' ? c.value : c;
+    const st = typeof c === 'object' ? c.status : 'unknown';
+    if (v === true || v === 'true' || v === 'yes') return `<span class="m m-y${st === 'unknown' ? ' m-soft' : ''}">●</span>`;
+    if (v === false || v === 'false' || v === 'no') return `<span class="m m-n">—</span>`;
+    if (v === 'partial') return `<span class="m m-p">◐</span>`;
+    return `<span class="m m-u">?</span>`;
+  };
+  let out = `<h3>Who has what</h3><p class="lede">Filled from their own pages.
+    <span class="m m-y">●</span> has it · <span class="m m-n">—</span> does not ·
+    <span class="m m-p">◐</span> partly · <span class="m m-u">?</span> nobody has checked.</p>`;
+  out += `<div class="scroll"><table class="grid"><thead><tr><th></th>` +
+    cols.map(c => `<th>${E(c)}</th>`).join('') + `</tr></thead><tbody>` +
+    rows.map(r => `<tr><td>${E(r)}</td>` + cols.map(c => `<td>${cell(fm[r]?.[c])}</td>`).join('') + `</tr>`).join('') +
+    `</tbody></table></div>`;
+  return out;
+}
+
+/* ---------- what we know ---------- */
+function secMarket(){
+  const c = S.category;
+  if (!c?.players?.length) return gap('No competitors mapped yet. Run /aris-category.');
+  let out = `<p class="lede">Read off their own pages, not from reviews. Prices are what they publish.</p>`;
+  out += `<div class="scroll"><table><thead><tr><th style="width:16%">Who</th><th style="width:26%">What they say</th><th style="width:16%">Price</th><th>Where they are weak</th></tr></thead><tbody>` +
+    c.players.map(pl => {
+      const pr = (pl.pricing ?? [])[0];
+      return `<tr><td style="min-width:130px"><b>${E(pl.name)}</b><div class="faint" style="font-size:12px">${E(pl.type ?? '')}</div></td>
+        <td>${E((pl.positioning ?? [])[0] ?? '')}</td>
+        <td class="tnum">${pr ? (money(pr) ?? `<span class="faint">${E(pr.note ?? 'not published')}</span>`) : '<span class="faint">unknown</span>'}</td>
+        <td>${(pl.weaknesses ?? []).slice(0,2).map(E).join('; ')}</td></tr>`;
+    }).join('') + `</tbody></table></div>`;
+  out += featureGrid() + priceLadder();
+  if (has(c.marketGaps)) out += `<h3>The gaps we found</h3><ul>` + c.marketGaps.map(g =>
+    `<li>${E(typeof g === 'object' ? g.value : g)} ${typeof g === 'object'
+      ? (g.sourceIds ?? []).map(id => `<span class="chip" data-src="${E(id)}">${E(id)}</span>`).join('') : ''}</li>`).join('') + `</ul>`;
+  return out;
+}
+function secCustomers(){
+  if (!S.pains.length) return `<div class="status blocked"><span class="mark">NOTHING</span><div>
+    <b>No customer was asked anything.</b>
+    <p>No voice-of-customer research was run, so nothing here has a quote behind it and no persona was
+    built. Everything under <b>What we do</b> rests on what competitors fail to sell, which is not the
+    same as what buyers want.</p></div></div>`;
+  let out = `<p class="lede">Ranked by how many separate people said it. Click one to read their words.</p>`;
+  out += `<div class="scroll"><table><thead><tr><th>What they said</th><th>People</th><th>Places</th><th></th></tr></thead><tbody>` +
+    [...S.pains].sort((a,b)=>(b.frequency?.quoteCount??0)-(a.frequency?.quoteCount??0)).map(pn =>
+      `<tr><td><a href="#" data-pain="${E(pn.id)}">${E(pn.statement)}</a></td>
+       <td class="tnum mono">${pn.frequency?.quoteCount ?? 0}</td>
+       <td class="tnum mono">${pn.frequency?.sourceCount ?? 0}</td>
+       <td>${pn.status === 'validated' ? badge('verified') : badge('unknown')}</td></tr>`).join('') + `</tbody></table></div>`;
+  if (S.personas.length) out += `<h3>Who they are</h3><div class="cards">` + S.personas.map(pe =>
+    `<div class="card"><h3>${E(pe.name || pe.id)}</h3><p class="muted">${E(pe.jobToBeDone ?? '')}</p>
+     ${(pe.attributes ?? []).slice(0,4).map(a => `<p style="font-size:14px">${E(a.attribute)}
+       ${(a.evidence ?? []).map(id => `<span class="chip" data-quote="${E(id)}">${E(id)}</span>`).join('')}</p>`).join('')}</div>`).join('') + `</div>`;
+  return out;
+}
+function secSize(){
+  let out = '';
+  if (S.sizing) {
+    out += `<p class="lede">Built up from public counts. Ranges, not points, because the weakest factor sets the width.</p>`;
+    for (const k of ['tam','sam','som']) {
+      const calc = S.sizing.calculations?.[k], r = calc?.range;
+      out += `<p><b>${k.toUpperCase()}</b> <span class="tnum">${Array.isArray(r)
+        ? `${Number(r[0]).toLocaleString()} – ${Number(r[1]).toLocaleString()}` : '—'}</span>
+        <span class="mono faint">${E(calc?.formula ?? '')}</span> ${badge('inferred')}</p>`;
+    }
+    if (has(S.sizing.limitations)) out += `<h4>Where it is weakest</h4><ul>` +
+      S.sizing.limitations.map(l => `<li>${E(l)}</li>`).join('') + `</ul>`;
+  } else out += gap('Not sized. Run /aris-size.');
+  if (S.demand) {
+    out += `<h3>Whether anyone wants it</h3>
+      <div class="status warn"><span class="mark">GUESSED</span><div><b>Read off public pages, never tested.</b>
+      <p>Nobody was asked whether they would pay.</p></div></div>`;
+    for (const sg of S.demand.signals ?? []) {
+      const v = sg.value && typeof sg.value === 'object'
+        ? Object.entries(sg.value).map(([k,x]) => `${k}: ${x}`).join(', ') : sg.value;
+      out += `<p><b>${E(String(sg.type ?? '').replace(/_/g,' '))}</b> ${E(v ?? '—')}
+        <span class="chip" data-src="${E(sg.sourceId ?? '')}">${E(sg.sourceId ?? '')}</span></p>`;
+    }
+    const dnp = S.demand.doesNotProve ?? [];
+    if (dnp.length) out += `<h4>What this does not prove</h4><p class="muted">${dnp.map(E).join(' · ')}</p>`;
+  }
+  return out;
+}
+function secSources(){
   const used = new Map();
-  const note = (id, what) => { if (!used.has(id)) used.set(id, []); used.get(id).push(what); };
-  for (const p of S.pains) for (const q of p.quotes ?? []) note(q.sourceId, p.id);
+  const note = (id, what) => { if (!id) return; if (!used.has(id)) used.set(id, []); used.get(id).push(what); };
+  for (const pn of S.pains) for (const q of pn.quotes ?? []) note(q.sourceId, pn.id);
   for (const f of S.sizing?.factors ?? []) note(f.sourceId, f.id);
-  for (const s of S.demand?.signals ?? []) note(s.sourceId, s.id);
-  for (const c of S.claims) for (const s of c.sourceIds ?? []) note(s, c.id);
-  let out = `<p class="muted">${S.sources.length} sources. This closes the spine backwards: every id above reaches one of these.</p><div class="scroll"><table><thead><tr><th>Id</th><th>Source</th><th>Type</th><th>Accessed</th><th>Reliability</th><th>Used by</th></tr></thead><tbody>`;
-  for (const s of S.sources) {
-    const u = [...new Set(used.get(s.id) ?? [])];
-    out += `<tr><td class="mono">${E(s.id)}</td>
-      <td>${s.url ? `<a href="${E(s.url)}" target="_blank" rel="noopener">${E(s.title || s.url)}</a>` : dash(s.title)}<div class="muted">${dash(s.publisher)}</div></td>
-      <td class="mono">${dash(s.sourceType)}</td><td class="mono">${dash(s.accessedAt)}</td>
-      <td>${badge(s.reliability === 'high' ? 'verified' : s.reliability === 'low' ? 'unknown' : 'inferred')} ${E(s.reliability ?? '')}</td>
-      <td>${u.length ? u.map(x=>`<span class="chip">${E(x)}</span>`).join('') : '<span class="badge b-bad">cited by nothing</span>'}</td></tr>`;
-  }
-  out += `</tbody></table></div>`;
-  if (S.assumptions.length) {
-    const order = {total:0, high:1, medium:2, low:3};
-    const sorted = [...S.assumptions].sort((a,b)=>(order[a.blastRadius]??9)-(order[b.blastRadius]??9) || (a.confidence??1)-(b.confidence??1));
-    out += `<h3>Assumptions register</h3><p class="muted">Highest blast radius first, lowest confidence within it. Each sits beside what it produced.</p><div class="scroll"><table><thead><tr><th>Id</th><th>Assumption</th><th>Confidence</th><th>Blast</th><th>Produced</th></tr></thead><tbody>`;
-    for (const a of sorted) out += `<tr><td class="mono">${E(a.id)}</td><td>${E(a.statement)}<div class="muted">${dash(a.reason)}</div></td>
-      <td class="mono">${a.confidence == null ? '—' : E(a.confidence)}</td>
-      <td>${badge(a.blastRadius === 'total' || a.blastRadius === 'high' ? 'unsupported' : 'assumption')} ${E(a.blastRadius ?? '')}</td>
-      <td class="mono muted">${(a.producedArtifacts ?? []).map(E).join('<br>') || '—'}</td></tr>`;
-    out += `</tbody></table></div>`;
-  }
+  for (const sg of S.demand?.signals ?? []) note(sg.sourceId, sg.id);
+  for (const cl of S.claims) for (const x of cl.sourceIds ?? []) note(x, cl.id);
+  let out = `<details><summary>Every source we read <span class="mono faint">${S.sources.length}</span></summary><div class="body">
+    <div class="scroll"><table><tbody>` + S.sources.map(x => {
+      const u = [...new Set(used.get(x.id) ?? [])];
+      return `<tr><td class="mono" style="width:11%">${E(x.id)}</td>
+        <td>${x.url ? `<a href="${E(x.url)}" target="_blank" rel="noopener">${E(x.title || x.url)}</a>` : E(x.title ?? '')}
+          <div class="mono faint">${E(x.publisher ?? '')} · ${E(x.accessedAt ?? '')}</div></td>
+        <td style="width:22%">${u.length ? u.map(y => `<span class="mono faint">${E(y)}</span>`).join(' ') : '<span class="badge b-unknown">unused</span>'}</td></tr>`;
+    }).join('') + `</tbody></table></div>`;
+  if (has(DATA.sources?.gaps)) out += `<h4>What we could not read</h4><ul>` +
+    DATA.sources.gaps.map(g => `<li>${E(g)}</li>`).join('') + `</ul>`;
+  return out + `</div></details>`;
+}
+function secWhyThis(){
+  const pg = S.positioning;
+  if (!pg) return gap('No positioning yet.');
+  const sel = (pg.directions ?? []).find(d => d.id === pg.selected);
+  let out = '';
+  if (sel && has(sel.whitespace)) out += `<ul>` + sel.whitespace.map(w => `<li>${E(w)}</li>`).join('') + `</ul>`;
+  const rej = new Map((pg.rejected ?? []).map(r => [r.id, r.reason]));
+  const others = (pg.directions ?? []).filter(d => d.id !== pg.selected);
+  if (others.length) out += `<details><summary>What we decided against <span class="mono faint">${others.length}</span></summary><div class="body">` +
+    others.map(d => `<p><b>${E(d.name ?? d.id)}</b><br><span class="muted">${E(d.statement ?? '')}</span><br>
+      <span style="color:var(--bad)">Why not: ${E(rej.get(d.id) ?? 'no reason recorded')}</span></p>`).join('') + `</div></details>`;
   return out;
 }
 
-const SECTIONS = [
-  ['01','Executive summary', sec01], ['02','Market overview', sec02], ['03','Customer & pain', sec03],
-  ['04','Personas', sec04], ['05','Market size', sec05], ['06','Demand signals', sec06],
-  ['07','Positioning', sec07], ['08','Messaging', sec08], ['09','GTM strategy', sec09],
-  ['10','Launch assets', sec10], ['11','Verification', sec11], ['12','Measurement harness', sec12],
-  ['13','Growth playbook', sec13], ['14','Evidence & sources', sec14]
-];
-
-document.getElementById('navprod').textContent = S.state.product?.name || 'Launch package';
-document.getElementById('navlist').innerHTML = SECTIONS.map(([n,t]) =>
-  `<li><a href="#s${n}" data-nav="s${n}"><span class="n">${n}</span><span>${E(t)}</span></a></li>`).join('');
-document.getElementById('main').innerHTML = SECTIONS.map(([n,t,fn]) => {
+const block = (title, fn) => {
   let body;
-  try { body = fn(); } catch (e) { body = `<div class="badbox"><b>This section could not render.</b> ${E(e.message)}</div>`; }
-  return `<section id="s${n}"><h2><span class="n">${n}</span>${E(t)}</h2>${body}</section>`;
-}).join('') + `<footer>Generated ${E(DATA.generatedAt ?? '')} &middot; artifact version ${E(S.manifest.version ?? '—')} &middot;
-  presentation layer over <code>.aris/</code>; if the two disagree the JSON is right and this page is stale.</footer>`;
+  try { body = fn(); } catch (e) { body = `<div class="status blocked"><span class="mark">ERROR</span>
+    <div><b>This part could not render.</b><p>${E(e.message)}</p></div></div>`; }
+  return `<div class="block"><h2>${E(title)}</h2>${body}</div>`;
+};
 
-/* ---------- drawer: the citation path ---------- */
+document.getElementById('prodname').textContent = S.state.product?.name || '';
+document.getElementById('answer').innerHTML = secAnswer();
+
+(function stats(){
+  const v = S.verify, st = S.state;
+  const price = money(S.gtm?.pricing?.recommended);
+  const chans = (S.gtm?.channels ?? []).filter(c => c.priority === 'primary').length;
+  const blocking = (v?.blockingIssues ?? []).length;
+  const cited = S.claims.filter(c => (c.sourceIds ?? []).length).length;
+  const ready = v?.passed === true;
+  const items = [
+    ['Status', ready ? 'Ready' : v ? `${blocking} blocking` : 'Not checked', 'flag' + (ready ? ' ok' : '')],
+    ['Market', `${E((st.market?.geography ?? []).join(', '))}<small>${E((st.market?.language ?? []).join('/'))}</small>`],
+    ['Price', price ? price.replace('<span class="muted">', '<small>').replace('</span>', '</small>') : 'not set'],
+    ['Claims cited', `${cited}/${S.claims.length}`],
+    ['Channels', String(chans)]
+  ];
+  document.getElementById('stats').innerHTML = items.map(([k, val, cls]) =>
+    `<div class="stat ${cls ?? ''}"><span class="k">${E(k)}</span><span class="v">${val}</span></div>`).join('');
+})();
+document.getElementById('p-know').innerHTML =
+  block('Who else is here', secMarket) + block('What customers told us', secCustomers) +
+  block('How big it is', secSize) + block('What we are not sure about', secBets) +
+  block('Where it all came from', secSources);
+document.getElementById('p-do').innerHTML =
+  block('At a glance', secGlance) +
+  block('Why this position', secWhyThis) + block('What we say', secSay) +
+  block('Where we say it', secWhere) + block('What we publish', secPublish) +
+  block('Do this first', secDo);
+document.getElementById('p-after').innerHTML = block('After it launches', secAfter) +
+  `<footer>${E(S.state.product?.name ?? '')} · generated ${E((DATA.generatedAt ?? '').slice(0,16).replace('T',' '))}
+   · version ${E(S.manifest.version ?? '—')}<br>
+   This page shows what is in <code>.aris/</code>. If the two disagree, the files are right and this is stale.</footer>`;
+
+document.querySelectorAll('.tabs button').forEach(b => b.onclick = () => {
+  document.querySelectorAll('.tabs button').forEach(x => x.classList.toggle('on', x === b));
+  for (const nm of ['know','do','after']) document.getElementById('p-' + nm).hidden = (nm !== b.dataset.tab);
+  scrollTo({top:0, behavior:'instant'});
+});
+
+if (Object.keys(S.assets).length) renderAsset(Object.keys(S.assets)[0]);
+
+/* ---------- drawer ---------- */
 const drawer = document.getElementById('drawer'), dbody = document.getElementById('drawer-body');
-const openDrawer = (html) => { dbody.innerHTML = html; drawer.classList.add('on'); };
+const openDrawer = (h) => { dbody.innerHTML = h; drawer.classList.add('on'); };
 document.getElementById('drawer-x').onclick = () => drawer.classList.remove('on');
 function srcLine(id){
   const s = srcById.get(id);
-  if (!s) return `<div class="mono">${E(id)} <span class="badge b-bad">missing</span></div>`;
-  return `<div style="margin:7px 0"><div class="mono muted">${E(id)} &middot; ${E(s.sourceType ?? '')} &middot; ${E(s.accessedAt ?? '')}</div>
-    ${s.url ? `<a href="${E(s.url)}" target="_blank" rel="noopener">${E(s.title || s.url)}</a>` : E(s.title ?? '')}</div>`;
+  if (!s) return `<p class="mono">${E(id)} <span class="badge b-bad">missing</span></p>`;
+  return `<p style="margin:8px 0"><a href="${E(s.url ?? '#')}" target="_blank" rel="noopener">${E(s.title || s.url || id)}</a>
+    <span class="mono faint" style="display:block">${E(id)} · ${E(s.publisher ?? '')} · ${E(s.accessedAt ?? '')}</span></p>`;
 }
 function showClaim(id){
   const c = S.claims.find(x => x.id === id);
-  if (!c) return openDrawer(`<h3>${E(id)}</h3><div class="badbox">Not in the claim registry. The marker resolves to nothing.</div>`);
-  const m = c.messageId ? msgById.get(c.messageId) : null;
-  let h = `<h3>${E(c.id)} ${badge(c.status)}</h3><p>${E(c.text)}</p>
-    <div class="mono muted">type ${E(c.type ?? '—')} &middot; used in ${(c.usedIn ?? []).map(E).join(', ') || '—'}</div>`;
-  if (m) {
-    h += `<h4>Message</h4><p>${E(m.message)}</p><div class="mono muted">${E(m.id)} &middot; ${E(m.personaId ?? '')}</div>`;
-    for (const e of m.evidence ?? []) {
-      const p = painById.get(e);
-      if (p) h += `<h4>Pain</h4><p>${E(p.statement)} <span class="mono muted">${p.frequency?.quoteCount ?? 0} quotes / ${p.frequency?.sourceCount ?? 0} sources</span></p>`
-        + (p.quotes ?? []).slice(0,3).map(q => `<div class="quote">${E(q.text)}<cite>${E(q.id)} &middot; ${q.url ? `<a href="${E(q.url)}" target="_blank" rel="noopener">${E(q.platform || 'source')}</a>` : E(q.platform ?? '')} &middot; ${E(q.date ?? '')}</cite></div>`).join('');
+  if (!c) return openDrawer(`<h3>${E(id)}</h3><p class="gap">Not in the registry. This marker resolves to nothing.</p>`);
+  let h = `<h3>${E(c.id)} ${badge(c.status)}</h3><p style="font:400 17px/1.5 var(--serif)">${E(c.text)}</p>`;
+  h += `<p class="mono faint">${E(c.type ?? '')} · used in ${(c.usedIn ?? []).map(x => E(x.split('/').pop())).join(', ') || 'nothing'}</p>`;
+  const m = allMsgs.find(x => x.id === c.messageId);
+  if (m) h += `<h4>Serves the message</h4><p>${E(m.message)}</p>`;
+  for (const e of m?.evidence ?? []) {
+    const p = painById.get(e);
+    if (p) {
+      h += `<h4>Which answers</h4><p>${E(p.statement)} <span class="mono faint">${p.frequency?.quoteCount ?? 0} quotes</span></p>`;
+      h += (p.quotes ?? []).slice(0,3).map(q => `<div class="quote">${E(q.text)}<cite>${E(q.id)} ·
+        ${q.url ? `<a href="${E(q.url)}" target="_blank" rel="noopener">${E(q.platform || 'source')}</a>` : E(q.platform ?? '')}</cite></div>`).join('');
     }
   }
-  h += `<h4>Sources</h4>${(c.sourceIds ?? []).length ? (c.sourceIds).map(srcLine).join('') : '<div class="badbox">No source. This claim blocks the launch.</div>'}`;
+  h += `<h4>Sources</h4>${(c.sourceIds ?? []).length ? c.sourceIds.map(srcLine).join('')
+    : `<p class="gap">No source. This claim blocks the launch.</p>`}`;
   openDrawer(h);
 }
 function showPain(id){
   const p = painById.get(id);
-  if (!p) return openDrawer(`<h3>${E(id)}</h3><div class="badbox">No such pain.</div>`);
-  const srcs = [...new Set((p.quotes ?? []).map(q => q.sourceId))];
+  if (!p) return openDrawer(`<h3>${E(id)}</h3><p class="gap">No such pain.</p>`);
   openDrawer(`<h3>${E(p.id)} ${p.status === 'validated' ? badge('verified') : badge('unknown')}</h3>
-    <p>${E(p.statement)}</p>
-    <div class="mono muted">${p.frequency?.quoteCount ?? 0} quotes &middot; ${p.frequency?.sourceCount ?? 0} sources &middot; severity ${E(p.severity ?? '—')}</div>
-    <h4>Quotes</h4>${(p.quotes ?? []).map(q => `<div class="quote">${E(q.text)}<cite>${E(q.id)} &middot; ${q.url ? `<a href="${E(q.url)}" target="_blank" rel="noopener">${E(q.platform || 'source')}</a>` : E(q.platform ?? '')} &middot; ${E(q.date ?? '')}</cite></div>`).join('') || '<span class="empty">none stored — this pain has no evidence</span>'}
-    <h4>Sources</h4>${srcs.map(srcLine).join('')}`);
-}
-function showQuote(id){
-  const q = quoteById.get(id);
-  if (!q) return openDrawer(`<h3>${E(id)}</h3><div class="badbox">No such quote.</div>`);
-  openDrawer(`<h3>${E(q.id)}</h3><div class="quote">${E(q.text)}<cite>${E(q.platform ?? '')} &middot; ${E(q.date ?? '')}</cite></div>
-    ${q.url ? `<p><a href="${E(q.url)}" target="_blank" rel="noopener">Open the original</a></p>` : '<div class="badbox">No URL. A quote without a link cannot be checked.</div>'}
-    <h4>Pain</h4><p><a href="#" data-pain="${E(q.painId)}">${E(q.painId)}</a></p>${srcLine(q.sourceId)}`);
+    <p style="font:400 17px/1.5 var(--serif)">${E(p.statement)}</p>
+    <p class="mono faint">${p.frequency?.quoteCount ?? 0} quotes · ${p.frequency?.sourceCount ?? 0} sources</p>
+    ${(p.quotes ?? []).map(q => `<div class="quote">${E(q.text)}<cite>${E(q.id)} ·
+      ${q.url ? `<a href="${E(q.url)}" target="_blank" rel="noopener">${E(q.platform || 'source')}</a>` : E(q.platform ?? '')}
+      · ${E(q.date ?? '')}</cite></div>`).join('') || '<p class="gap">No quotes stored.</p>'}`);
 }
 document.addEventListener('click', (ev) => {
-  const t = ev.target.closest('[data-claim],[data-pain],[data-quote],[data-src],[data-a],[data-export]');
+  const t = ev.target.closest('[data-claim],[data-pain],[data-src],[data-a],[data-export]');
   if (!t) return;
   if (t.dataset.claim) { ev.preventDefault(); showClaim(t.dataset.claim); }
   else if (t.dataset.pain) { ev.preventDefault(); showPain(t.dataset.pain); }
-  else if (t.dataset.quote) { ev.preventDefault(); showQuote(t.dataset.quote); }
   else if (t.dataset.src) { ev.preventDefault(); openDrawer(`<h3>${E(t.dataset.src)}</h3>${srcLine(t.dataset.src)}`); }
-  else if (t.dataset.a) { ev.preventDefault(); document.querySelectorAll('#asset-tabs button').forEach(b=>b.classList.toggle('on', b===t)); renderAsset(t.dataset.a); }
-  else if (t.dataset.export) { ev.preventDefault(); doExport(t.dataset.export); }
+  else if (t.dataset.a) { ev.preventDefault();
+    document.querySelectorAll('#asset-tabs button').forEach(b => b.classList.toggle('on', b === t));
+    renderAsset(t.dataset.a); }
+  else if (t.dataset.export) { ev.preventDefault(); saveJson(); }
 });
-if (Object.keys(S.assets).length) renderAsset(Object.keys(S.assets)[0]);
+addEventListener('keydown', e => { if (e.key === 'Escape') drawer.classList.remove('on'); });
 
-/* ---------- export ---------- */
-function doExport(kind){
-  const pick = {
-    package: DATA,
-    evidence: {sources: S.sources, pains: S.pains, assumptions: S.assumptions, cutSteps: S.cuts},
-    assets: {assets: S.assets, claims: S.claims}
-  }[kind] ?? DATA;
-  const blob = new Blob([JSON.stringify(pick, null, 2)], {type:'application/json'});
+/**
+ * Saving the data works two ways, because this page has two homes.
+ *
+ * Opened from disk it is a plain file, and an <a download> is the only route. Published
+ * as an Artifact the viewer sandbox ignores that link entirely, and the `downloads`
+ * capability is what actually hands someone a file. Try the capability first, fall back
+ * to the link, and if neither is available hide the button rather than leave a control
+ * that silently does nothing.
+ */
+let downloadsApi = null;
+(async () => {
+  if (!window.claude?.use) return;                 // opened from disk: the link works
+  try { downloadsApi = await window.claude.use('downloads'); } catch { downloadsApi = null; }
+  if (!downloadsApi) document.querySelector('[data-export]')?.remove();
+})();
+
+async function saveJson(){
+  const name = `aris-${(S.state.product?.name || 'package').toLowerCase().replace(/\W+/g,'-')}.json`;
+  const data = JSON.stringify(DATA, null, 2);
+  if (downloadsApi) {
+    try { await downloadsApi.save({ filename: name, data }); } catch { /* viewer declined */ }
+    return;
+  }
   const a = document.createElement('a');
-  a.href = URL.createObjectURL(blob);
-  a.download = `aris-${kind}-${(S.state.product?.name || 'package').toLowerCase().replace(/\W+/g,'-')}.json`;
+  a.href = URL.createObjectURL(new Blob([data], {type:'application/json'}));
+  a.download = name;
   document.body.appendChild(a); a.click(); a.remove();
 }
 
-/* ---------- search ---------- */
-const sbox = document.getElementById('search'), q = document.getElementById('q'), res = document.getElementById('res');
-const INDEX = [
-  ...(S.category?.players ?? []).map(p => ({k:'competitor', t:p.name, h:'#s02'})),
-  ...S.pains.map(p => ({k:'pain', t:`${p.id} ${p.statement}`, d:{pain:p.id}})),
-  ...S.personas.map(p => ({k:'persona', t:`${p.id} ${p.name ?? ''} ${p.jobToBeDone ?? ''}`, h:'#s04'})),
-  ...S.claims.map(c => ({k:'claim', t:`${c.id} ${c.text}`, d:{claim:c.id}})),
-  ...Object.keys(S.assets).map(n => ({k:'asset', t:n, h:'#s10'})),
-  ...S.sources.map(s => ({k:'source', t:`${s.id} ${s.title ?? ''} ${s.url ?? ''}`, d:{src:s.id}})),
-  ...[...msgById.values()].map(m => ({k:'message', t:`${m.id} ${m.message}`, h:'#s08'}))
-];
-function runSearch(){
-  const v = q.value.trim().toLowerCase();
-  const hits = v ? INDEX.filter(x => x.t.toLowerCase().includes(v)).slice(0, 40) : [];
-  res.innerHTML = hits.map(x => {
-    const attr = x.d ? Object.entries(x.d).map(([k,val])=>`data-${k}="${E(val)}"`).join(' ') : `href="${x.h}"`;
-    return `<a ${attr} href="${x.h ?? '#'}"><span class="k">${E(x.k)}</span>${E(x.t.slice(0,110))}</a>`;
-  }).join('') || (v ? '<a><span class="k">—</span>nothing found</a>' : '');
-}
-q.addEventListener('input', runSearch);
-document.getElementById('btn-search').onclick = () => { sbox.classList.add('on'); q.value=''; runSearch(); q.focus(); };
-sbox.addEventListener('click', e => { if (e.target === sbox) sbox.classList.remove('on'); });
-res.addEventListener('click', () => setTimeout(()=>sbox.classList.remove('on'), 10));
-addEventListener('keydown', e => {
-  if (e.key === '/' && !/input|textarea/i.test(document.activeElement.tagName)) { e.preventDefault(); document.getElementById('btn-search').click(); }
-  if (e.key === 'Escape') { sbox.classList.remove('on'); drawer.classList.remove('on'); }
-});
-
-/* ---------- theme + nav highlight ---------- */
 document.getElementById('btn-theme').onclick = () => {
   const cur = document.documentElement.getAttribute('data-theme');
-  const next = cur === 'dark' ? 'light' : cur === 'light' ? 'dark' : (matchMedia('(prefers-color-scheme:dark)').matches ? 'light' : 'dark');
+  const next = cur === 'dark' ? 'light' : cur === 'light' ? 'dark'
+    : (matchMedia('(prefers-color-scheme:dark)').matches ? 'light' : 'dark');
   document.documentElement.setAttribute('data-theme', next);
   try { localStorage.setItem('aris-theme', next); } catch {}
 };
 try { const t = localStorage.getItem('aris-theme'); if (t) document.documentElement.setAttribute('data-theme', t); } catch {}
-const obs = new IntersectionObserver(es => {
-  for (const e of es) if (e.isIntersecting)
-    document.querySelectorAll('[data-nav]').forEach(a => a.classList.toggle('on', a.dataset.nav === e.target.id));
-}, {rootMargin:'-10% 0px -80% 0px'});
-document.querySelectorAll('section').forEach(s => obs.observe(s));
+
 </script>
 </body>
 </html>

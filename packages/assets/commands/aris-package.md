@@ -33,19 +33,22 @@ ordered so someone can work down it. Include the items this workflow cannot do �
 supply real testimonials, connect the waitlist service, set the budget amount, press
 publish — because those are the ones that get forgotten.
 
-## 3. Build the HTML
+## 3. Build it
 
 ```
 node ${CLAUDE_PLUGIN_ROOT}/scripts/build-html.mjs
 ```
 
-It reads the manifest, embeds the JSON, writes `package/aris-launch.html`, **and opens
-it**. A path printed in a terminal is not a delivered package: someone has to notice it,
-copy it, and decide to look. Finishing the build and finishing the job are the same
-moment, so do not print a path and stop.
+Two files come out of one template, so they can never drift:
 
-`--no-open` suppresses it for CI or a headless box, where the script says so rather than
-failing.
+- **`package/aris-launch.html`** — the complete document. Works offline, opens from
+  disk, survives with no network. This is the archival copy.
+- **`package/aris-launch.artifact.html`** — the same page as a fragment, for publishing.
+  The Artifact runtime wraps whatever it is given in its own skeleton, so a complete
+  document would nest one inside another.
+
+Pass `--open` to open the local file. Nothing else opens a window: a browser appearing on
+every programmatic rebuild is noise, and this script runs many times in a session.
 
 It refuses to write a launch-ready page over a failed verification — requirement 15, and
 it is enforced in the generator rather than trusted to the caller.
@@ -58,12 +61,27 @@ it is enforced in the generator rather than trusted to the caller.
 keeps, and the publish gate stays closed until a person sets it by hand after reading
 the page.
 
-## 5. Offer the shareable version
+## 5. Publish it
 
-The file is offline-first, and opening it is enough for one person. If it needs to reach
-anyone else — a colleague, a client, a reviewer — offer to publish it as an Artifact and
-hand over the link. Do not publish unasked: it is the user's decision whether this leaves
-their machine.
+**Publish the Artifact and hand over the link.** A launch package exists to be read by
+more than one person — a colleague, a client, whoever signs off — and a path on one
+laptop reaches none of them.
+
+```
+Artifact(file_path: ".aris/package/aris-launch.artifact.html",
+         capabilities: {downloads: true})
+```
+
+`downloads` is what makes the page's own Download button work: the artifact viewer
+ignores a plain `<a download>`, so without the capability the control sits there doing
+nothing. The page falls back to the link when opened from disk, so one build serves both.
+
+Artifacts are private to the user until they share them. Say so, and leave sharing to
+them.
+
+Republish to the **same file path** to keep the same URL. A fresh publish from a
+conversation that did not create it makes a second artifact and strands the link people
+already have.
 
 ## 6. Report, in this order
 
