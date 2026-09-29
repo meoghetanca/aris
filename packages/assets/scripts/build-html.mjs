@@ -28,7 +28,10 @@ import { execFileSync } from "node:child_process";
 import { requireRoot, readJson } from "./lib/aris.mjs";
 
 const HERE = path.dirname(url.fileURLToPath(import.meta.url));
-const TEMPLATE = path.join(HERE, "template", "page.html");
+const TPL_DIR = path.join(HERE, "template");
+const TEMPLATE = path.join(TPL_DIR, "page.html");
+const TPL_CSS = path.join(TPL_DIR, "page.css");
+const TPL_JS = path.join(TPL_DIR, "page.js");
 const PLACEHOLDER = "/*__ARIS_DATA__*/";
 
 // `build-html.mjs | head` closes the pipe mid-write. Without this the process dies
@@ -44,8 +47,9 @@ const FORCE = process.argv.includes("--force");
 const warn = (m) => process.stderr.write(`  warn  ${m}\n`);
 const notes = [];
 
-if (!fs.existsSync(TEMPLATE)) {
-  process.stderr.write(`template missing at ${TEMPLATE}. The install is broken.\n`);
+for (const f of [TEMPLATE, TPL_CSS, TPL_JS]) {
+  if (fs.existsSync(f)) continue;
+  process.stderr.write(`template part missing at ${f}. The install is broken.\n`);
   process.exit(2);
 }
 
@@ -196,7 +200,18 @@ const json = JSON.stringify(DATA)
   .replace(/\u2028/g, "\\u2028")
   .replace(/\u2029/g, "\\u2029");
 
-const template = fs.readFileSync(TEMPLATE, "utf8");
+// Three files, one page. Markup, stylesheet and behaviour are edited separately and
+// joined here, so a change to one cannot silently delete another.
+// Three files, one page. Markup, stylesheet and behaviour are edited separately and
+// joined here, so a change to one cannot silently delete another.
+//
+// The replacements go through a FUNCTION, not a string. A string replacement treats
+// $&, $\' and $` as patterns, and the page script contains them inside template
+// literals -- passing it as a string silently duplicated the rest of the document and
+// the page rendered three copies of its own tab bar.
+const template = fs.readFileSync(TEMPLATE, "utf8")
+  .replace("__ARIS_STYLE__", () => "<style>\n" + fs.readFileSync(TPL_CSS, "utf8") + "</style>")
+  .replace("__ARIS_SCRIPT__", () => "<script>\n" + fs.readFileSync(TPL_JS, "utf8") + "</script>");
 if (!template.includes(PLACEHOLDER)) {
   process.stderr.write(`template has no ${PLACEHOLDER} placeholder. The install is broken.\n`);
   process.exit(2);

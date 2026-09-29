@@ -1,0 +1,4 @@
+# page.html is 3% markup; its stylesheet and behaviour live in page.css and page.js and
+# are assembled at build time. Counting the assembled artefact would misreport the repo.
+packages/assets/scripts/template/page.html linguist-detectable=false
+*.mjs linguist-language=JavaScript
