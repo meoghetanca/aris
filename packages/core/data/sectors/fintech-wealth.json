@@ -1,0 +1,146 @@
+{
+  "sector": "fintech-wealth",
+  "aliases": [
+    "wealth management",
+    "family office",
+    "investment platform",
+    "fintech",
+    "robo advisor",
+    "mfo"
+  ],
+  "status": "covered",
+  "reviewPlatforms": [
+    {
+      "name": "G2",
+      "url": "https://www.g2.com",
+      "coverage": "medium"
+    },
+    {
+      "name": "Trustpilot",
+      "url": "https://www.trustpilot.com",
+      "coverage": "high"
+    },
+    {
+      "name": "App Store",
+      "url": "https://apps.apple.com",
+      "coverage": "medium"
+    }
+  ],
+  "communities": [
+    {
+      "platform": "reddit",
+      "handle": "r/fatFIRE"
+    },
+    {
+      "platform": "reddit",
+      "handle": "r/investing"
+    },
+    {
+      "platform": "linkedin",
+      "handle": "family office and RIA groups"
+    },
+    {
+      "platform": "forum",
+      "handle": "Bogleheads"
+    }
+  ],
+  "buyingCommittee": [
+    {
+      "role": "principal / family head",
+      "influence": "economic"
+    },
+    {
+      "role": "CIO or investment adviser",
+      "influence": "champion"
+    },
+    {
+      "role": "compliance officer",
+      "influence": "veto"
+    },
+    {
+      "role": "external auditor",
+      "influence": "veto"
+    }
+  ],
+  "channelNorms": {
+    "effective": [
+      "referral",
+      "LinkedIn",
+      "private events",
+      "SEO on advisory terms",
+      "earned media"
+    ],
+    "ineffective": [
+      "paid social",
+      "Product Hunt",
+      "growth loops",
+      "discount offers"
+    ],
+    "reason": "Trust-led, referral-dominated, and heavily regulated. Discounting signals distress; paid social reads as retail and repels the segment."
+  },
+  "priceBands": {
+    "currency": null,
+    "low": null,
+    "mid": null,
+    "high": null,
+    "unit": "",
+    "sourceIds": [],
+    "note": "Uncited. /mkt-sector refresh <sector> must derive these from the live competitor ladder and cite them."
+  },
+  "cacBenchmarks": {
+    "note": "Uncited. Derive per run from published benchmarks and cite, or leave unknown."
+  },
+  "salesCycleDays": {
+    "midmarket": "90-180",
+    "enterprise": "180-540"
+  },
+  "regulatedClaims": [
+    {
+      "claim": "any projected or guaranteed return",
+      "rule": "forbidden",
+      "authority": "securities regulators worldwide; past performance disclosure is mandatory"
+    },
+    {
+      "claim": "investment advice",
+      "rule": "requires_disclosure",
+      "authority": "licensing depends on jurisdiction; unlicensed advice is an offence"
+    },
+    {
+      "claim": "insured / protected capital",
+      "rule": "requires_disclosure",
+      "authority": "deposit insurance has named limits and named schemes"
+    },
+    {
+      "claim": "beats the market / outperforms",
+      "rule": "forbidden",
+      "authority": "comparative performance claims require audited evidence and a stated benchmark"
+    }
+  ],
+  "forbidden": [
+    "a performance chart with no benchmark and no period",
+    "client names or portfolio values in a screenshot",
+    "the words risk-free in any context",
+    "testimonials from clients — restricted or prohibited in most jurisdictions"
+  ],
+  "reservedTerms": [
+    {
+      "term": "AUM",
+      "meaning": "assets under management, an audited figure. Never an estimate."
+    },
+    {
+      "term": "advisory",
+      "meaning": "a licensed activity. Not a support chat."
+    }
+  ],
+  "requiredDisclosures": [
+    "licence and jurisdiction",
+    "past performance warning",
+    "fee schedule in full",
+    "conflicts of interest"
+  ],
+  "seasonality": [
+    "tax year end",
+    "Q1 rebalancing",
+    "annual audit windows"
+  ]
+}

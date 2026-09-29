@@ -1,0 +1,25 @@
+{
+  "name": "mkt-intel",
+  "description": "mkt intel: the category map, voice of customer mined from the public record, personas derived from quotes, market size from cited factors, and demand inferred rather than asserted.",
+  "version": "0.1.0",
+  "author": {
+    "name": "Nhi Trinh"
+  },
+  "license": "MIT",
+  "dependencies": [
+    "mkt-core"
+  ],
+  "commands": [
+    "./commands"
+  ],
+  "agents": [
+    "./agents/mkt-miner.md"
+  ],
+  "keywords": [
+    "marketing",
+    "gtm",
+    "research",
+    "launch",
+    "workflow"
+  ]
+}

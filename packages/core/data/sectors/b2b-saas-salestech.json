@@ -1,0 +1,141 @@
+{
+  "sector": "b2b-saas-salestech",
+  "aliases": [
+    "salestech",
+    "martech",
+    "sales automation",
+    "crm",
+    "outreach",
+    "linkedin automation"
+  ],
+  "status": "covered",
+  "reviewPlatforms": [
+    {
+      "name": "G2",
+      "url": "https://www.g2.com/categories/sales-engagement",
+      "coverage": "high"
+    },
+    {
+      "name": "Capterra",
+      "url": "https://www.capterra.com",
+      "coverage": "medium"
+    },
+    {
+      "name": "Product Hunt",
+      "url": "https://www.producthunt.com",
+      "coverage": "medium"
+    }
+  ],
+  "communities": [
+    {
+      "platform": "reddit",
+      "handle": "r/sales"
+    },
+    {
+      "platform": "reddit",
+      "handle": "r/SaaS"
+    },
+    {
+      "platform": "slack",
+      "handle": "RevGenius, Pavilion"
+    },
+    {
+      "platform": "linkedin",
+      "handle": "sales influencer comment sections"
+    }
+  ],
+  "buyingCommittee": [
+    {
+      "role": "SDR / AE",
+      "influence": "champion"
+    },
+    {
+      "role": "Head of Sales / RevOps",
+      "influence": "economic"
+    },
+    {
+      "role": "IT / Security",
+      "influence": "veto"
+    },
+    {
+      "role": "Legal",
+      "influence": "veto"
+    }
+  ],
+  "channelNorms": {
+    "effective": [
+      "LinkedIn",
+      "content marketing",
+      "communities",
+      "product-led free tier",
+      "partnerships",
+      "Product Hunt"
+    ],
+    "ineffective": [
+      "print",
+      "events for SMB",
+      "TV"
+    ],
+    "reason": "Practitioner-led adoption: the champion finds the tool themselves and brings it in. Bottom-up free tiers outperform top-down selling below enterprise."
+  },
+  "priceBands": {
+    "currency": null,
+    "low": null,
+    "mid": null,
+    "high": null,
+    "unit": "",
+    "sourceIds": [],
+    "note": "Uncited. /mkt-sector refresh <sector> must derive these from the live competitor ladder and cite them."
+  },
+  "cacBenchmarks": {
+    "note": "Uncited. Derive per run from published benchmarks and cite, or leave unknown."
+  },
+  "salesCycleDays": {
+    "smb": "7-30",
+    "midmarket": "30-90",
+    "enterprise": "90-180"
+  },
+  "regulatedClaims": [
+    {
+      "claim": "automates actions on a third-party platform",
+      "rule": "requires_disclosure",
+      "authority": "that platform's terms of service; automation may breach them and risk the user's account"
+    },
+    {
+      "claim": "scrapes contact data / provides emails",
+      "rule": "requires_disclosure",
+      "authority": "GDPR lawful basis, CAN-SPAM, PDPD (Vietnam) — the lawful basis must be stated"
+    },
+    {
+      "claim": "undetectable / bypasses limits",
+      "rule": "forbidden",
+      "authority": "promoting detection evasion against a platform's terms"
+    }
+  ],
+  "forbidden": [
+    "implying endorsement by the platform being automated",
+    "a claimed reply rate with no sample size and no period",
+    "real prospect names or company data in a screenshot",
+    "silence about account risk when the product automates a third-party platform"
+  ],
+  "reservedTerms": [
+    {
+      "term": "lead",
+      "meaning": "a qualified contact. Not a page view."
+    },
+    {
+      "term": "connection",
+      "meaning": "an accepted relationship on the platform. Not a send."
+    }
+  ],
+  "requiredDisclosures": [
+    "lawful basis for any contact data",
+    "account-risk warning for third-party automation",
+    "data retention period"
+  ],
+  "seasonality": [
+    "January quota reset",
+    "Q4 budget spend",
+    "summer slowdown in outbound reply rates"
+  ]
+}

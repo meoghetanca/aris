@@ -1,0 +1,139 @@
+{
+  "sector": "consumer-media-streaming",
+  "aliases": [
+    "music app",
+    "streaming",
+    "consumer media",
+    "music discovery",
+    "podcast app"
+  ],
+  "status": "covered",
+  "reviewPlatforms": [
+    {
+      "name": "App Store",
+      "url": "https://apps.apple.com",
+      "coverage": "high"
+    },
+    {
+      "name": "Google Play",
+      "url": "https://play.google.com",
+      "coverage": "high"
+    },
+    {
+      "name": "Trustpilot",
+      "url": "https://www.trustpilot.com",
+      "coverage": "low"
+    }
+  ],
+  "communities": [
+    {
+      "platform": "reddit",
+      "handle": "r/spotify"
+    },
+    {
+      "platform": "reddit",
+      "handle": "r/musicsuggestions"
+    },
+    {
+      "platform": "reddit",
+      "handle": "r/listentothis"
+    },
+    {
+      "platform": "discord",
+      "handle": "music discovery servers"
+    },
+    {
+      "platform": "youtube",
+      "handle": "app review comment sections"
+    }
+  ],
+  "buyingCommittee": [
+    {
+      "role": "the listener",
+      "influence": "champion"
+    },
+    {
+      "role": "the listener",
+      "influence": "economic"
+    },
+    {
+      "role": "household payer (family plans)",
+      "influence": "economic"
+    }
+  ],
+  "channelNorms": {
+    "effective": [
+      "App Store optimisation",
+      "TikTok",
+      "Instagram Reels",
+      "YouTube",
+      "creator partnerships",
+      "Reddit communities"
+    ],
+    "ineffective": [
+      "LinkedIn",
+      "cold email",
+      "sales outreach",
+      "long-form whitepapers"
+    ],
+    "reason": "Single-user impulse purchase at a low price point. Discovery happens in-feed and in the store; there is no buying committee and no consideration cycle to nurture."
+  },
+  "priceBands": {
+    "currency": null,
+    "low": null,
+    "mid": null,
+    "high": null,
+    "unit": "",
+    "sourceIds": [],
+    "note": "Uncited. /mkt-sector refresh <sector> must derive these from the live competitor ladder and cite them."
+  },
+  "cacBenchmarks": {
+    "note": "Uncited. Derive per run from published benchmarks and cite, or leave unknown."
+  },
+  "salesCycleDays": {
+    "consumer": "0-1"
+  },
+  "regulatedClaims": [
+    {
+      "claim": "unlimited / offline downloads of licensed catalogue",
+      "rule": "requires_disclosure",
+      "authority": "licensing terms are territory-bound"
+    },
+    {
+      "claim": "free forever",
+      "rule": "requires_disclosure",
+      "authority": "consumer protection — must state what the free tier excludes"
+    },
+    {
+      "claim": "auto-renewing subscription",
+      "rule": "requires_disclosure",
+      "authority": "App Store / Play Store rules plus consumer law; price, period and cancellation must be stated at the point of purchase"
+    }
+  ],
+  "forbidden": [
+    "real album artwork or artist photography without a licence",
+    "song lyrics reproduced in marketing material",
+    "naming a major label or artist as a partner without one",
+    "a screenshot implying a catalogue the product does not have"
+  ],
+  "reservedTerms": [
+    {
+      "term": "library",
+      "meaning": "what the user saved. Not the catalogue."
+    },
+    {
+      "term": "radio",
+      "meaning": "an endless algorithmic stream. Not a playlist."
+    }
+  ],
+  "requiredDisclosures": [
+    "what the free tier excludes",
+    "territory of catalogue availability",
+    "subscription renewal terms"
+  ],
+  "seasonality": [
+    "December wrapped-style retrospectives",
+    "January resolution churn",
+    "summer festival season"
+  ]
+}

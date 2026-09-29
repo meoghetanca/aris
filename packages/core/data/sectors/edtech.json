@@ -1,0 +1,143 @@
+{
+  "sector": "edtech",
+  "aliases": [
+    "education",
+    "e-learning",
+    "lms",
+    "training",
+    "course platform"
+  ],
+  "status": "covered",
+  "reviewPlatforms": [
+    {
+      "name": "G2",
+      "url": "https://www.g2.com/categories/lms",
+      "coverage": "medium"
+    },
+    {
+      "name": "Capterra",
+      "url": "https://www.capterra.com",
+      "coverage": "medium"
+    },
+    {
+      "name": "App Store",
+      "url": "https://apps.apple.com",
+      "coverage": "high"
+    },
+    {
+      "name": "Trustpilot",
+      "url": "https://www.trustpilot.com",
+      "coverage": "medium"
+    }
+  ],
+  "communities": [
+    {
+      "platform": "reddit",
+      "handle": "r/Teachers"
+    },
+    {
+      "platform": "reddit",
+      "handle": "r/edtech"
+    },
+    {
+      "platform": "facebook",
+      "handle": "teacher and parent groups (VN market: primary)"
+    },
+    {
+      "platform": "youtube",
+      "handle": "study and review channels"
+    }
+  ],
+  "buyingCommittee": [
+    {
+      "role": "teacher / instructor",
+      "influence": "champion"
+    },
+    {
+      "role": "parent or learner",
+      "influence": "economic"
+    },
+    {
+      "role": "school administrator / procurement",
+      "influence": "economic"
+    },
+    {
+      "role": "data protection officer",
+      "influence": "veto"
+    }
+  ],
+  "channelNorms": {
+    "effective": [
+      "SEO",
+      "YouTube",
+      "teacher communities",
+      "parent groups",
+      "school partnerships",
+      "content marketing"
+    ],
+    "ineffective": [
+      "cold outbound to schools",
+      "LinkedIn for K-12",
+      "paid search on brand terms of institutions"
+    ],
+    "reason": "The user, the payer and the approver are three different people. Procurement is slow and seasonal; the champion is a practitioner with no budget."
+  },
+  "priceBands": {
+    "currency": null,
+    "low": null,
+    "mid": null,
+    "high": null,
+    "unit": "",
+    "sourceIds": [],
+    "note": "Uncited. /mkt-sector refresh <sector> must derive these from the live competitor ladder and cite them."
+  },
+  "cacBenchmarks": {
+    "note": "Uncited. Derive per run from published benchmarks and cite, or leave unknown."
+  },
+  "salesCycleDays": {
+    "consumer": "1-14",
+    "institution": "90-365"
+  },
+  "regulatedClaims": [
+    {
+      "claim": "improves grades / guaranteed outcomes",
+      "rule": "forbidden",
+      "authority": "advertising standards — educational outcome claims require controlled evidence"
+    },
+    {
+      "claim": "accredited / certified",
+      "rule": "requires_disclosure",
+      "authority": "the accrediting body must be named and verifiable"
+    },
+    {
+      "claim": "collects data from children",
+      "rule": "requires_disclosure",
+      "authority": "COPPA, GDPR-K, FERPA — parental consent and data handling must be stated"
+    }
+  ],
+  "forbidden": [
+    "a child's face, name or work in marketing without written consent",
+    "a completion or outcome statistic with no cohort size",
+    "implying institutional endorsement from a pilot"
+  ],
+  "reservedTerms": [
+    {
+      "term": "certificate",
+      "meaning": "a credential a third party recognises. Not a completion badge."
+    },
+    {
+      "term": "curriculum",
+      "meaning": "an approved syllabus. Not a content list."
+    }
+  ],
+  "requiredDisclosures": [
+    "accrediting body if certification is claimed",
+    "children's data handling",
+    "refund policy"
+  ],
+  "seasonality": [
+    "August-September enrolment",
+    "January intake",
+    "budget approvals in spring for autumn"
+  ]
+}

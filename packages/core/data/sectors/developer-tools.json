@@ -1,0 +1,155 @@
+{
+  "sector": "developer-tools",
+  "aliases": [
+    "devtools",
+    "api",
+    "infrastructure",
+    "sdk",
+    "open source",
+    "platform engineering"
+  ],
+  "status": "covered",
+  "reviewPlatforms": [
+    {
+      "name": "G2",
+      "url": "https://www.g2.com",
+      "coverage": "low"
+    },
+    {
+      "name": "GitHub issues and discussions",
+      "url": "https://github.com",
+      "coverage": "high"
+    },
+    {
+      "name": "Stack Overflow",
+      "url": "https://stackoverflow.com",
+      "coverage": "high"
+    }
+  ],
+  "communities": [
+    {
+      "platform": "hackernews",
+      "handle": "news.ycombinator.com"
+    },
+    {
+      "platform": "reddit",
+      "handle": "r/programming"
+    },
+    {
+      "platform": "reddit",
+      "handle": "r/devops"
+    },
+    {
+      "platform": "discord",
+      "handle": "framework and tool servers"
+    },
+    {
+      "platform": "github",
+      "handle": "issue threads of competitors — the highest-signal pain source in this field"
+    }
+  ],
+  "buyingCommittee": [
+    {
+      "role": "individual engineer",
+      "influence": "champion"
+    },
+    {
+      "role": "tech lead / staff engineer",
+      "influence": "champion"
+    },
+    {
+      "role": "engineering manager or CTO",
+      "influence": "economic"
+    },
+    {
+      "role": "security and compliance",
+      "influence": "veto"
+    },
+    {
+      "role": "procurement (enterprise only)",
+      "influence": "veto"
+    }
+  ],
+  "channelNorms": {
+    "effective": [
+      "documentation as marketing",
+      "open source",
+      "Hacker News",
+      "technical content",
+      "conference talks",
+      "free tier",
+      "GitHub presence"
+    ],
+    "ineffective": [
+      "cold outbound",
+      "gated whitepapers",
+      "paid social",
+      "aggressive sales motion"
+    ],
+    "reason": "Bottom-up adoption by practitioners who distrust marketing and evaluate by reading docs and trying it. Gating anything costs more trust than it captures leads."
+  },
+  "priceBands": {
+    "currency": null,
+    "low": null,
+    "mid": null,
+    "high": null,
+    "unit": "",
+    "sourceIds": [],
+    "note": "Uncited. /mkt-sector refresh <sector> must derive these from the live competitor ladder and cite them."
+  },
+  "cacBenchmarks": {
+    "note": "Uncited. Derive per run from published benchmarks and cite, or leave unknown."
+  },
+  "salesCycleDays": {
+    "self-serve": "0-7",
+    "midmarket": "30-90",
+    "enterprise": "90-270"
+  },
+  "regulatedClaims": [
+    {
+      "claim": "a benchmark or performance comparison",
+      "rule": "requires_disclosure",
+      "authority": "the methodology, version, hardware and config must be published or the claim is worthless and will be publicly disputed"
+    },
+    {
+      "claim": "SOC 2 / ISO 27001 certified",
+      "rule": "requires_disclosure",
+      "authority": "the report must exist and the auditor be nameable"
+    },
+    {
+      "claim": "open source",
+      "rule": "requires_disclosure",
+      "authority": "the licence must be named; source-available is not open source"
+    }
+  ],
+  "forbidden": [
+    "a benchmark with no reproducible method",
+    "a comparison table misrepresenting a competitor's current feature set",
+    "claiming a licence the repository does not carry",
+    "logos of companies that are not customers"
+  ],
+  "reservedTerms": [
+    {
+      "term": "open source",
+      "meaning": "an OSI-approved licence. Nothing else."
+    },
+    {
+      "term": "serverless",
+      "meaning": "no server management by the user. Not just hosted."
+    },
+    {
+      "term": "real-time",
+      "meaning": "a stated latency bound. Not fast."
+    }
+  ],
+  "requiredDisclosures": [
+    "licence",
+    "benchmark methodology",
+    "what the free tier limits"
+  ],
+  "seasonality": [
+    "conference cycles",
+    "January infrastructure budget",
+    "December code freeze — launches land badly"
+  ]
+}

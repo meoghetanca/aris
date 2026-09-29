@@ -1,0 +1,148 @@
+{
+  "sector": "professional-services",
+  "aliases": [
+    "agency",
+    "consultancy",
+    "software outsourcing",
+    "it services",
+    "dev shop",
+    "studio"
+  ],
+  "status": "covered",
+  "reviewPlatforms": [
+    {
+      "name": "Clutch",
+      "url": "https://clutch.co",
+      "coverage": "high"
+    },
+    {
+      "name": "GoodFirms",
+      "url": "https://www.goodfirms.co",
+      "coverage": "medium"
+    },
+    {
+      "name": "Google reviews",
+      "url": "https://maps.google.com",
+      "coverage": "medium"
+    },
+    {
+      "name": "Glassdoor",
+      "url": "https://www.glassdoor.com",
+      "coverage": "medium"
+    }
+  ],
+  "communities": [
+    {
+      "platform": "linkedin",
+      "handle": "founder and CTO networks"
+    },
+    {
+      "platform": "reddit",
+      "handle": "r/cscareerquestions"
+    },
+    {
+      "platform": "reddit",
+      "handle": "r/agency"
+    },
+    {
+      "platform": "slack",
+      "handle": "founder communities"
+    }
+  ],
+  "buyingCommittee": [
+    {
+      "role": "founder or CTO",
+      "influence": "economic"
+    },
+    {
+      "role": "engineering lead",
+      "influence": "champion"
+    },
+    {
+      "role": "procurement / finance",
+      "influence": "veto"
+    },
+    {
+      "role": "legal (IP and data terms)",
+      "influence": "veto"
+    }
+  ],
+  "channelNorms": {
+    "effective": [
+      "referral",
+      "Clutch presence",
+      "LinkedIn",
+      "case studies",
+      "founder network",
+      "conference presence",
+      "content demonstrating depth"
+    ],
+    "ineffective": [
+      "paid social",
+      "cold mass outbound",
+      "discount positioning",
+      "Product Hunt"
+    ],
+    "reason": "Trust and proof of prior work dominate. The strongest asset is a verifiable case study; price competition here signals commodity capability."
+  },
+  "priceBands": {
+    "currency": null,
+    "low": null,
+    "mid": null,
+    "high": null,
+    "unit": "",
+    "sourceIds": [],
+    "note": "Uncited. /mkt-sector refresh <sector> must derive these from the live competitor ladder and cite them."
+  },
+  "cacBenchmarks": {
+    "note": "Uncited. Derive per run from published benchmarks and cite, or leave unknown."
+  },
+  "salesCycleDays": {
+    "smb": "14-60",
+    "midmarket": "60-180",
+    "enterprise": "120-365"
+  },
+  "regulatedClaims": [
+    {
+      "claim": "named client work",
+      "rule": "requires_disclosure",
+      "authority": "NDAs and master service agreements routinely prohibit naming clients or describing the work"
+    },
+    {
+      "claim": "team size or seniority",
+      "rule": "requires_disclosure",
+      "authority": "must reflect actual staff, not a bench or a partner network"
+    },
+    {
+      "claim": "certified partner status",
+      "rule": "requires_disclosure",
+      "authority": "the certifying vendor must list the firm"
+    }
+  ],
+  "forbidden": [
+    "a client logo used without written permission",
+    "a case study describing work under NDA",
+    "presenting subcontracted or partner work as in-house",
+    "an outcome metric attributed to the engagement with no baseline"
+  ],
+  "reservedTerms": [
+    {
+      "term": "partner",
+      "meaning": "a formal certified relationship. Not a client."
+    },
+    {
+      "term": "team",
+      "meaning": "employed staff. Not a freelancer bench."
+    }
+  ],
+  "requiredDisclosures": [
+    "where the delivery team is located",
+    "IP ownership terms",
+    "named-client permission status"
+  ],
+  "seasonality": [
+    "Q4 budget for Q1 starts",
+    "Tet shutdown (VN delivery)",
+    "summer slowdown in European buying"
+  ]
+}

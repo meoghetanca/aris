@@ -1,0 +1,97 @@
+#!/usr/bin/env node
+/**
+ * SessionStart hook for mkt.
+ *
+ * Three jobs:
+ *
+ *   1. Put hooks/dispatcher.md back into context. Rules that live only in
+ *      conversation decay inside a long session, and the compact case is the one
+ *      that matters.
+ *   2. Report this project's state, if there is one.
+ *   3. Report anything missing that mkt needs. A missing dependency must be
+ *      visible, never inferred from odd behaviour three commands later.
+ *
+ * Injection pattern adapted from pica and superpowers (MIT).
+ * Never fails silently; never fails loudly enough to break a session.
+ */
+"use strict";
+const fs = require("node:fs");
+const path = require("node:path");
+const os = require("node:os");
+
+function emit(text) {
+  process.stdout.write(JSON.stringify({
+    hookSpecificOutput: { hookEventName: "SessionStart", additionalContext: text },
+  }) + "\n");
+  process.exit(0);
+}
+
+function findState(start) {
+  let d = path.resolve(start || process.cwd());
+  for (;;) {
+    const c = path.join(d, ".mkt", "state.json");
+    if (fs.existsSync(c)) return c;
+    const p = path.dirname(d);
+    if (p === d) return null;
+    d = p;
+  }
+}
+
+/** Is a plugin present anywhere in the plugin cache or marketplaces? */
+function installed(name) {
+  const base = path.join(os.homedir(), ".claude", "plugins");
+  for (const sub of ["cache", "marketplaces"]) {
+    const d = path.join(base, sub);
+    if (!fs.existsSync(d)) continue;
+    for (const e of fs.readdirSync(d)) {
+      if (e === name || e.includes(name)) return true;
+      const inner = path.join(d, e);
+      try {
+        if (fs.statSync(inner).isDirectory() && fs.readdirSync(inner).some((x) => x === name || x.includes(name)))
+          return true;
+      } catch { /* unreadable entry: treat as absent */ }
+    }
+  }
+  return false;
+}
+
+const here = path.dirname(path.resolve(process.argv[1]));
+const dispatcher = path.join(here, "dispatcher.md");
+
+if (!fs.existsSync(dispatcher))
+  emit(`mkt: dispatcher.md could not be read at ${dispatcher}. The workflow rules are NOT loaded. ` +
+       "Tell the user their mkt install is broken.");
+
+const parts = [fs.readFileSync(dispatcher, "utf8")];
+
+const statePath = findState();
+if (statePath) {
+  let st = {};
+  try { st = JSON.parse(fs.readFileSync(statePath, "utf8")); } catch { /* keep going */ }
+  const m = st.market || {};
+  let line = `\n## This project\n\nmkt project: **${(st.product || {}).name || "(unnamed)"}** — sector \`${m.sector || "unresolved"}\`` +
+    `${m.sectorStatus === "provisional" ? " **(PROVISIONAL sector)**" : ""}, status \`${st.status || "?"}\`.`;
+  if (!st.launchAuthorization) line += "\n\n`launchAuthorization` is false: the publish gate is closed.";
+  parts.push(line);
+}
+
+const missing = [];
+if (!installed("superpowers"))
+  missing.push(["superpowers", "the decision blocks (AskUserQuestion) run through it",
+                "/plugin install superpowers@claude-plugins-official"]);
+if (!installed("pica"))
+  missing.push(["pica", "it builds the landing page from assets/landing-brief.md",
+                "/plugin marketplace add vqdungwork/pica  then  /plugin install pica@pica"]);
+
+if (missing.length) {
+  parts.push(
+    "\n## Something mkt uses is not installed\n\n" +
+    missing.map(([n, why, how]) => `- **${n}** — ${why}\n  \`${how}\``).join("\n") +
+    "\n\nSay this **once** if the user runs an mkt command, and offer `/mkt-setup` to fix it. " +
+    "Do not repeat it every turn. mkt still runs without them: without superpowers it takes the " +
+    "recommended option at every decision and records it as an assumption; without pica it writes " +
+    "the landing brief and stops there."
+  );
+}
+
+emit("<system-reminder>\n" + parts.join("\n") + "\n</system-reminder>");

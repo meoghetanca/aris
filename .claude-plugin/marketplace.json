@@ -1,0 +1,33 @@
+{
+  "name": "mkt",
+  "description": "Unknown market to a launch-ready package. Mine the public record, derive positioning from evidence, write every asset with a traceable claim, verify by script, and end in one HTML command centre. Four packages, sector-aware, fails closed on missing evidence.",
+  "owner": {
+    "name": "Nhi Trinh"
+  },
+  "plugins": [
+    {
+      "name": "mkt-core",
+      "source": "./packages/core",
+      "version": "0.1.0",
+      "description": "mkt core: intake, the state contract, the sector knowledge base, the decision blocks, traceability and every gate."
+    },
+    {
+      "name": "mkt-intel",
+      "source": "./packages/intel",
+      "version": "0.1.0",
+      "description": "mkt intel: the category map, voice of customer mined from the public record, personas derived from quotes, market size from cited factors, and demand inferred rather than asserted."
+    },
+    {
+      "name": "mkt-strategy",
+      "source": "./packages/strategy",
+      "version": "0.1.0",
+      "description": "mkt strategy: three scored positioning directions, messaging traceable to pain, and a channel mix argued from where the evidence came from."
+    },
+    {
+      "name": "mkt-assets",
+      "source": "./packages/assets",
+      "version": "0.1.0",
+      "description": "mkt assets: every launch material with a claim id, the dormant measurement harness, the conditional growth playbook, and the single-file HTML command centre."
+    }
+  ]
+}

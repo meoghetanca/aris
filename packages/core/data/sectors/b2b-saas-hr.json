@@ -1,0 +1,144 @@
+{
+  "sector": "b2b-saas-hr",
+  "aliases": [
+    "hr tech",
+    "hris",
+    "people ops",
+    "hr platform",
+    "human resources software"
+  ],
+  "status": "covered",
+  "reviewPlatforms": [
+    {
+      "name": "G2",
+      "url": "https://www.g2.com/categories/core-hr",
+      "coverage": "high"
+    },
+    {
+      "name": "Capterra",
+      "url": "https://www.capterra.com/hr-software/",
+      "coverage": "high"
+    },
+    {
+      "name": "TrustRadius",
+      "url": "https://www.trustradius.com",
+      "coverage": "medium"
+    }
+  ],
+  "communities": [
+    {
+      "platform": "reddit",
+      "handle": "r/humanresources"
+    },
+    {
+      "platform": "reddit",
+      "handle": "r/AskHR"
+    },
+    {
+      "platform": "linkedin",
+      "handle": "HR groups — high signal, low scrapability"
+    },
+    {
+      "platform": "facebook",
+      "handle": "Vietnam HR groups (VN market: primary channel)"
+    }
+  ],
+  "buyingCommittee": [
+    {
+      "role": "HR Manager / People Ops lead",
+      "influence": "champion"
+    },
+    {
+      "role": "Head of HR / CHRO",
+      "influence": "economic"
+    },
+    {
+      "role": "Finance / CFO",
+      "influence": "veto"
+    },
+    {
+      "role": "IT / Security",
+      "influence": "veto"
+    },
+    {
+      "role": "Works council / union (EU)",
+      "influence": "veto"
+    }
+  ],
+  "channelNorms": {
+    "effective": [
+      "LinkedIn",
+      "SEO",
+      "content marketing",
+      "partnerships with payroll providers",
+      "HR communities",
+      "webinars"
+    ],
+    "ineffective": [
+      "TikTok",
+      "display advertising",
+      "Product Hunt"
+    ],
+    "reason": "Considered purchase with a security and finance veto. Buyers research in professional channels and arrive via peer recommendation; consumer-style paid social reaches the wrong person."
+  },
+  "priceBands": {
+    "currency": null,
+    "low": null,
+    "mid": null,
+    "high": null,
+    "unit": "",
+    "sourceIds": [],
+    "note": "Uncited. /mkt-sector refresh <sector> must derive these from the live competitor ladder and cite them."
+  },
+  "cacBenchmarks": {
+    "note": "Uncited. Derive per run from published benchmarks and cite, or leave unknown."
+  },
+  "salesCycleDays": {
+    "smb": "30-60",
+    "midmarket": "60-120",
+    "enterprise": "120-270"
+  },
+  "regulatedClaims": [
+    {
+      "claim": "GDPR compliant / fully compliant",
+      "rule": "requires_disclosure",
+      "authority": "EU GDPR — compliance is a property of the deployment, not the product"
+    },
+    {
+      "claim": "guaranteed legal compliance with labour law",
+      "rule": "forbidden",
+      "authority": "labour law varies by jurisdiction; a blanket guarantee is unsupportable"
+    },
+    {
+      "claim": "eliminates bias in hiring",
+      "rule": "forbidden",
+      "authority": "EU AI Act / NYC LL144 treat hiring tools as high risk; bias elimination cannot be claimed"
+    }
+  ],
+  "forbidden": [
+    "storing employee data without naming the data residency",
+    "screenshots showing real employee names, salaries or photographs",
+    "implying automated hiring decisions without a human in the loop",
+    "a pricing page with no per-seat unit when the field prices per seat"
+  ],
+  "reservedTerms": [
+    {
+      "term": "employee record",
+      "meaning": "the legal personnel file. Do not use for a profile page."
+    },
+    {
+      "term": "payroll",
+      "meaning": "money actually disbursed. Never use for cost reporting."
+    }
+  ],
+  "requiredDisclosures": [
+    "data residency",
+    "sub-processor list",
+    "whether AI is used in any evaluative decision"
+  ],
+  "seasonality": [
+    "budget cycles Q4 for a January start",
+    "hiring freezes mid-Q3",
+    "payroll migrations land on a fiscal year boundary"
+  ]
+}

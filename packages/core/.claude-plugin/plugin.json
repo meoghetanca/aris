@@ -1,0 +1,25 @@
+{
+  "name": "mkt-core",
+  "description": "mkt core: intake, the state contract, the sector knowledge base, the decision blocks, traceability and every gate.",
+  "version": "0.1.0",
+  "author": {
+    "name": "Nhi Trinh"
+  },
+  "license": "MIT",
+  "dependencies": [
+    "superpowers@claude-plugins-official"
+  ],
+  "commands": [
+    "./commands"
+  ],
+  "skills": [
+    "./skills"
+  ],
+  "keywords": [
+    "marketing",
+    "gtm",
+    "research",
+    "launch",
+    "workflow"
+  ]
+}

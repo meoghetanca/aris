@@ -1,0 +1,24 @@
+{
+  "name": "mkt-assets",
+  "description": "mkt assets: every launch material with a claim id, the dormant measurement harness, the conditional growth playbook, and the single-file HTML command centre.",
+  "version": "0.1.0",
+  "author": {
+    "name": "Nhi Trinh"
+  },
+  "license": "MIT",
+  "dependencies": [
+    "mkt-core",
+    "mkt-strategy",
+    "pica@pica"
+  ],
+  "commands": [
+    "./commands"
+  ],
+  "keywords": [
+    "marketing",
+    "gtm",
+    "research",
+    "launch",
+    "workflow"
+  ]
+}

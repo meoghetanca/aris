@@ -1,0 +1,6 @@
+.DS_Store
+node_modules/
+*.log
+
+# A user's own project data. The test fixture lives at test/fixture/ and is tracked.
+.mkt/

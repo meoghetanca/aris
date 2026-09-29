@@ -1,0 +1,155 @@
+{
+  "sector": "healthtech",
+  "aliases": [
+    "health",
+    "medical",
+    "clinical",
+    "digital health",
+    "wellness app",
+    "telehealth"
+  ],
+  "status": "covered",
+  "reviewPlatforms": [
+    {
+      "name": "App Store",
+      "url": "https://apps.apple.com",
+      "coverage": "high"
+    },
+    {
+      "name": "Google Play",
+      "url": "https://play.google.com",
+      "coverage": "high"
+    },
+    {
+      "name": "Trustpilot",
+      "url": "https://www.trustpilot.com",
+      "coverage": "medium"
+    },
+    {
+      "name": "G2",
+      "url": "https://www.g2.com",
+      "coverage": "low"
+    }
+  ],
+  "communities": [
+    {
+      "platform": "reddit",
+      "handle": "condition-specific subreddits — high signal, ethically sensitive"
+    },
+    {
+      "platform": "facebook",
+      "handle": "patient support groups"
+    },
+    {
+      "platform": "forum",
+      "handle": "PatientsLikeMe and condition forums"
+    }
+  ],
+  "buyingCommittee": [
+    {
+      "role": "patient or consumer",
+      "influence": "champion"
+    },
+    {
+      "role": "clinician",
+      "influence": "champion"
+    },
+    {
+      "role": "payer / insurer or hospital procurement",
+      "influence": "economic"
+    },
+    {
+      "role": "medical director",
+      "influence": "veto"
+    },
+    {
+      "role": "regulatory and privacy officer",
+      "influence": "veto"
+    }
+  ],
+  "channelNorms": {
+    "effective": [
+      "clinician education",
+      "SEO on condition terms",
+      "professional associations",
+      "earned media",
+      "partnerships with providers"
+    ],
+    "ineffective": [
+      "growth hacking",
+      "urgency and scarcity tactics",
+      "influencer health claims",
+      "paid social on condition targeting"
+    ],
+    "reason": "Regulated, trust-critical, and the consumer is often not the payer. Consumer growth tactics on health topics attract regulatory attention and destroy clinician trust."
+  },
+  "priceBands": {
+    "currency": null,
+    "low": null,
+    "mid": null,
+    "high": null,
+    "unit": "",
+    "sourceIds": [],
+    "note": "Uncited. /mkt-sector refresh <sector> must derive these from the live competitor ladder and cite them."
+  },
+  "cacBenchmarks": {
+    "note": "Uncited. Derive per run from published benchmarks and cite, or leave unknown."
+  },
+  "salesCycleDays": {
+    "consumer": "1-30",
+    "provider": "180-540"
+  },
+  "regulatedClaims": [
+    {
+      "claim": "diagnoses, treats, cures or prevents any condition",
+      "rule": "forbidden",
+      "authority": "FDA / EU MDR — such a claim makes the product a regulated medical device"
+    },
+    {
+      "claim": "clinically proven or validated",
+      "rule": "requires_disclosure",
+      "authority": "a published, citable trial is required"
+    },
+    {
+      "claim": "HIPAA compliant",
+      "rule": "requires_disclosure",
+      "authority": "compliance is a property of the deployment and the BAA, not the software"
+    },
+    {
+      "claim": "medical advice",
+      "rule": "requires_disclosure",
+      "authority": "must state it is not a substitute for professional care"
+    }
+  ],
+  "forbidden": [
+    "patient data, images or identifiable stories without documented consent",
+    "a testimonial describing a health outcome",
+    "before-and-after imagery",
+    "any outcome statistic without the study, the cohort and the period",
+    "targeting advertising on inferred health conditions"
+  ],
+  "reservedTerms": [
+    {
+      "term": "clinical",
+      "meaning": "involving licensed care. Not a rigour adjective."
+    },
+    {
+      "term": "diagnosis",
+      "meaning": "a clinician's determination. Never an app's output."
+    },
+    {
+      "term": "patient",
+      "meaning": "someone under care. Not any user."
+    }
+  ],
+  "requiredDisclosures": [
+    "not-medical-advice statement",
+    "regulatory status of the product",
+    "data handling and any sharing with third parties"
+  ],
+  "seasonality": [
+    "January health resolutions",
+    "open enrolment for payers",
+    "flu and seasonal condition peaks"
+  ]
+}

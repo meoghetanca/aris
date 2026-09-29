@@ -1,0 +1,141 @@
+{
+  "sector": "ecommerce-dtc",
+  "aliases": [
+    "dtc",
+    "d2c",
+    "ecommerce",
+    "retail",
+    "consumer goods",
+    "shopify"
+  ],
+  "status": "covered",
+  "reviewPlatforms": [
+    {
+      "name": "Trustpilot",
+      "url": "https://www.trustpilot.com",
+      "coverage": "high"
+    },
+    {
+      "name": "Amazon reviews",
+      "url": "https://www.amazon.com",
+      "coverage": "high"
+    },
+    {
+      "name": "Google reviews",
+      "url": "https://maps.google.com",
+      "coverage": "high"
+    }
+  ],
+  "communities": [
+    {
+      "platform": "reddit",
+      "handle": "category-specific subreddits"
+    },
+    {
+      "platform": "tiktok",
+      "handle": "product review and unboxing"
+    },
+    {
+      "platform": "facebook",
+      "handle": "buy-sell and enthusiast groups"
+    },
+    {
+      "platform": "instagram",
+      "handle": "comment sections of category creators"
+    }
+  ],
+  "buyingCommittee": [
+    {
+      "role": "the shopper",
+      "influence": "champion"
+    },
+    {
+      "role": "the shopper",
+      "influence": "economic"
+    },
+    {
+      "role": "household influence (gifting, family goods)",
+      "influence": "champion"
+    }
+  ],
+  "channelNorms": {
+    "effective": [
+      "Meta paid social",
+      "TikTok",
+      "creator partnerships",
+      "email",
+      "SEO on category terms",
+      "Google Shopping"
+    ],
+    "ineffective": [
+      "LinkedIn",
+      "long sales cycles",
+      "whitepapers",
+      "webinars"
+    ],
+    "reason": "Impulse-to-considered consumer purchase decided on visual proof and social validation. Creative quality dominates channel choice."
+  },
+  "priceBands": {
+    "currency": null,
+    "low": null,
+    "mid": null,
+    "high": null,
+    "unit": "",
+    "sourceIds": [],
+    "note": "Uncited. /mkt-sector refresh <sector> must derive these from the live competitor ladder and cite them."
+  },
+  "cacBenchmarks": {
+    "note": "Uncited. Derive per run from published benchmarks and cite, or leave unknown."
+  },
+  "salesCycleDays": {
+    "consumer": "0-7"
+  },
+  "regulatedClaims": [
+    {
+      "claim": "health, weight, skin or wellness benefit",
+      "rule": "forbidden",
+      "authority": "FTC / EU consumer law / Vietnam advertising law — health claims on non-medical goods require substantiation"
+    },
+    {
+      "claim": "sustainable / eco-friendly / carbon neutral",
+      "rule": "requires_disclosure",
+      "authority": "greenwashing rules (EU Green Claims, FTC Green Guides) — the basis must be stated"
+    },
+    {
+      "claim": "was-now pricing / limited stock",
+      "rule": "requires_disclosure",
+      "authority": "pricing-practice rules — a reference price must have been genuinely charged"
+    },
+    {
+      "claim": "clinically proven",
+      "rule": "forbidden",
+      "authority": "requires a published trial; the trial must be cited"
+    }
+  ],
+  "forbidden": [
+    "a before-and-after image without a disclosure",
+    "an incentivised review presented as organic",
+    "countdown urgency that resets on reload",
+    "a review score with no review count"
+  ],
+  "reservedTerms": [
+    {
+      "term": "organic",
+      "meaning": "a certified agricultural standard. Not a marketing adjective."
+    },
+    {
+      "term": "clinically tested",
+      "meaning": "a trial happened. Says nothing about the result."
+    }
+  ],
+  "requiredDisclosures": [
+    "paid partnership on every creator post",
+    "shipping and returns terms",
+    "basis of any sustainability claim"
+  ],
+  "seasonality": [
+    "Q4 peak: Black Friday through December",
+    "Tet / Lunar New Year (VN)",
+    "post-holiday January returns"
+  ]
+}
