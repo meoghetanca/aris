@@ -1,8 +1,8 @@
-# Aris
+# aris
 
 **Take a product from "we don't know this market" to a launch-ready package — and be able to prove where every claim came from.**
 
-**Aris** is a workflow for [Claude Code](https://claude.com/claude-code). You describe your
+**aris** is a workflow for [Claude Code](https://claude.com/claude-code). You describe your
 product; it researches the market from the public record, works out the positioning,
 writes every launch asset, checks its own work, and hands you one file you open in a
 browser where **clicking any sentence shows you the source it came from**.
@@ -16,7 +16,7 @@ browser where **clicking any sentence shows you the source it came from**.
 **2. Add aris** — type this inside Claude Code:
 
 ```
-/plugin marketplace add meoghetanca/Aris
+/plugin marketplace add meoghetanca/aris
 /plugin install aris-assets@aris
 ```
 
