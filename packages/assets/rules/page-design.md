@@ -134,3 +134,63 @@ Render it once and answer these. Any "no" is a defect, not a preference.
 8. At 390px wide, does the page **scroll sideways**?
 9. Is any number set large that is **not the point** of its block?
 10. Is the **blocked/ready state** visible from every part of the page?
+
+---
+
+## Part 4 — Colour and type, for every product in every field
+
+These are not per-product choices. A launch package is a working document that someone
+reads for an hour while deciding something that costs money, and the same constraints
+serve a dental clinic and a crypto exchange. **Do not theme the page to the product.**
+
+### Colour: pastel and muted, never bright
+
+**R13 · No saturated colour anywhere.** Every colour on the page is desaturated and
+light. No pure red, no vivid green, no electric blue, no neon. A page that shouts gives
+the reader nothing to compare against when something genuinely is urgent.
+
+**R14 · Neutrals carry the page; colour only marks meaning.** The ground, surfaces,
+rules and body text are near-neutral with a faint tint. Colour appears only to say
+*good*, *caution*, *stop* or *this is the accent*, and nowhere else. Colour used for
+decoration spends the one signal you have.
+
+**R15 · Three semantic colours, one accent, and they are different things.**
+Dusty sage for settled, soft ochre for caution, dusty rose for blocked. The accent is a
+fourth, quieter still, and is never one of the three — otherwise "accent" and "good"
+become indistinguishable and a link reads as an approval.
+
+**R16 · Severity is carried by more than hue.** A blocked state is a word, a mark and a
+border, not just a red tint. Eight percent of men cannot separate your red from your
+green, and a muted palette makes that worse, not better.
+
+**R17 · Contrast is checked, not assumed.** Body text and any coloured text meets 4.5:1
+against the surface behind it. A pastel that fails contrast becomes a pale fill with a
+darker text colour on top — it does not become brighter.
+
+### Type: quiet, readable, never sharp
+
+**R18 · Reading text is a face designed for reading at length.** A screen-reading serif
+or a humanist sans. Not a geometric display face, not a high-contrast fashion serif,
+not a condensed or squared face. The test: could someone read nine hundred words of it
+without effort?
+
+**R19 · No sharp faces.** Avoid tight apertures, high stroke contrast, spurred
+terminals and anything that reads as a logo. Sharpness is an attention device, and this
+page needs the reader's attention on the argument.
+
+**R20 · Three faces at most, each with a job.** One for reading, one for structure and
+labels, one monospace for identifiers and figures. No fourth face, no decorative weight,
+no italic display.
+
+**R21 · Reading size is at least 16px with line-height near 1.6.** Anything smaller is
+for labels and identifiers, never for a sentence the reader must understand.
+
+**R22 · Webfonts are an enhancement, never a dependency.** The page must work offline,
+so every family declares a real fallback stack that is itself readable. A font that
+fails to load may not change the meaning of anything.
+
+### Both themes, same restraint
+
+**R23 · Dark mode is muted too.** Do not invert a pastel into a neon. Lift the
+lightness, keep the saturation low, and re-check contrast — a pastel that reads as soft
+on white often reads as dirty on near-black and needs its own value, not a filter.

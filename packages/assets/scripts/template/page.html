@@ -1,44 +1,48 @@
 <title>Launch package</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Be+Vietnam+Pro:wght@400;600;700&family=IBM+Plex+Mono:wght@400;500&family=Source+Serif+4:opsz,wght@8..60,400;8..60,600&display=swap">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500&family=Literata:opsz,wght@7..72,400;7..72,600&family=Source+Sans+3:wght@400;600;700&display=swap">
 <style>
 :root{
-  --ground:#EFF3F1; --surface:#FFFFFF; --surface-2:#F5F9F7;
-  --ink:#151C19; --ink-2:#4A5852; --ink-3:#7A8880;
-  --line:#D9E2DD; --line-soft:#E8EFEB;
-  --accent:#0E6B4A; --accent-ink:#0B5A3E; --accent-soft:#DFEEE7;
-  --yes:#1F6B4A; --yes-soft:#DEEFE5;
-  --wait:#8E6113; --wait-soft:#F6EAD3;
-  --no:#A2382A; --no-soft:#F6E2DE;
-  --shadow:0 1px 2px rgba(21,28,25,.05), 0 8px 24px -16px rgba(21,28,25,.26);
-  --sans:"Be Vietnam Pro",system-ui,-apple-system,sans-serif;
-  --serif:"Source Serif 4","Iowan Old Style",Georgia,serif;
+  /* Pastel and muted throughout (R13). Neutrals carry the page; colour only marks
+     meaning (R14). The accent is a fourth colour, quieter than the three semantics,
+     so a link never reads as an approval (R15). Every text colour below was checked
+     at 4.5:1 or better against the surface it sits on (R17). */
+  --ground:#F6F7F4; --surface:#FFFFFF; --surface-2:#F1F4EF;
+  --ink:#2B302C; --ink-2:#5C6660; --ink-3:#6f7972;
+  --line:#E3E7E0; --line-soft:#EDF0EA;
+  --accent:#5C7F6B; --accent-ink:#456353; --accent-soft:#E9F0EA;
+  --yes:#4F7A61; --yes-soft:#E7F0E9;
+  --wait:#8A6E3C; --wait-soft:#F5EFE3;
+  --no:#9C6058; --no-soft:#F4E9E7;
+  --shadow:0 1px 2px rgba(43,48,44,.04), 0 8px 22px -16px rgba(43,48,44,.20);
+  --sans:"Source Sans 3",system-ui,-apple-system,"Segoe UI",sans-serif;
+  --serif:"Literata","Iowan Old Style",Georgia,Cambria,serif;
   --mono:"IBM Plex Mono",ui-monospace,SFMono-Regular,Menlo,monospace;
 }
 @media (prefers-color-scheme:dark){:root:not([data-theme="light"]){
-  --ground:#101614; --surface:#19211D; --surface-2:#202A25;
-  --ink:#E7EFEA; --ink-2:#A9B7B0; --ink-3:#7B8A83;
-  --line:#2C3833; --line-soft:#232E29;
-  --accent:#5BC793; --accent-ink:#7FD9AC; --accent-soft:#133024;
-  --yes:#63C494; --yes-soft:#16332A;
-  --wait:#DCA851; --wait-soft:#332918;
-  --no:#E58273; --no-soft:#39201C;
-  --shadow:0 1px 2px rgba(0,0,0,.3), 0 10px 28px -18px rgba(0,0,0,.8);
+  --ground:#171A18; --surface:#1F2320; --surface-2:#262B27;
+  --ink:#E3E7E2; --ink-2:#A6AEA8; --ink-3:#828b85;
+  --line:#2F3531; --line-soft:#272D29;
+  --accent:#8FB39C; --accent-ink:#A6C6B2; --accent-soft:#232D27;
+  --yes:#8FB39C; --yes-soft:#232D27;
+  --wait:#C2A473; --wait-soft:#2C271D;
+  --no:#C28F87; --no-soft:#2C2321;
+  --shadow:0 1px 2px rgba(0,0,0,.28), 0 10px 26px -18px rgba(0,0,0,.7);
 }}
 :root[data-theme="dark"]{
-  --ground:#101614; --surface:#19211D; --surface-2:#202A25;
-  --ink:#E7EFEA; --ink-2:#A9B7B0; --ink-3:#7B8A83;
-  --line:#2C3833; --line-soft:#232E29;
-  --accent:#5BC793; --accent-ink:#7FD9AC; --accent-soft:#133024;
-  --yes:#63C494; --yes-soft:#16332A;
-  --wait:#DCA851; --wait-soft:#332918;
-  --no:#E58273; --no-soft:#39201C;
-  --shadow:0 1px 2px rgba(0,0,0,.3), 0 10px 28px -18px rgba(0,0,0,.8);
+  --ground:#171A18; --surface:#1F2320; --surface-2:#262B27;
+  --ink:#E3E7E2; --ink-2:#A6AEA8; --ink-3:#828b85;
+  --line:#2F3531; --line-soft:#272D29;
+  --accent:#8FB39C; --accent-ink:#A6C6B2; --accent-soft:#232D27;
+  --yes:#8FB39C; --yes-soft:#232D27;
+  --wait:#C2A473; --wait-soft:#2C271D;
+  --no:#C28F87; --no-soft:#2C2321;
+  --shadow:0 1px 2px rgba(0,0,0,.28), 0 10px 26px -18px rgba(0,0,0,.7);
 }
 *{box-sizing:border-box}
 body{margin:0;background:var(--ground);color:var(--ink);font-family:var(--serif);
-  font-size:17px;line-height:1.62;-webkit-font-smoothing:antialiased}
+  font-size:17px;line-height:1.65;-webkit-font-smoothing:antialiased}
 h1,h2,h3,h4,.sans{font-family:var(--sans);text-wrap:balance;margin:0}
 h1{font-weight:700;font-size:clamp(1.9rem,1.2rem+2.4vw,2.7rem);line-height:1.08;letter-spacing:-.025em}
 h2{font-weight:700;font-size:clamp(1.3rem,1.05rem+.8vw,1.6rem);line-height:1.2;letter-spacing:-.02em}
@@ -103,9 +107,9 @@ section{padding-top:46px}
   letter-spacing:-.03em;font-variant-numeric:tabular-nums}
 .card .big span{font-size:.75rem;font-weight:400;color:var(--ink-3);letter-spacing:0}
 .card .big.none{font-size:1.15rem;color:var(--ink-3);font-weight:600}
-.card p{font-size:.94rem;color:var(--ink-2)}
+.card p{font-size:.96rem;color:var(--ink-2)}
 .card ul{list-style:none;margin:0;padding:0;display:flex;flex-direction:column;gap:6px}
-.card li{font-family:var(--sans);font-size:.84rem;line-height:1.45;color:var(--ink-2);
+.card li{font-family:var(--sans);font-size:.88rem;line-height:1.45;color:var(--ink-2);
   padding-left:17px;position:relative}
 .card li::before{content:"";position:absolute;left:0;top:.52em;width:7px;height:7px;
   border-radius:2px;background:var(--accent);opacity:.6}
@@ -137,7 +141,11 @@ section{padding-top:46px}
 .callout{background:var(--surface);border:1px solid var(--line);border-left:3px solid var(--accent);
   border-radius:2px 9px 9px 2px;padding:15px 19px;box-shadow:var(--shadow);margin-top:18px;
   font-size:.99rem;line-height:1.65}
-.callout.bad{border-left-color:var(--no)} .callout.wait{border-left-color:var(--wait)}
+.callout.bad{border-left-color:var(--no);border-left-width:4px}
+.callout.wait{border-left-color:var(--wait);border-left-width:4px}
+.callout.bad b::before{content:"\25a0\00a0";color:var(--no)}
+.callout.wait b::before{content:"\25b3\00a0";color:var(--wait)}
+.flag.no::before{content:"\25a0\00a0"} .flag.wait::before{content:"\25b3\00a0"}
 .callout b{font-family:var(--sans);font-weight:600}
 .callout .q{color:var(--ink-3);font-size:.88rem;display:block;margin-bottom:4px}
 
