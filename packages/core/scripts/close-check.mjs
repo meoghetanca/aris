@@ -25,6 +25,7 @@ const required = [
   "strategy/positioning.json", "strategy/messages.json", "strategy/gtm.json",
   "assets/claims.json", "verification/verify.json",
   "harness/metrics.json", "harness/dashboard-spec.json", "playbook/growth-rules.json",
+  "playbook/runway.json",
 ];
 const missing = required.filter((r) => !exists(root, r));
 

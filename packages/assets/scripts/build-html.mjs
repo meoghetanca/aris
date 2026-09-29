@@ -72,6 +72,7 @@ const DATA = {
   metrics: readJson(root, "harness/metrics.json", { metrics: [] }),
   dashboard: readJson(root, "harness/dashboard-spec.json", null),
   playbook: readJson(root, "playbook/growth-rules.json", { rules: [] }),
+  runway: readJson(root, "playbook/runway.json", { weeks: [] }),
   manifest: manifest ?? { version: "0", artifacts: [] },
   assets: {},
 };

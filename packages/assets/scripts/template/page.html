@@ -570,6 +570,29 @@ function doBlock(){
 }
 
 /* ================= after ================= */
+function runwayBlock(){
+  const w=S.runway, life=S.assets['lifecycle-emails.md'], cal=S.assets['content-calendar.md'];
+  if(!w.length && !life && !cal) return `<div class="callout wait"><b>Nothing here yet.</b>
+    Every asset in this package is acquisition: it gets someone to sign up and stops.
+    Run <code>/aris-runway</code> for the ninety days after that, which is where the
+    business either works or does not.</div>`;
+  let out='';
+  if(life) out+=`<div class="callout"><b>Lifecycle email sequence written.</b>
+    Each one fires on something the person did or failed to do, never on a date alone —
+    a fourteen-day drip reaches someone who churned on day two. See <b>What we publish</b>.</div>`;
+  if(w.length){
+    out+=`<div class="grid g2">`+w.map(x=>
+      `<div class="card"><div class="row" style="border:none;padding:0;grid-template-columns:1fr auto">
+        <div class="nm">${E(x.label??('Week '+x.week))}</div>
+        <span class="flag ${x.decision?'wait':''}">${x.decision?'decision':'week '+E(x.week)}</span></div>
+        ${x.expect?`<p><b>If this is working:</b> ${E(x.expect)}</p>`:''}
+        ${x.ifNot?`<p class="sub" style="color:var(--no)">If not: ${E(x.ifNot)}</p>`:''}</div>`).join('')+`</div>`;
+  }
+  if(cal) out+=`<p class="tnote">A twelve-week cadence is in <code>content-calendar.md</code>.
+    Every slot is <span class="flag wait">UNASSIGNED</span>: this workflow does not know who writes.</p>`;
+  return out;
+}
+
 function afterBlock(){
   let out='';
   if(S.metrics.length){
@@ -614,7 +637,10 @@ document.getElementById('p-do').innerHTML =
   sec('10','Next','Do this first', '', doBlock());
 
 document.getElementById('p-after').innerHTML =
-  sec('11','Measure','What to watch once it is live', '', afterBlock());
+  sec('11','Keeping them','What happens after somebody signs up',
+      'Everything before this gets a signup. This is the part where the business works or does not.',
+      runwayBlock()) +
+  sec('12','Measure','What to watch once it is live', '', afterBlock());
 
 if(Object.keys(S.assets).length) renderAsset(Object.keys(S.assets)[0]);
 

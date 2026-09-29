@@ -50,7 +50,8 @@ Load `${CLAUDE_PLUGIN_ROOT}/rules/decisions.md`,
 | 11 | `/aris-verify` | — |
 | 12 | `/aris-harness` | — |
 | 13 | `/aris-playbook` | — |
-| 14 | `/aris-package` | — |
+| 14 | `/aris-runway` | — |
+| 15 | `/aris-package` | — |
 
 Run each as its own command, in order, honouring its preconditions. Do not inline a
 step's work here: the commands carry the rules, and a step run from memory of them

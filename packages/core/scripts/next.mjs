@@ -51,6 +51,8 @@ const STEPS = [
     why: "the measurement plan is a precondition of release" },
   { cmd: "/aris-playbook",  needs: ["harness/metrics.json"], makes: "playbook/growth-rules.json",
     why: "rules written after the data are rationalisations" },
+  { cmd: "/aris-runway",    needs: ["harness/metrics.json"], makes: "playbook/runway.json",
+    why: "everything so far gets someone to sign up; this is the ninety days after" },
   { cmd: "/aris-verify",    needs: ["assets/claims.json"], makes: "verification/verify.json",
     why: "nothing publishes without it", check: () => gate("verify-all.mjs", "--no-write") },
   { cmd: "/aris-package",   needs: ["verification/verify.json"], makes: "package/aris-launch.html",

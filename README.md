@@ -104,6 +104,7 @@ sending the file.
 | **Launch assets** | emails, social posts, ads, FAQ, sales deck, PR, launch post |
 | **Verification** | what passed, what blocks the launch |
 | **Measurement** | the dashboard, deliberately empty until real data arrives |
+| **Keeping them** | lifecycle emails that fire on what someone did, a twelve-week cadence, and the first ninety days as decision points |
 | **Growth playbook** | if CAC goes above X for 14 days, do Y |
 | **Evidence** | every source, and what used it |
 
