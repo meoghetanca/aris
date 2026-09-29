@@ -59,6 +59,8 @@ a:focus-visible,button:focus-visible{outline:2px solid var(--accent);outline-off
 .mast{display:flex;flex-direction:column;gap:15px;border-bottom:1px solid var(--line);padding-bottom:26px}
 .mast .row{display:flex;align-items:baseline;gap:12px;flex-wrap:wrap}
 .mast .lede{font-size:1.1rem;color:var(--ink-2);max-width:60ch}
+.kw{font-family:var(--mono);font-size:.62rem;letter-spacing:.12em;text-transform:uppercase;
+  color:var(--ink-3);vertical-align:.18em;padding:0 1px}
 .tools{margin-left:auto;display:flex;gap:7px}
 .tools button{font-family:var(--sans);font-size:.72rem;padding:6px 11px;border:1px solid var(--line);
   background:var(--surface);color:var(--ink-2);border-radius:7px;cursor:pointer}
@@ -100,6 +102,7 @@ section{padding-top:46px}
 .card .big{font-family:var(--sans);font-weight:700;font-size:1.85rem;line-height:1;
   letter-spacing:-.03em;font-variant-numeric:tabular-nums}
 .card .big span{font-size:.75rem;font-weight:400;color:var(--ink-3);letter-spacing:0}
+.card .big.none{font-size:1.15rem;color:var(--ink-3);font-weight:600}
 .card p{font-size:.94rem;color:var(--ink-2)}
 .card ul{list-style:none;margin:0;padding:0;display:flex;flex-direction:column;gap:6px}
 .card li{font-family:var(--sans);font-size:.84rem;line-height:1.45;color:var(--ink-2);
@@ -107,6 +110,24 @@ section{padding-top:46px}
 .card li::before{content:"";position:absolute;left:0;top:.52em;width:7px;height:7px;
   border-radius:2px;background:var(--accent);opacity:.6}
 .card li b{color:var(--ink);font-weight:600}
+.card ul.who{gap:0}
+.card ul.who li{display:flex;justify-content:space-between;gap:12px;padding:7px 0;
+  border-bottom:1px solid var(--line-soft);padding-left:0}
+.card ul.who li::before{display:none}
+.card ul.who li:last-child{border-bottom:0}
+.card ul.who li b{font-family:var(--mono);font-size:.72rem;font-weight:500}
+.card ul.who li.yes b{color:var(--yes)} .card ul.who li.nope b{color:var(--ink-3)}
+.card ul.who li.part b{color:var(--wait)} .card ul.who li.unk b{color:var(--ink-3);opacity:.6}
+.card ul.who li.me span{font-weight:700;color:var(--accent-ink)}
+.quoteline{font-family:var(--serif);font-style:italic;color:var(--ink-2);font-size:.95rem;
+  border-left:2px solid var(--line);padding-left:12px}
+.srclist{display:flex;flex-direction:column;gap:0;background:var(--surface);border:1px solid var(--line);
+  border-radius:11px;padding:6px 18px;box-shadow:var(--shadow);margin-top:18px}
+.src{display:grid;grid-template-columns:5rem 1fr;gap:14px;padding:11px 0;border-bottom:1px solid var(--line-soft)}
+.src:last-child{border-bottom:0}
+.src .id{font-family:var(--mono);font-size:.7rem;color:var(--ink-3);padding-top:2px}
+.src a{font-family:var(--sans);font-size:.92rem}
+@media(max-width:560px){.src{grid-template-columns:1fr;gap:2px}}
 .flag{font-family:var(--mono);font-size:.6rem;letter-spacing:.1em;text-transform:uppercase;
   color:var(--accent-ink);background:var(--accent-soft);padding:3px 7px;border-radius:4px}
 .flag.no{color:var(--no);background:var(--no-soft)}
@@ -272,8 +293,11 @@ const sec = (n,eyebrow,title,desc,body) =>
     `${st.product?.name ?? 'Launch package'} · ${st.market?.category ?? 'launch package'}`;
   document.getElementById('headline').textContent =
     selDir?.name ? selDir.name : (st.product?.name ?? 'Launch package');
+  // FOR / WHO / UNLIKE are scaffolding for writing the statement, not words to read.
+  // Set small and quiet so the sentence reads as a sentence.
   document.getElementById('lede').innerHTML = selDir?.statement
-    ? E(selDir.statement)
+    ? E(selDir.statement).replace(/\b(FOR|WHO|IS THE|THAT|UNLIKE|BECAUSE)\b/g,
+        m => `<span class="kw">${m.toLowerCase()}</span>`)
     : '<span class="gap">No positioning selected yet. Nothing downstream means anything without it.</span>';
 
   const blocking=(v?.blockingIssues??[]).length;
@@ -286,7 +310,9 @@ const sec = (n,eyebrow,title,desc,body) =>
      v?.passed?'good':'bad'],
     [price ?? '—', 'price, recommended'],
     [`${cited}<small>/${S.claims.length}</small>`, 'claims cited'],
-    [`${validated}<small>/${S.pains.length}</small>`, 'pains validated', validated?'':'bad'],
+    S.pains.length
+      ? [`${validated}<small>/${S.pains.length}</small>`, 'pains validated', validated?'':'bad']
+      : ['none', 'customer research', 'bad'],
     [String((S.gtm?.channels??[]).filter(c=>c.priority==='primary').length), 'primary channels']
   ];
   document.getElementById('statbar').innerHTML = items.map(([n,l,cls])=>
@@ -304,7 +330,14 @@ function marketBlock(){
     const pr=(p.pricing??[])[0];
     return `<div class="card"><div class="nm">${E(p.name)}</div>
       <p class="sub">${E(p.type??'')}</p>
-      <p class="big">${pr?(money(pr)??`<span style="font-size:.9rem">${E(pr.note??'no public price')}</span>`):'<span style="font-size:.9rem">unknown</span>'}</p>
+      ${(() => {
+        // A price slot holds a price. When there is not one, say so in two words and put
+        // the reason underneath, rather than squeezing a sentence into the big number.
+        const m = pr ? money(pr) : null;
+        if (m) return `<p class="big">${m}</p>`;
+        const why = pr?.note ?? 'no price published';
+        return `<p class="big none">Not published</p><p class="sub">${E(why)}</p>`;
+      })()}
       <p>${E((p.positioning??[])[0]??'')}</p>
       ${(p.weaknesses??[]).length?`<ul>${(p.weaknesses??[]).slice(0,3).map(w=>`<li>${E(w)}</li>`).join('')}</ul>`:''}</div>`;
   }).join('')+`</div>`;
@@ -317,19 +350,27 @@ function marketBlock(){
 function gridBlock(){
   const fm=S.category?.featureMatrix??{}; const rows=Object.keys(fm);
   if(!rows.length) return '';
-  const cols=[...new Set(rows.flatMap(r=>Object.keys(fm[r]??{})))];
-  const cell=c=>{ if(c==null) return '<span class="unk">?</span>';
+  const mine=S.state.product?.name;
+  /* Inverted deliberately: a vendors-by-capabilities grid makes the reader triangulate
+     between a header row and a cell. One card per capability puts the question and every
+     answer to it in the same place. */
+  const mark=c=>{ if(c==null) return ['unk','not checked'];
     const v=typeof c==='object'?c.value:c, st=typeof c==='object'?c.status:'unknown';
-    if(v===true||v==='true'||v==='yes') return `<span class="yes">✓${st==='unknown'?' <span class="unk">?</span>':''}</span>`;
-    if(v===false||v==='false'||v==='no') return '<span class="nope">—</span>';
-    if(v==='partial') return '<span class="part">◐ partly</span>';
-    return '<span class="unk">?</span>'; };
-  return `<div class="scroll"><table><thead><tr><th>Capability</th>`+
-    cols.map(c=>`<th${c===S.state.product?.name?' style="color:var(--accent-ink)"':''}>${E(c)}</th>`).join('')+
-    `</tr></thead><tbody>`+rows.map(r=>`<tr><td class="k">${E(r)}</td>`+
-      cols.map(c=>`<td>${cell(fm[r]?.[c])}</td>`).join('')+`</tr>`).join('')+
-    `</tbody></table></div><p class="tnote">✓ has it · — does not · ◐ partly · ? nobody has checked. An unknown is never a no.</p>`;
+    if(v===true||v==='true'||v==='yes') return st==='unknown'?['unk','claimed, unchecked']:['yes','yes'];
+    if(v===false||v==='false'||v==='no') return ['nope','no'];
+    if(v==='partial') return ['part','partly'];
+    return ['unk','not checked']; };
+  return `<div class="grid g2">`+rows.map(r=>{
+    const vendors=Object.entries(fm[r]??{});
+    const yes=vendors.filter(([n,c])=>mark(c)[0]==='yes'&&n!==mine).length;
+    return `<div class="card">
+      <div class="nm">${E(r)}</div>
+      <p class="sub">${yes===0?'No competitor has this':yes===1?'One competitor has this':`${yes} competitors have this`}</p>
+      <ul class="who">`+vendors.map(([n,c])=>{ const [cls,label]=mark(c);
+        return `<li class="${cls}${n===mine?' me':''}"><span>${E(n)}</span><b>${E(label)}</b></li>`; }).join('')+
+      `</ul></div>`; }).join('')+`</div>`;
 }
+
 function ladderBlock(){
   const lad=S.category?.priceLadder??[];
   const per=lad.filter(x=>/per user/i.test(x.unit??'')&&Number.isFinite(Number(x.amount)));
@@ -353,13 +394,17 @@ function customersBlock(){
     No voice-of-customer research was run, so no pain here has a quote behind it and no persona was
     built. Everything under <b>What we do</b> rests on what competitors fail to sell, which is not the
     same as what buyers want.</div>`;
-  return `<div class="scroll"><table><thead><tr><th>What they said</th><th>People</th><th>Places</th><th></th></tr></thead><tbody>`+
-    [...S.pains].sort((a,b)=>(b.frequency?.quoteCount??0)-(a.frequency?.quoteCount??0)).map(p=>
-      `<tr><td class="k"><a href="#" data-pain="${E(p.id)}">${E(p.statement)}</a></td>
-       <td class="n">${p.frequency?.quoteCount??0}</td><td class="n">${p.frequency?.sourceCount??0}</td>
-       <td>${p.status==='validated'?'<span class="yes">validated</span>':'<span class="part">too few</span>'}</td></tr>`).join('')+
-    `</tbody></table></div>`;
+  return `<div class="grid g2">`+[...S.pains]
+    .sort((a,b)=>(b.frequency?.quoteCount??0)-(a.frequency?.quoteCount??0)).map(p=>
+    `<div class="card${p.status==='validated'?' hero':''}">
+      <div class="row" style="border:none;padding:0;grid-template-columns:1fr auto">
+        <div class="nm">${E(p.statement)}</div>
+        <span class="flag ${p.status==='validated'?'':'wait'}">${p.status==='validated'?'validated':'too few'}</span></div>
+      <p class="big">${p.frequency?.quoteCount??0}<span> people, in ${p.frequency?.sourceCount??0} places</span></p>
+      ${(p.quotes??[]).slice(0,1).map(q=>`<p class="quoteline">“${E(q.text)}”</p>`).join('')}
+      <p class="sub"><a href="#" data-pain="${E(p.id)}">Read all ${p.frequency?.quoteCount??0} →</a></p></div>`).join('')+`</div>`;
 }
+
 function sizeBlock(){
   let out='';
   if(S.sizing){
@@ -396,9 +441,13 @@ function betsBlock(){
       <p>${E(a.reason??'')}</p>
       <p class="sub" style="color:var(--no)">If wrong: ${E(cost[a.blastRadius]??'unknown')}</p></div>`).join('');
   out=`<div class="grid g2">${out}</div>`;
-  if(S.cuts.length) out+=`<div class="scroll"><table><thead><tr><th>Not done</th><th>Consequence</th><th>Risk</th></tr></thead><tbody>`+
-    S.cuts.map(c=>`<tr><td class="k">${E(c.deleted.replace(/_/g,' '))}</td><td>${E(c.consequence)}</td>
-      <td><span class="${c.risk==='high'?'part':'nope'}">${E(c.risk??'')}</span></td></tr>`).join('')+`</tbody></table></div>`;
+  if(S.cuts.length) out+=`<h3 style="margin-top:26px">What this package could not know</h3>
+    <p class="tnote">Deliberate omissions. They are why some of the bets above are bets.</p>
+    <div class="grid g2">`+S.cuts.map(c=>
+    `<div class="card"><div class="row" style="border:none;padding:0;grid-template-columns:1fr auto">
+      <div class="nm">${E(c.deleted.replace(/_/g,' '))}</div>
+      <span class="flag ${c.risk==='high'?'no':'wait'}">${E(c.risk??'')} risk</span></div>
+      <p>${E(c.consequence)}</p></div>`).join('')+`</div>`;
   return out;
 }
 function sourcesBlock(){
@@ -407,13 +456,13 @@ function sourcesBlock(){
   for(const f of S.sizing?.factors??[]) note(f.sourceId,f.id);
   for(const s of S.demand?.signals??[]) note(s.sourceId,s.id);
   for(const c of S.claims) for(const x of c.sourceIds??[]) note(x,c.id);
-  let out=`<div class="scroll"><table><tbody>`+S.sources.map(x=>{
+  let out=`<div class="srclist">`+S.sources.map(x=>{
     const u=[...new Set(used.get(x.id)??[])];
-    return `<tr><td class="n" style="width:9%">${E(x.id)}</td>
-      <td>${x.url?`<a href="${E(x.url)}" target="_blank" rel="noopener">${E(x.title||x.url)}</a>`:E(x.title??'')}
-        <div class="sub">${E(x.publisher??'')} · ${E(x.accessedAt??'')}</div></td>
-      <td style="width:22%">${u.length?u.map(y=>`<span class="sub">${E(y)}</span>`).join(' '):'<span class="unk">unused</span>'}</td></tr>`;
-  }).join('')+`</tbody></table></div>`;
+    return `<div class="src"><div class="id">${E(x.id)}</div>
+      <div><a href="${E(x.url??'#')}" target="_blank" rel="noopener">${E(x.title||x.url||'untitled')}</a>
+        <div class="sub">${E(x.publisher??'')} \u00b7 read ${E(x.accessedAt??'')} \u00b7
+        ${u.length?'used by '+u.map(E).join(', '):'<span class="unk">used by nothing</span>'}</div></div></div>`;
+  }).join('')+`</div>`;
   if(has(DATA.sources?.gaps)) out+=`<div class="callout bad"><b>What we could not read.</b>
     <ul class="plain" style="margin-top:8px">${DATA.sources.gaps.map(g=>`<li>${E(g)}</li>`).join('')}</ul></div>`;
   return out;
@@ -451,8 +500,9 @@ function sayBlock(){
   }
   if(has(m.elevatorPitch)) out+=`<div class="col" style="margin-top:20px">`+
     Object.entries(m.elevatorPitch).map(([k,v])=>`<h3>${E(k)}</h3><p>${E(v)}</p>`).join('')+`</div>`;
-  if(has(m.featureToBenefit)) out+=`<div class="scroll"><table><thead><tr><th>What it is</th><th>What it does for them</th></tr></thead><tbody>`+
-    m.featureToBenefit.map(f=>`<tr><td class="k">${E(f.feature??'')}</td><td>${E(f.benefit??'')}</td></tr>`).join('')+`</tbody></table></div>`;
+  if(has(m.featureToBenefit)) out+=`<h3 style="margin-top:26px">What each thing is for</h3><div class="grid g2">`+
+    m.featureToBenefit.map(f=>`<div class="card"><div class="nm">${E(f.feature??'')}</div>
+      <p>${E(f.benefit??'')}</p></div>`).join('')+`</div>`;
   if(has(m.tone?.avoid)) out+=`<p class="tnote"><b>Never write:</b> ${m.tone.avoid.map(E).join(' · ')}</p>`;
   return out;
 }

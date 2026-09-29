@@ -31,6 +31,10 @@ const HERE = path.dirname(url.fileURLToPath(import.meta.url));
 const TEMPLATE = path.join(HERE, "template", "page.html");
 const PLACEHOLDER = "/*__ARIS_DATA__*/";
 
+// `build-html.mjs | head` closes the pipe mid-write. Without this the process dies
+// with an unhandled EPIPE and a stack trace, which reads like the build failed.
+process.stdout.on("error", (e) => { if (e.code === "EPIPE") process.exit(0); });
+
 const root = requireRoot();
 const argOut = (() => {
   const i = process.argv.indexOf("--out");

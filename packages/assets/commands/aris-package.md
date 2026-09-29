@@ -6,7 +6,9 @@ description: Assemble the package — the brief, the checklist, the manifest, an
 
 Step 14. Everything produced so far becomes one file a person can read.
 
-Load `${CLAUDE_PLUGIN_ROOT}/rules/html-contract.md`.
+Load `${CLAUDE_PLUGIN_ROOT}/rules/html-contract.md` for what the page may not do, and
+`${CLAUDE_PLUGIN_ROOT}/rules/page-design.md` for what it must contain and how it reads.
+The second exists because three rewrites failed without it.
 
 ## Preconditions — the release gate
 
