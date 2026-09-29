@@ -11,7 +11,7 @@
  * mined evidence, so a persona carrying them is usually a persona that was
  * imagined.
  */
-import { requireRoot, readJson, writeJson, check, report } from "./lib/mkt.mjs";
+import { requireRoot, readJson, writeJson, check, report } from "./lib/aris.mjs";
 
 const STRIP = process.argv.includes("--strip");
 const DEMOGRAPHIC = /\b(age|aged|income|salary|years old|gender|male|female|tech-savv|education level|household)\b/i;
@@ -19,7 +19,7 @@ const DEMOGRAPHIC = /\b(age|aged|income|salary|years old|gender|male|female|tech
 const root = requireRoot();
 const doc = readJson(root, "intel/personas.json");
 if (!doc) {
-  process.stderr.write("intel/personas.json is absent. Run /mkt-personas first.\n");
+  process.stderr.write("intel/personas.json is absent. Run /aris-personas first.\n");
   process.exit(2);
 }
 const pains = readJson(root, "intel/pains.json", { pains: [] }).pains ?? [];

@@ -1,5 +1,5 @@
 /**
- * Shared helpers for the mkt scripts.
+ * Shared helpers for the aris scripts.
  *
  * Duplicated verbatim in each package's scripts/lib/ rather than imported across
  * packages: ${CLAUDE_PLUGIN_ROOT} differs per package, so a relative import
@@ -10,11 +10,11 @@ import path from "node:path";
 
 export const STATES = ["verified", "inferred", "assumption", "unknown"];
 
-/** Walk up from `start` looking for a .mkt directory, so scripts work from subdirectories. */
+/** Walk up from `start` looking for a .aris directory, so scripts work from subdirectories. */
 export function findRoot(start = process.cwd()) {
   let d = path.resolve(start);
   for (;;) {
-    if (fs.existsSync(path.join(d, ".mkt", "state.json"))) return d;
+    if (fs.existsSync(path.join(d, ".aris", "state.json"))) return d;
     const parent = path.dirname(d);
     if (parent === d) return null;
     d = parent;
@@ -24,14 +24,14 @@ export function findRoot(start = process.cwd()) {
 export function requireRoot() {
   const root = findRoot();
   if (!root) {
-    process.stderr.write("no .mkt/state.json found. Run /mkt first.\n");
+    process.stderr.write("no .aris/state.json found. Run /aris first.\n");
     process.exit(2);
   }
   return root;
 }
 
 export function readJson(root, rel, fallback = undefined) {
-  const p = path.join(root, ".mkt", rel);
+  const p = path.join(root, ".aris", rel);
   if (!fs.existsSync(p)) {
     if (fallback !== undefined) return fallback;
     return null;
@@ -44,14 +44,14 @@ export function readJson(root, rel, fallback = undefined) {
 }
 
 export function writeJson(root, rel, obj) {
-  const p = path.join(root, ".mkt", rel);
+  const p = path.join(root, ".aris", rel);
   fs.mkdirSync(path.dirname(p), { recursive: true });
   fs.writeFileSync(p, JSON.stringify(obj, null, 2) + "\n");
   return p;
 }
 
 export function exists(root, rel) {
-  return fs.existsSync(path.join(root, ".mkt", rel));
+  return fs.existsSync(path.join(root, ".aris", rel));
 }
 
 /** Next id in a namespace, e.g. nextId(["PAIN-001","PAIN-004"], "PAIN") -> "PAIN-005". */

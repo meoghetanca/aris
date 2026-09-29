@@ -3,15 +3,15 @@
  * The release gate. Refuses to call a package launch-ready while anything is
  * missing, unverified, or stale.
  *
- * Nothing here is advisory. /mkt-package will not write a launch-ready manifest
+ * Nothing here is advisory. /aris-package will not write a launch-ready manifest
  * while this fails, and the publish hook reads the same state.
  */
 import fs from "node:fs";
 import path from "node:path";
-import { requireRoot, readJson, exists, check, report } from "./lib/mkt.mjs";
+import { requireRoot, readJson, exists, check, report } from "./lib/aris.mjs";
 
 const root = requireRoot();
-const M = (rel) => path.join(root, ".mkt", rel);
+const M = (rel) => path.join(root, ".aris", rel);
 const state = readJson(root, "state.json");
 const verify = readJson(root, "verification/verify.json");
 const claims = readJson(root, "assets/claims.json", { claims: [] }).claims ?? [];
@@ -45,7 +45,7 @@ if (verify?.timestamp && fs.existsSync(assetsDir)) {
 
 report("close-check: is this package releasable", [
   check("CLOSE-001", "required_artifacts_present", missing.length === 0, missing.map((m) => `${m} is absent`)),
-  check("CLOSE-002", "verification_passed", !!verify?.passed, verify ? (verify.passed ? [] : (verify.blockingIssues ?? ["verify.json reports passed: false"]).map(String)) : ["verification/verify.json is absent — run /mkt-verify"]),
+  check("CLOSE-002", "verification_passed", !!verify?.passed, verify ? (verify.passed ? [] : (verify.blockingIssues ?? ["verify.json reports passed: false"]).map(String)) : ["verification/verify.json is absent — run /aris-verify"]),
   check("CLOSE-003", "verification_is_current", stale.length === 0, stale),
   check("CLOSE-004", "no_unsupported_claims", unsupported.length === 0, unsupported),
   check("CLOSE-005", "assumptions_are_labelled", unBadged.length === 0, unBadged),

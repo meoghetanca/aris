@@ -1,23 +1,23 @@
 ---
 name: marketing-flow
-description: Use whenever the work touches taking a product to market - market or competitor research, customer pains, personas, TAM/SAM/SOM or market sizing, product-market fit, positioning, USP or differentiation, messaging, value proposition, elevator pitch, tone of voice, go-to-market or GTM, pricing strategy, marketing channels, launch planning, a landing page brief, waitlist, email sequence, social posts, ads, a launch announcement, PR, a sales deck, FAQ, campaign QA, marketing KPIs, CAC, conversion, activation, retention, post-launch measurement, or growth and scaling. Also use when someone asks "how do we sell this", "who is this for", "what do we say", "where do we launch", "is this ready to launch", or "it launched, now what". Routes to the right step of the mkt workflow instead of answering from general marketing knowledge.
+description: Use whenever the work touches taking a product to market - market or competitor research, customer pains, personas, TAM/SAM/SOM or market sizing, product-market fit, positioning, USP or differentiation, messaging, value proposition, elevator pitch, tone of voice, go-to-market or GTM, pricing strategy, marketing channels, launch planning, a landing page brief, waitlist, email sequence, social posts, ads, a launch announcement, PR, a sales deck, FAQ, campaign QA, marketing KPIs, CAC, conversion, activation, retention, post-launch measurement, or growth and scaling. Also use when someone asks "how do we sell this", "who is this for", "what do we say", "where do we launch", "is this ready to launch", or "it launched, now what". Routes to the right step of the aris workflow instead of answering from general marketing knowledge.
 ---
 
-# Routing into the mkt workflow
+# Routing into the aris workflow
 
 Someone is doing marketing work. **Do not answer from general marketing knowledge**
 and do not start writing copy: that produces confident, unsourced output, which is
-the exact failure the mkt workflow exists to prevent.
+the exact failure the aris workflow exists to prevent.
 
 Work out where they are, then run the command that owns that step.
 
 ## 1. Is there a project?
 
 ```
-node ${CLAUDE_PLUGIN_ROOT}/scripts/mkt-status.mjs
+node ${CLAUDE_PLUGIN_ROOT}/scripts/aris-status.mjs
 ```
 
-**No `.mkt/` in the tree** → this is a new product. Run `/mkt "<what they described>"`.
+**No `.aris/` in the tree** → this is a new product. Run `/aris "<what they described>"`.
 Say in one line what the workflow will do and what it deliberately will not
 (no interviews, no publishing, no budget), then continue.
 
@@ -28,21 +28,21 @@ exists; resume from the furthest complete one.
 
 | They said, roughly | Command |
 |:--|:--|
-| "who else is doing this", competitors, the category, pricing landscape | `/mkt-category` |
-| "what do customers complain about", pains, reviews, voice of customer | `/mkt-voc` |
-| "who is this for", personas, segments, the buyer | `/mkt-personas` |
-| "how big is this", TAM, SAM, SOM, market size, opportunity | `/mkt-size` |
-| "is there demand", validation, product-market fit, would anyone pay | `/mkt-demand` |
-| "how do we position this", USP, differentiation, what makes us different | `/mkt-position` |
-| "what do we say", messaging, value prop, pitch, tone of voice, copy | `/mkt-messages` |
-| "where do we launch", channels, GTM, pricing, budget, KPIs, timeline | `/mkt-gtm` |
-| "write the emails / posts / ads / FAQ / deck / launch post" | `/mkt-assets` |
-| "is it ready", check it, QA, did we miss anything | `/mkt-verify` |
-| "what do we measure", metrics, dashboard, tracking | `/mkt-harness` |
-| "what do we do if X happens", optimisation rules | `/mkt-playbook` |
-| "put it all together", the deck, the report, show me everything | `/mkt-package` |
-| "do the whole thing", from scratch, end to end | `/mktflow` |
-| "it launched, now what", results, the numbers came in | `/mkt-harness` then `analyze.mjs` |
+| "who else is doing this", competitors, the category, pricing landscape | `/aris-category` |
+| "what do customers complain about", pains, reviews, voice of customer | `/aris-voc` |
+| "who is this for", personas, segments, the buyer | `/aris-personas` |
+| "how big is this", TAM, SAM, SOM, market size, opportunity | `/aris-size` |
+| "is there demand", validation, product-market fit, would anyone pay | `/aris-demand` |
+| "how do we position this", USP, differentiation, what makes us different | `/aris-position` |
+| "what do we say", messaging, value prop, pitch, tone of voice, copy | `/aris-messages` |
+| "where do we launch", channels, GTM, pricing, budget, KPIs, timeline | `/aris-gtm` |
+| "write the emails / posts / ads / FAQ / deck / launch post" | `/aris-assets` |
+| "is it ready", check it, QA, did we miss anything | `/aris-verify` |
+| "what do we measure", metrics, dashboard, tracking | `/aris-harness` |
+| "what do we do if X happens", optimisation rules | `/aris-playbook` |
+| "put it all together", the deck, the report, show me everything | `/aris-package` |
+| "do the whole thing", from scratch, end to end | `/arisflow` |
+| "it launched, now what", results, the numbers came in | `/aris-harness` then `analyze.mjs` |
 
 ## 3. Respect the order
 

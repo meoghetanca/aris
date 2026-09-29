@@ -6,7 +6,7 @@ collects and on how honestly it is recorded.
 
 ## Where to look, and in what order
 
-The sector entry decides. Run the core command `/mkt-sector`'s check first, or read
+The sector entry decides. Run the core command `/aris-sector`'s check first, or read
 the entry, and mine in this order:
 
 1. **Competitor review sites** named in `reviewPlatforms`. Sort by 1 and 2 stars.
@@ -63,7 +63,7 @@ outcome this workflow exists to prevent.
 
 ## Fan-out
 
-One `mkt-miner` per platform, none seeing another's findings. A miner that has read
+One `aris-miner` per platform, none seeing another's findings. A miner that has read
 the G2 reviews will code a Reddit thread in G2's vocabulary, and the clustering then
 reflects the framing rather than the market. Overlap also wastes the fan-out: each
 miner has one platform and does not stray into another's.

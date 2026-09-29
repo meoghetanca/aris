@@ -86,7 +86,7 @@
     "high": null,
     "unit": "",
     "sourceIds": [],
-    "note": "Uncited. /mkt-sector refresh <sector> must derive these from the live competitor ladder and cite them."
+    "note": "Uncited. /aris-sector refresh <sector> must derive these from the live competitor ladder and cite them."
   },
   "cacBenchmarks": {
     "note": "Uncited. Derive per run from published benchmarks and cite, or leave unknown."

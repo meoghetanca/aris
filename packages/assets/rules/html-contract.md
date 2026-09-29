@@ -1,6 +1,6 @@
 # The HTML contract
 
-`package/mkt-launch.html` is a **presentation layer over the JSON**, never a
+`package/aris-launch.html` is a **presentation layer over the JSON**, never a
 replacement for it. If the two disagree, the JSON is right and the HTML is stale.
 
 ## The twenty requirements

@@ -12,7 +12,7 @@
  * actually stored, duplicate quote text across pains (one post counted twice),
  * and quotes that look paraphrased rather than verbatim.
  */
-import { requireRoot, readJson, check, report } from "./lib/mkt.mjs";
+import { requireRoot, readJson, check, report } from "./lib/aris.mjs";
 
 const arg = (flag, dflt) => {
   const i = process.argv.indexOf(flag);
@@ -24,7 +24,7 @@ const MIN_SOURCES = arg("--min-sources", 3);
 const root = requireRoot();
 const doc = readJson(root, "intel/pains.json");
 if (!doc) {
-  process.stderr.write("intel/pains.json is absent. Run /mkt-voc first — this script does not create it.\n");
+  process.stderr.write("intel/pains.json is absent. Run /aris-voc first — this script does not create it.\n");
   process.exit(2);
 }
 const pains = doc.pains ?? [];

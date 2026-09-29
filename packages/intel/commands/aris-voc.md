@@ -3,7 +3,7 @@ description: Mine the public voice of the market and code it into pains with quo
 argument-hint: "[--platforms g2,reddit,appstore]"
 ---
 
-# mkt-voc: voice of customer, mined not asked
+# aris-voc: voice of customer, mined not asked
 
 Step 3, and **the load-bearing step of the whole workflow.** The flow runs no
 interviews, so everything downstream rests on what this collects. It is also the
@@ -22,7 +22,7 @@ Stop, naming the failure, unless:
 
 ## 1. Fan out, one miner per platform
 
-Dispatch a `mkt-miner` per platform from the sector entry's `reviewPlatforms` and
+Dispatch a `aris-miner` per platform from the sector entry's `reviewPlatforms` and
 `communities`, **in a single message so they run concurrently**, each given its
 platform, the competitor names and the category. None sees another's findings.
 
@@ -46,7 +46,7 @@ distinct sources**; everything else stays `insufficient` and is kept.
 ## 4. Check before you continue
 
 ```
-/mkt-verify --only pains
+/aris-verify --only pains
 ```
 
 Fix what it finds in the clustering, not in the numbers. If it reports a quote

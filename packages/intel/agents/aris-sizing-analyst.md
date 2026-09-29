@@ -1,5 +1,5 @@
 ---
-name: mkt-sizing-analyst
+name: aris-sizing-analyst
 description: Hunts the public statistics behind one sizing factor and reports the number with its source, or reports that it does not exist. Never estimates, never interpolates, never completes a chain.
 tools: Read, Glob, Grep, Bash, WebFetch, WebSearch
 model: sonnet

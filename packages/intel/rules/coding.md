@@ -50,7 +50,7 @@ carry the consequence.
 
 ## Contexts and platforms
 
-Record where each pain was found. This is what makes `/mkt-gtm`'s channel argument
+Record where each pain was found. This is what makes `/aris-gtm`'s channel argument
 honest later: a channel earns its place because the evidence came from there, not
 because it appeared on a list of channels.
 

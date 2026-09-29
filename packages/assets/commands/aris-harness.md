@@ -2,7 +2,7 @@
 description: Define the measurement contract before any data exists — metrics, formulas, null baselines, and the analyzer that wakes when an export arrives
 ---
 
-# mkt-harness: the measurement contract
+# aris-harness: the measurement contract
 
 Step 12. Not "measure" — there is no data yet. This builds the thing that measures.
 
@@ -38,7 +38,7 @@ dashboard being shaped by whatever happened to be logged.
 
 ## 3. `harness/analyze.mjs`
 
-The script that runs when a real export lands in `.mkt/evidence/analytics/`. It must:
+The script that runs when a real export lands in `.aris/evidence/analytics/`. It must:
 
 - read whatever CSVs are there and say which metrics it could and could not compute;
 - compute only from the file, never fill a gap with an estimate;
@@ -52,5 +52,5 @@ Write it so it fails loudly on an unexpected column rather than guessing the map
 ## 4. Report
 
 The metric list, which targets are `null` and why, and the drop path:
-`.mkt/evidence/analytics/`. Say that the dashboard in the HTML renders empty — em-dashes,
+`.aris/evidence/analytics/`. Say that the dashboard in the HTML renders empty — em-dashes,
 not sample charts — until something is dropped there.

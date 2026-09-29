@@ -1,11 +1,11 @@
 ---
-description: Where this mkt project stands — what exists, what is validated, what blocks the launch
+description: Where this aris project stands — what exists, what is validated, what blocks the launch
 ---
 
-# mkt-status
+# aris-status
 
 ```
-node ${CLAUDE_PLUGIN_ROOT}/scripts/mkt-status.mjs
+node ${CLAUDE_PLUGIN_ROOT}/scripts/aris-status.mjs
 ```
 
 Reads state and counts what is on disk. It asserts nothing and fixes nothing.
@@ -19,4 +19,4 @@ Then add, in a sentence each, only where it is true:
 - whether verification is **stale** — an asset newer than the last verify run means
   the green result describes an older package.
 
-If there is no `.mkt/` in the tree, say so and offer `/mkt "<product>"`.
+If there is no `.aris/` in the tree, say so and offer `/aris "<product>"`.

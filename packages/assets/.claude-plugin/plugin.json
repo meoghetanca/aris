@@ -1,22 +1,22 @@
 {
-  "name": "mkt-assets",
-  "description": "mkt assets: every launch material with a claim id, the dormant measurement harness, the conditional growth playbook, and the single-file HTML command centre.",
+  "name": "aris-assets",
+  "description": "aris assets: every launch material with a claim id, the dormant measurement harness, the conditional growth playbook, and the single-file HTML command centre.",
   "version": "0.1.0",
   "author": {
     "name": "Nhi Trinh"
   },
   "license": "MIT",
   "dependencies": [
-    "mkt-core",
-    "mkt-strategy",
+    "aris-core",
+    "aris-strategy",
     "pica@pica"
   ],
   "commands": [
     "./commands"
   ],
   "agents": [
-    "./agents/mkt-copywriter.md",
-    "./agents/mkt-compliance-reviewer.md"
+    "./agents/aris-copywriter.md",
+    "./agents/aris-compliance-reviewer.md"
   ],
   "keywords": [
     "marketing",

@@ -14,7 +14,7 @@
  * A dangling id is a blocking issue, not a warning. The spine is the only thing
  * standing between "derived from evidence" and "written by a language model".
  */
-import { requireRoot, readJson, check, report } from "./lib/mkt.mjs";
+import { requireRoot, readJson, check, report } from "./lib/aris.mjs";
 
 const root = requireRoot();
 const R = (rel) => readJson(root, rel, null);

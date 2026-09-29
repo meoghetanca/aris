@@ -127,9 +127,9 @@ footer{border-top:1px solid var(--line);padding:16px 0 0;color:var(--muted);font
 <aside id="drawer"><button class="x" id="drawer-x">&times;</button><div id="drawer-body"></div></aside>
 <div id="search"><div class="box"><input id="q" placeholder="Search competitors, pains, personas, claims, assets, sources"><div class="res" id="res"></div></div></div>
 
-<script id="mkt-data" type="application/json">/*__MKT_DATA__*/</script>
+<script id="aris-data" type="application/json">/*__ARIS_DATA__*/</script>
 <script>
-const DATA = JSON.parse(document.getElementById('mkt-data').textContent);
+const DATA = JSON.parse(document.getElementById('aris-data').textContent);
 const E = (s) => String(s ?? '').replace(/[&<>"']/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
 const has = (x) => Array.isArray(x) ? x.length > 0 : (x && typeof x === 'object' ? Object.keys(x).length > 0 : x != null && x !== '');
 const nf = (n) => Number.isFinite(Number(n)) ? Number(n).toLocaleString() : '—';
@@ -247,7 +247,7 @@ function sec01(){
 /* ---------- 02 market ---------- */
 function sec02(){
   const c = S.category;
-  if (!c) return missing('/mkt-category');
+  if (!c) return missing('/aris-category');
   let out = `<div class="card"><h4>Category</h4><p>${dash(c.category)}</p><p class="muted">${dash(c.definition)}</p></div>`;
   const players = c.players ?? [];
   if (players.length) {
@@ -293,7 +293,7 @@ function sec02(){
 
 /* ---------- 03 pain ---------- */
 function sec03(){
-  if (!S.pains.length) return missing('/mkt-voc');
+  if (!S.pains.length) return missing('/aris-voc');
   const sorted = [...S.pains].sort((a,b)=>(b.frequency?.quoteCount??0)-(a.frequency?.quoteCount??0));
   let out = `<p class="muted">Ranked by quote count. Click a pain for its quotes — the evidence is never hidden.</p><div class="scroll"><table><thead><tr><th></th><th>Pain</th><th>Quotes</th><th>Sources</th><th>Severity</th><th></th></tr></thead><tbody>`;
   sorted.forEach((p, i) => {
@@ -313,7 +313,7 @@ function sec03(){
 
 /* ---------- 04 personas ---------- */
 function sec04(){
-  if (!S.personas.length) return missing('/mkt-personas');
+  if (!S.personas.length) return missing('/aris-personas');
   let out = `<p class="muted">Derived objects. Every attribute carries the quote ids behind it; an attribute with no evidence is stripped, not flagged.</p><div class="grid">`;
   for (const p of S.personas) {
     out += `<div class="card"><b>${E(p.name || p.id)}</b> <span class="mono muted">${E(p.id)}</span>
@@ -334,7 +334,7 @@ function sec04(){
 /* ---------- 05 market size ---------- */
 function sec05(){
   const s = S.sizing;
-  if (!s) return missing('/mkt-size');
+  if (!s) return missing('/aris-size');
   const fac = new Map((s.factors ?? []).map(f => [f.id, f]));
   let out = `<div class="grid">`;
   for (const k of ['tam','sam','som']) {
@@ -360,7 +360,7 @@ function sec05(){
 /* ---------- 06 demand ---------- */
 function sec06(){
   const d = S.demand;
-  if (!d) return missing('/mkt-demand');
+  if (!d) return missing('/aris-demand');
   let out = `<div class="badbox"><b>INFERRED — NOT TESTED</b>
     These are desk signals read off the public record. No customer was asked anything.</div>`;
   if (has(d.signals)) {
@@ -384,7 +384,7 @@ function sec06(){
 /* ---------- 07 positioning ---------- */
 function sec07(){
   const p = S.positioning;
-  if (!p) return missing('/mkt-position');
+  if (!p) return missing('/aris-position');
   const rej = new Map((p.rejected ?? []).map(r => [r.id, r.reason]));
   let out = `<p class="muted">Criteria declared before scoring: ${(p.criteria ?? []).map(c=>`<code>${E(c)}</code>`).join(' ')}</p><div class="grid">`;
   for (const d of p.directions ?? []) {
@@ -407,7 +407,7 @@ function sec07(){
 /* ---------- 08 messaging ---------- */
 function sec08(){
   const m = S.messages;
-  if (!m) return missing('/mkt-messages');
+  if (!m) return missing('/aris-messages');
   let out = `<div class="card"><h4>USP</h4><p>${dash(m.usp)}</p><h4>Value proposition</h4><p>${dash(m.valueProposition)}</p></div>`;
   if (has(m.elevatorPitch)) {
     out += `<h3>Elevator pitch</h3><div class="grid">`;
@@ -436,7 +436,7 @@ function sec08(){
 /* ---------- 09 gtm ---------- */
 function sec09(){
   const g = S.gtm;
-  if (!g) return missing('/mkt-gtm');
+  if (!g) return missing('/aris-gtm');
   let out = '';
   if (has(g.channels)) {
     out += `<h3>Channels</h3><p class="muted">A channel earns its place because the evidence came from there.</p><div class="grid">`;
@@ -472,7 +472,7 @@ function sec09(){
 /* ---------- 10 assets ---------- */
 function sec10(){
   const names = Object.keys(S.assets);
-  if (!names.length) return missing('/mkt-assets');
+  if (!names.length) return missing('/aris-assets');
   const label = (n) => n.replace(/\.md$/,'').replace(/-/g,' ');
   let out = `<div class="tabs" id="asset-tabs">` +
     names.map((n,i)=>`<button data-a="${E(n)}" class="${i===0?'on':''}">${E(label(n))}</button>`).join('') + `</div><div id="asset-body"></div>`;
@@ -490,7 +490,7 @@ function renderAsset(name){
 /* ---------- 11 verification ---------- */
 function sec11(){
   const v = S.verify;
-  if (!v) return `<div class="badbox"><b>Never verified.</b> Run <code>/mkt-verify</code>. Nothing may be published until it passes.</div>`;
+  if (!v) return `<div class="badbox"><b>Never verified.</b> Run <code>/aris-verify</code>. Nothing may be published until it passes.</div>`;
   let out = `<div class="${v.passed ? 'card' : 'badbox'}"><b style="font-size:15px">${v.passed ? 'PASSED' : 'FAILED'}</b>
     <div class="mono muted">${E(v.timestamp ?? '')} &middot; ${(v.blockingIssues ?? []).length} blocking, ${(v.warnings ?? []).length} warnings</div></div>`;
   out += `<div class="scroll"><table><thead><tr><th></th><th>Check</th><th>Findings</th></tr></thead><tbody>`;
@@ -507,7 +507,7 @@ function sec11(){
 
 /* ---------- 12 harness ---------- */
 function sec12(){
-  if (!S.metrics.length) return missing('/mkt-harness');
+  if (!S.metrics.length) return missing('/aris-harness');
   const secs = S.dashboard?.sections ?? [{name:'Metrics', metrics: S.metrics.map(m=>m.name)}];
   let out = `<div class="warnbox"><b>No data yet. This dashboard is deliberately empty.</b>
     Em-dashes, not sample charts: a chart with plausible numbers before launch is the clearest example of
@@ -524,13 +524,13 @@ function sec12(){
   out += `<h3>The measurement contract</h3><div class="scroll"><table><thead><tr><th>Metric</th><th>Formula</th><th>Baseline</th><th>Target</th></tr></thead><tbody>`;
   for (const m of S.metrics) out += `<tr><td>${E(m.name)}<div class="mono muted">${E(m.id ?? '')}</div></td><td class="mono">${dash(m.formula)}</td>
     <td class="mono">${m.baseline == null ? 'null' : E(m.baseline)}</td><td class="mono">${m.target == null ? 'null' : E(m.target)}</td></tr>`;
-  out += `</tbody></table></div><p class="muted"><code>baseline: null</code> is correct before launch. Drop an export into <code>.mkt/evidence/analytics/</code> and <code>analyze.mjs</code> populates this.</p>`;
+  out += `</tbody></table></div><p class="muted"><code>baseline: null</code> is correct before launch. Drop an export into <code>.aris/evidence/analytics/</code> and <code>analyze.mjs</code> populates this.</p>`;
   return out;
 }
 
 /* ---------- 13 playbook ---------- */
 function sec13(){
-  if (!S.rules.length) return missing('/mkt-playbook');
+  if (!S.rules.length) return missing('/aris-playbook');
   let out = `<p class="muted">Written before the data. A rule written afterwards is a rationalisation of whatever happened.</p>`;
   for (const r of S.rules) {
     out += `<div class="card"><div class="mono muted">${E(r.id)} &middot; ${E(r.priority ?? '')}</div>
@@ -544,7 +544,7 @@ function sec13(){
 
 /* ---------- 14 sources ---------- */
 function sec14(){
-  if (!S.sources.length) return missing('/mkt-category');
+  if (!S.sources.length) return missing('/aris-category');
   const used = new Map();
   const note = (id, what) => { if (!used.has(id)) used.set(id, []); used.get(id).push(what); };
   for (const p of S.pains) for (const q of p.quotes ?? []) note(q.sourceId, p.id);
@@ -590,7 +590,7 @@ document.getElementById('main').innerHTML = SECTIONS.map(([n,t,fn]) => {
   try { body = fn(); } catch (e) { body = `<div class="badbox"><b>This section could not render.</b> ${E(e.message)}</div>`; }
   return `<section id="s${n}"><h2><span class="n">${n}</span>${E(t)}</h2>${body}</section>`;
 }).join('') + `<footer>Generated ${E(DATA.generatedAt ?? '')} &middot; artifact version ${E(S.manifest.version ?? '—')} &middot;
-  presentation layer over <code>.mkt/</code>; if the two disagree the JSON is right and this page is stale.</footer>`;
+  presentation layer over <code>.aris/</code>; if the two disagree the JSON is right and this page is stale.</footer>`;
 
 /* ---------- drawer: the citation path ---------- */
 const drawer = document.getElementById('drawer'), dbody = document.getElementById('drawer-body');
@@ -658,7 +658,7 @@ function doExport(kind){
   const blob = new Blob([JSON.stringify(pick, null, 2)], {type:'application/json'});
   const a = document.createElement('a');
   a.href = URL.createObjectURL(blob);
-  a.download = `mkt-${kind}-${(S.state.product?.name || 'package').toLowerCase().replace(/\W+/g,'-')}.json`;
+  a.download = `aris-${kind}-${(S.state.product?.name || 'package').toLowerCase().replace(/\W+/g,'-')}.json`;
   document.body.appendChild(a); a.click(); a.remove();
 }
 
@@ -695,9 +695,9 @@ document.getElementById('btn-theme').onclick = () => {
   const cur = document.documentElement.getAttribute('data-theme');
   const next = cur === 'dark' ? 'light' : cur === 'light' ? 'dark' : (matchMedia('(prefers-color-scheme:dark)').matches ? 'light' : 'dark');
   document.documentElement.setAttribute('data-theme', next);
-  try { localStorage.setItem('mkt-theme', next); } catch {}
+  try { localStorage.setItem('aris-theme', next); } catch {}
 };
-try { const t = localStorage.getItem('mkt-theme'); if (t) document.documentElement.setAttribute('data-theme', t); } catch {}
+try { const t = localStorage.getItem('aris-theme'); if (t) document.documentElement.setAttribute('data-theme', t); } catch {}
 const obs = new IntersectionObserver(es => {
   for (const e of es) if (e.isIntersecting)
     document.querySelectorAll('[data-nav]').forEach(a => a.classList.toggle('on', a.dataset.nav === e.target.id));

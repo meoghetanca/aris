@@ -5,7 +5,7 @@ genuinely the user's, present options you generated and let them pick.
 
 ## Requires superpowers
 
-`/mkt` loads `superpowers:brainstorming` for the intake block. Every decision point
+`/aris` loads `superpowers:brainstorming` for the intake block. Every decision point
 is an `AskUserQuestion` call. If superpowers is absent the `SessionStart` hook says
 so and sets `state.decisionMode = "auto"`; say it once, then run unattended.
 
@@ -25,13 +25,13 @@ so and sets `state.decisionMode = "auto"`; say it once, then run unattended.
 
 | Point | Command | Options generated from |
 |:--|:--|:--|
-| audience, geography, language, model, sector | `/mkt` | product description + sector KB |
-| which segment to lead with | `/mkt-personas` | personas ranked by pain frequency |
-| positioning direction | `/mkt-position` | the three scored directions |
-| tone of voice | `/mkt-messages` | sector norms + chosen positioning |
-| channel mix | `/mkt-gtm` | scored channels with audience evidence |
-| price point | `/mkt-gtm` | the competitor ladder + sector `priceBands` |
-| asset scope | `/mkt-assets` | the chosen channel mix |
+| audience, geography, language, model, sector | `/aris` | product description + sector KB |
+| which segment to lead with | `/aris-personas` | personas ranked by pain frequency |
+| positioning direction | `/aris-position` | the three scored directions |
+| tone of voice | `/aris-messages` | sector norms + chosen positioning |
+| channel mix | `/aris-gtm` | scored channels with audience evidence |
+| price point | `/aris-gtm` | the competitor ladder + sector `priceBands` |
+| asset scope | `/aris-assets` | the chosen channel mix |
 
 Everything else is either derived from evidence or an assumption. Do not invent new
 decision points to be polite; each one costs the user attention, and a flow that

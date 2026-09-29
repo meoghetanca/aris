@@ -3,7 +3,7 @@ description: Run the whole chain — unknown market to a launch-ready package �
 argument-hint: "[the brief, or a path to it] [--auto] [--to strategy|assets|package] [--resume]"
 ---
 
-# mktflow: a product in, a launch package out
+# arisflow: a product in, a launch package out
 
 Runs the chain and stops **only** where a person has a genuine choice to make, with
 the options already written out in front of them.
@@ -29,28 +29,28 @@ Load `${CLAUDE_PLUGIN_ROOT}/rules/decisions.md`,
 
 | `--to` | You get | Stops after |
 |:--|:--|:--|
-| `strategy` | the evidence base, positioning, messaging, go-to-market | `/mkt-gtm` |
-| `assets` | that, plus every launch material with cited claims | `/mkt-verify` |
-| `package` *(default)* | that, plus the harness, the playbook and `mkt-launch.html` | `/mkt-package` |
+| `strategy` | the evidence base, positioning, messaging, go-to-market | `/aris-gtm` |
+| `assets` | that, plus every launch material with cited claims | `/aris-verify` |
+| `package` *(default)* | that, plus the harness, the playbook and `aris-launch.html` | `/aris-package` |
 
 ## The chain
 
 | | Command | Decision block |
 |:--:|:--|:--|
-| 1 | `/mkt` | audience, market, language, model, out-of-scope |
-| 2 | `/mkt-category` | — |
-| 3 | `/mkt-voc` | — |
-| 4 | `/mkt-personas` | which segment to lead with |
-| 5 | `/mkt-size` | — |
-| 6 | `/mkt-demand` | — |
-| 7 | `/mkt-position` | which of three directions |
-| 8 | `/mkt-messages` | tone of voice |
-| 9 | `/mkt-gtm` | channel mix, price point |
-| 10 | `/mkt-assets` | asset scope |
-| 11 | `/mkt-verify` | — |
-| 12 | `/mkt-harness` | — |
-| 13 | `/mkt-playbook` | — |
-| 14 | `/mkt-package` | — |
+| 1 | `/aris` | audience, market, language, model, out-of-scope |
+| 2 | `/aris-category` | — |
+| 3 | `/aris-voc` | — |
+| 4 | `/aris-personas` | which segment to lead with |
+| 5 | `/aris-size` | — |
+| 6 | `/aris-demand` | — |
+| 7 | `/aris-position` | which of three directions |
+| 8 | `/aris-messages` | tone of voice |
+| 9 | `/aris-gtm` | channel mix, price point |
+| 10 | `/aris-assets` | asset scope |
+| 11 | `/aris-verify` | — |
+| 12 | `/aris-harness` | — |
+| 13 | `/aris-playbook` | — |
+| 14 | `/aris-package` | — |
 
 Run each as its own command, in order, honouring its preconditions. Do not inline a
 step's work here: the commands carry the rules, and a step run from memory of them
@@ -89,6 +89,6 @@ Present, in this order:
 3. **The low-confidence assumptions**, most consequential first.
 4. **What was not available and what its absence cost** — from `cutSteps.json`.
 
-Then the path to `mkt-launch.html`, and the single remaining human act: reviewing
+Then the path to `aris-launch.html`, and the single remaining human act: reviewing
 it and setting `launchAuthorization` by hand. Do not set it yourself; the publish
 gate exists because publishing is public and irreversible.

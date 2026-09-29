@@ -15,7 +15,7 @@
  */
 import fs from "node:fs";
 import path from "node:path";
-import { requireRoot, readJson, check, report } from "./lib/mkt.mjs";
+import { requireRoot, readJson, check, report } from "./lib/aris.mjs";
 
 /**
  * An attributed quote the workflow wrote is fabricated evidence.
@@ -45,10 +45,10 @@ function fabricatedQuotes(body) {
 }
 
 const root = requireRoot();
-const dir = path.join(root, ".mkt", "assets");
+const dir = path.join(root, ".aris", "assets");
 const doc = readJson(root, "assets/claims.json");
 if (!doc) {
-  process.stderr.write("assets/claims.json is absent. Run /mkt-assets first.\n");
+  process.stderr.write("assets/claims.json is absent. Run /aris-assets first.\n");
   process.exit(2);
 }
 const claims = doc.claims ?? [];

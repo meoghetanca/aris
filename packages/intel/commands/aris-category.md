@@ -2,7 +2,7 @@
 description: Map the category from the public record — players, claims, the price ladder, the feature matrix and the gaps
 ---
 
-# mkt-category: the market map
+# aris-category: the market map
 
 Step 2. Desk research, fully automatable, and the foundation everything else stands on.
 
@@ -13,7 +13,7 @@ Load `${CLAUDE_PLUGIN_ROOT}/rules/mining.md` and the core package's
 
 Check and **stop** if any fail, naming the one that failed:
 
-- `.mkt/state.json` exists
+- `.aris/state.json` exists
 - `state.market.sector` is set
 
 ## 1. Find the players
@@ -22,7 +22,7 @@ Identify the players first — the obvious leaders plus at least two adjacent or
 ones. A map of only the leaders makes every gap look like whitespace when it is really
 a deliberate choice.
 
-Then dispatch **one `mkt-competitor-analyst` per player, in a single message so they
+Then dispatch **one `aris-competitor-analyst` per player, in a single message so they
 run concurrently.** Each gets one company and nothing else. None sees another's
 profile: an analyst who has read the market leader describes everyone else as a
 variation of it, and the feature matrix then reflects the reading order rather than

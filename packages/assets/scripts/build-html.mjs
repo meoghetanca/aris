@@ -1,6 +1,6 @@
 #!/usr/bin/env node
 /**
- * Build package/mkt-launch.html from the .mkt artifact tree.
+ * Build package/aris-launch.html from the .aris artifact tree.
  *
  * The page is a PRESENTATION LAYER over the JSON, never a replacement. Everything
  * it shows is embedded at build time from the manifest, so the file works offline
@@ -24,11 +24,11 @@
 import fs from "node:fs";
 import path from "node:path";
 import url from "node:url";
-import { requireRoot, readJson } from "./lib/mkt.mjs";
+import { requireRoot, readJson } from "./lib/aris.mjs";
 
 const HERE = path.dirname(url.fileURLToPath(import.meta.url));
 const TEMPLATE = path.join(HERE, "template", "page.html");
-const PLACEHOLDER = "/*__MKT_DATA__*/";
+const PLACEHOLDER = "/*__ARIS_DATA__*/";
 
 const root = requireRoot();
 const argOut = (() => {
@@ -46,7 +46,7 @@ if (!fs.existsSync(TEMPLATE)) {
 
 /* ---- read the tree. The manifest is the index; a missing manifest is not fatal. ---- */
 const manifest = readJson(root, "package/manifest.json", null);
-if (!manifest) notes.push("no package/manifest.json — read the tree directly. /mkt-package writes it.");
+if (!manifest) notes.push("no package/manifest.json — read the tree directly. /aris-package writes it.");
 
 const DATA = {
   generatedAt: new Date().toISOString(),
@@ -72,7 +72,7 @@ const DATA = {
 };
 
 /* Asset Markdown, embedded verbatim: requirement 16. */
-const assetsDir = path.join(root, ".mkt", "assets");
+const assetsDir = path.join(root, ".aris", "assets");
 if (fs.existsSync(assetsDir))
   for (const f of fs.readdirSync(assetsDir).filter((x) => x.endsWith(".md")).sort())
     DATA.assets[f] = fs.readFileSync(path.join(assetsDir, f), "utf8");
@@ -88,7 +88,7 @@ if (!manifest) {
     ["playbook/growth-rules.json", "harness"],
   ];
   DATA.manifest.artifacts = known
-    .filter(([rel]) => fs.existsSync(path.join(root, ".mkt", rel)))
+    .filter(([rel]) => fs.existsSync(path.join(root, ".aris", rel)))
     .map(([rel, type]) => ({ path: rel, type, status: "complete" }));
 }
 
@@ -112,7 +112,7 @@ if (!passed) {
   if (!FORCE && !DATA.verify) {
     process.stderr.write(
       "\nRefusing to build: verification has never run, so the page would have nothing to report.\n" +
-        "Run /mkt-verify, or pass --force to build a page that says so.\n"
+        "Run /aris-verify, or pass --force to build a page that says so.\n"
     );
     process.exit(3);
   }
@@ -130,8 +130,8 @@ if (DATA.demand && !(DATA.demand.doesNotProve ?? []).length)
   };
 
 // 13. no fabricated metrics: a pre-launch baseline is an invented number.
-const hasData = fs.existsSync(path.join(root, ".mkt", "evidence", "analytics")) &&
-  fs.readdirSync(path.join(root, ".mkt", "evidence", "analytics")).some((f) => /\.(csv|tsv|json)$/i.test(f));
+const hasData = fs.existsSync(path.join(root, ".aris", "evidence", "analytics")) &&
+  fs.readdirSync(path.join(root, ".aris", "evidence", "analytics")).some((f) => /\.(csv|tsv|json)$/i.test(f));
 if (!hasData) {
   const bad = (DATA.metrics.metrics ?? []).filter((m) => m.baseline != null);
   if (bad.length) {
@@ -178,7 +178,7 @@ if (fabricated.length) {
     "\nRefusing to build: these assets carry an attributed quote with no [TESTIMONIAL - SUPPLY REAL] marker:\n" +
       fabricated.map(([f, hits]) => hits.map((h) => `  assets/${f}:${h.line}  ${h.text}`).join("\n")).join("\n") +
       "\n\nA testimonial this workflow wrote is fabricated evidence, and publishing one is not a style\n" +
-      "problem. Replace it with the placeholder, or supply a real one via .mkt/evidence/supplied/.\n"
+      "problem. Replace it with the placeholder, or supply a real one via .aris/evidence/supplied/.\n"
   );
   process.exit(4);
 }
@@ -200,7 +200,7 @@ const html = template.split(PLACEHOLDER).join(json).replace(
   `<title>${String(DATA.state?.product?.name || "Launch package").replace(/[<>&]/g, "")} — launch package</title>`
 );
 
-const out = argOut ? path.resolve(argOut) : path.join(root, ".mkt", "package", "mkt-launch.html");
+const out = argOut ? path.resolve(argOut) : path.join(root, ".aris", "package", "aris-launch.html");
 fs.mkdirSync(path.dirname(out), { recursive: true });
 fs.writeFileSync(out, html);
 

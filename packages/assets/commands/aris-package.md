@@ -2,7 +2,7 @@
 description: Assemble the package — the brief, the checklist, the manifest, and the single-file HTML command centre
 ---
 
-# mkt-package: the command centre
+# aris-package: the command centre
 
 Step 14. Everything produced so far becomes one file a person can read.
 
@@ -10,7 +10,7 @@ Load `${CLAUDE_PLUGIN_ROOT}/rules/html-contract.md`.
 
 ## Preconditions — the release gate
 
-Run the core package's `close-check.mjs` (via `/mkt-verify` first, then the script).
+Run the core package's `close-check.mjs` (via `/aris-verify` first, then the script).
 **Stop if it fails**, and say which check failed and what clears it.
 
 The gate is not advisory. A package assembled over a failed verification looks finished
@@ -39,7 +39,7 @@ publish — because those are the ones that get forgotten.
 node ${CLAUDE_PLUGIN_ROOT}/scripts/build-html.mjs
 ```
 
-It reads the manifest, embeds the JSON, and writes `package/mkt-launch.html`. It
+It reads the manifest, embeds the JSON, and writes `package/aris-launch.html`. It
 refuses to write a launch-ready page over a failed verification — requirement 15, and
 it is enforced in the generator rather than trusted to the caller.
 
@@ -65,5 +65,5 @@ Then the path to the file, and the two remaining human acts: reviewing it, and s
 
 Only if the user asks. Publish the HTML as an Artifact, declaring `db`, `user`,
 `comments` (composer_only) and `downloads` so reviewers can record per-asset approvals
-that `/mkt-verify` reads back. **Never declare `assets`** — that makes the page
+that `/aris-verify` reads back. **Never declare `assets`** — that makes the page
 organisation-internal and it can never be shared with a client outside the org.

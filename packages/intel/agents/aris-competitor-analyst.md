@@ -1,5 +1,5 @@
 ---
-name: mkt-competitor-analyst
+name: aris-competitor-analyst
 description: Profiles ONE competitor from its own public surfaces and reports what it says, charges and ships. Never compares, never ranks, never sees another competitor's profile.
 tools: Read, Glob, Grep, Bash, WebFetch, WebSearch
 model: sonnet

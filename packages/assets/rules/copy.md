@@ -57,6 +57,6 @@ good reason.
 
 ## The landing page itself is out of scope
 
-`/mkt-assets` writes the brief. **pica builds the page.** Do not write HTML here: it
+`/aris-assets` writes the brief. **pica builds the page.** Do not write HTML here: it
 would drift from the brief immediately and there would be two sources of truth for the
 same copy.

@@ -1,6 +1,6 @@
 # The state contract
 
-`.mkt/state.json` is the canonical project state. Hooks and scripts read it;
+`.aris/state.json` is the canonical project state. Hooks and scripts read it;
 commands write it. A hook cannot know that a human said yes out loud, so authority
 lives here.
 
@@ -34,7 +34,7 @@ Companion files, separate because they grow and are read independently:
   it immediately. A fact that lives only in the conversation is lost at the next
   compact, and this workflow is long.
 - **`status` only moves forward**, and only when its artifacts exist. Do not set
-  `launch-ready`; `/mkt-package` sets it, and only when `close-check.mjs` passes.
+  `launch-ready`; `/aris-package` sets it, and only when `close-check.mjs` passes.
 - **`launchAuthorization` is never set by a command.** The user sets it by hand.
   This is the one deliberate human act the workflow keeps.
 - **`verify` mirrors `verification/verify.json`.** The gate reads both; keep them
@@ -45,8 +45,8 @@ Companion files, separate because they grow and are read independently:
 ## Reading it from a script
 
 ```js
-import { requireRoot, readJson, writeJson } from "./lib/mkt.mjs";
-const root = requireRoot();               // walks up for .mkt/state.json, exits 2 if absent
+import { requireRoot, readJson, writeJson } from "./lib/aris.mjs";
+const root = requireRoot();               // walks up for .aris/state.json, exits 2 if absent
 const state = readJson(root, "state.json");
 ```
 

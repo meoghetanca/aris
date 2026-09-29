@@ -30,11 +30,11 @@ import url from "node:url";
 const HERE = path.dirname(url.fileURLToPath(import.meta.url));
 const BUILTIN = path.join(HERE, "..", "data", "sectors");
 
-/** Project-local entries override built-ins, so /mkt-sector adds a field without touching the plugin. */
+/** Project-local entries override built-ins, so /aris-sector adds a field without touching the plugin. */
 function projectDir() {
   let d = process.cwd();
   for (;;) {
-    const c = path.join(d, ".mkt", "sectors");
+    const c = path.join(d, ".aris", "sectors");
     if (fs.existsSync(c)) return c;
     const p = path.dirname(d);
     if (p === d) return null;
@@ -175,7 +175,7 @@ if (!hit) {
     `public voice, which of its claims are regulated, or what it charges. Mining blind\n` +
     `is where fabrication starts, so this stops here.\n\n` +
     `  node sector-check.mjs --list        see what is covered\n` +
-    `  /mkt-sector ${wantRaw}${" ".repeat(Math.max(1, 18 - wantRaw.length))}research it and write a provisional entry\n`
+    `  /aris-sector ${wantRaw}${" ".repeat(Math.max(1, 18 - wantRaw.length))}research it and write a provisional entry\n`
   );
   process.exit(3);
 }
@@ -228,7 +228,7 @@ if (quality === "family")
     `\n  RESOLVED TO A FAMILY, NOT A SPECIFIC FIELD.\n` +
     `  "${wantRaw}" has no researched entry, so this is the generic ${hit.sector} profile.\n` +
     `  It is a real starting point and it is not specific. Set sectorStatus to "family",\n` +
-    `  say so in the package, and run /mkt-sector ${wantRaw} to research the specifics.\n`);
+    `  say so in the package, and run /aris-sector ${wantRaw} to research the specifics.\n`);
 if (hit.status === "provisional")
   process.stdout.write(`\n  Bootstrapped, not curated. Everything derived from it is stamped provisional.\n`);
 L("Review platforms (where to mine)", r.reviewPlatforms);

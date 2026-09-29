@@ -1,5 +1,5 @@
 ---
-name: mkt-demand-analyst
+name: aris-demand-analyst
 description: Measures ONE public demand signal - ad persistence, search trend, review growth, community volume or price survival - and reports it with its source. Never concludes that demand exists.
 tools: Read, Glob, Grep, Bash, WebFetch, WebSearch
 model: sonnet

@@ -2,11 +2,11 @@
 /**
  * Where is this project. Reads state and counts what exists; asserts nothing.
  */
-import { findRoot, readJson, exists } from "./lib/mkt.mjs";
+import { findRoot, readJson, exists } from "./lib/aris.mjs";
 
 const root = findRoot();
 if (!root) {
-  process.stdout.write("Not an mkt project (no .mkt/state.json). Run /mkt \"<product>\" to start.\n");
+  process.stdout.write("Not an aris project (no .aris/state.json). Run /aris \"<product>\" to start.\n");
   process.exit(0);
 }
 const s = readJson(root, "state.json") ?? {};
@@ -36,14 +36,14 @@ const rows = [
   ["launch auth", s.launchAuthorization ? "GRANTED" : "not granted"],
 ];
 const w = Math.max(...rows.map((r) => r[0].length));
-process.stdout.write(`mkt: ${root}\n\n`);
+process.stdout.write(`aris: ${root}\n\n`);
 for (const [k, v] of rows) process.stdout.write(`  ${k.padEnd(w)}  ${v}\n`);
 
 const artifacts = [
   "intel/category.json", "intel/pains.json", "intel/personas.json", "intel/tam-sam-som.json",
   "intel/demand.json", "strategy/positioning.json", "strategy/messages.json", "strategy/gtm.json",
   "assets/claims.json", "verification/verify.json", "harness/metrics.json",
-  "playbook/growth-rules.json", "package/mkt-launch.html",
+  "playbook/growth-rules.json", "package/aris-launch.html",
 ];
 process.stdout.write("\n  artifacts\n");
 for (const a of artifacts) process.stdout.write(`    ${exists(root, a) ? "[x]" : "[ ]"} ${a}\n`);

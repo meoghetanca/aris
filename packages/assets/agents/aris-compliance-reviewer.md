@@ -1,5 +1,5 @@
 ---
-name: mkt-compliance-reviewer
+name: aris-compliance-reviewer
 description: Reviews the written assets against one field's regulated-claim rules and reports violations with the authority behind each. Never rewrites copy, never softens a finding, never sees who wrote it.
 tools: Read, Glob, Grep, Bash
 model: sonnet

@@ -2,7 +2,7 @@
 description: Generate three scored positioning directions, select one, and keep the rejected two with their reasons
 ---
 
-# mkt-position: three directions, one choice
+# aris-position: three directions, one choice
 
 Step 7. Blast radius `total`: everything downstream inherits this.
 
@@ -60,4 +60,4 @@ Record the decision in `state.decisions` with its option set. Set
 ## Report
 
 The selected statement in full, the two rejected in one line each with their reason,
-and the scores. Then `/mkt-messages`.
+and the scores. Then `/aris-messages`.

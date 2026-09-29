@@ -3,7 +3,7 @@ description: Write every launch material, each factual claim carrying an id that
 argument-hint: "[asset name, or all]"
 ---
 
-# mkt-assets: the launch materials
+# aris-assets: the launch materials
 
 Step 10. The largest step, and the one whose output gets published.
 
@@ -26,7 +26,7 @@ writing twelve social posts for a channel the mix dropped.
 
 ## 2. Write, one asset at a time
 
-Dispatch **one `mkt-copywriter` per asset in the agreed scope, concurrently**. Each gets
+Dispatch **one `aris-copywriter` per asset in the agreed scope, concurrently**. Each gets
 the messaging library, the claim registry, the glossary and the sector's language
 constraints — and one asset to write.
 
@@ -54,11 +54,11 @@ unmissable. A quote this workflow wrote is fabricated evidence.
 ## 3. Check after each asset, not at the end
 
 ```
-/mkt-verify --only claims
-/mkt-verify --only language
+/aris-verify --only claims
+/aris-verify --only language
 ```
 
-First, dispatch the **`mkt-compliance-reviewer`** — one per sector in scope, including
+First, dispatch the **`aris-compliance-reviewer`** — one per sector in scope, including
 secondary sectors — with the sector entry and the finished assets, and nothing else. It
 must not see the brief or the positioning: a reviewer who knows why a claim was made
 finds reasons to let it stand.
@@ -81,6 +81,6 @@ note: it means the field does not permit that claim and the authority is named.
 
 Each asset with its claim count, the claims still `unsupported`, every placeholder
 awaiting real content, and any sentence the language gate refused with the authority
-that refuses it. Then `/mkt-harness`.
+that refuses it. Then `/aris-harness`.
 
 Say plainly that the landing page is not here and pica builds it from the brief.

@@ -1,5 +1,5 @@
 ---
-name: mkt-evaluator
+name: aris-evaluator
 description: Evaluates the messaging against one persona's evidence and reports findings. Never rewrites copy, never proposes replacements, and never sees another evaluator's findings.
 tools: Read, Glob, Grep, Bash
 model: sonnet

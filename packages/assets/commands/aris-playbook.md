@@ -2,7 +2,7 @@
 description: Write the conditional growth rules in advance, so the optimisation loop runs itself once data arrives
 ---
 
-# mkt-playbook: decisions written before the data
+# aris-playbook: decisions written before the data
 
 Step 13. The rules that make the post-launch loop automatic.
 
@@ -50,4 +50,4 @@ gets misread as failure.
 ## Report
 
 The rules, which thresholds are `null`, and which metric each keys off. Then
-`/mkt-package`.
+`/aris-package`.

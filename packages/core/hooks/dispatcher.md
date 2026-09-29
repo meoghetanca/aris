@@ -1,11 +1,11 @@
-# mkt: the rules that must not decay
+# aris: the rules that must not decay
 
-You are in a session where the `mkt` workflow may be used. These rules survive a
+You are in a session where the `aris` workflow may be used. These rules survive a
 compact; the reasoning behind them lives in the package `rules/` files.
 
-## If `.mkt/state.json` exists in this tree
+## If `.aris/state.json` exists in this tree
 
-This is an mkt project. Before writing to any `.mkt/` artifact, load the relevant
+This is an aris project. Before writing to any `.aris/` artifact, load the relevant
 rules by name from the owning package — do not work from memory of them.
 
 ## The four states, always
@@ -25,7 +25,7 @@ cannot source it, say `unknown` and move on.
   or a metric. Not as a placeholder, not "to show the shape", not because the
   section looked empty.
 - Fill a gate's precondition by synthesising the artifact it asked for. If
-  `pains.json` is missing, `/mkt-personas` stops. It does not write pains.
+  `pains.json` is missing, `/aris-personas` stops. It does not write pains.
 - Assert that demand is validated. Desk research infers; it never tests.
 - Mark a package launch-ready while `verify.passed` is false.
 

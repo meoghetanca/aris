@@ -3,7 +3,7 @@ description: Research a field the knowledge base does not cover and write a prov
 argument-hint: "<sector name> [--refresh]"
 ---
 
-# mkt-sector: bootstrap a field
+# aris-sector: bootstrap a field
 
 The escape hatch from a closed gate. The knowledge base fails closed on an
 uncovered field because without an entry the miner does not know where this field's
@@ -26,7 +26,7 @@ it is, say so and stop — a duplicate entry will drift from the original.
 
 ## 2. Research the structure, not the numbers
 
-Dispatch the **`mkt-sector-researcher`** with the field name and an example product. It
+Dispatch the **`aris-sector-researcher`** with the field name and an example product. It
 returns a profile and, separately, what it could not establish — read that second list
 carefully, because the platform list is the part a human should check first.
 
@@ -54,12 +54,12 @@ entries deliberately carry nulls there for exactly this reason.
 
 ## 3. Write it
 
-To `.mkt/sectors/<slug>.json` in the project — project entries override built-ins,
+To `.aris/sectors/<slug>.json` in the project — project entries override built-ins,
 so a field can be added without touching the plugin. Use the shape in
 `sector-discipline.md`, with `status: "provisional"`.
 
 Then set `state.market.sectorStatus = "provisional"`. That flag propagates into the
-manifest and prints prominently in `mkt-launch.html`. **A provisional sector is a
+manifest and prints prominently in `aris-launch.html`. **A provisional sector is a
 disclosed weakness, never a silent one.**
 
 ## 4. Verify it resolves

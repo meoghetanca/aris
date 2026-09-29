@@ -1,5 +1,5 @@
 ---
-name: mkt-copywriter
+name: aris-copywriter
 description: Writes ONE launch asset from the approved messaging library, with a claim id on every factual sentence. Never invents a message, never invents a statistic, never writes a testimonial.
 tools: Read, Glob, Grep, Bash, Write, Edit
 model: sonnet

@@ -1,9 +1,9 @@
 ---
-description: Start an mkt project — resolve the sector, scaffold the artifact tree, and settle audience, geography, language and business model in one decision block
+description: Start an aris project — resolve the sector, scaffold the artifact tree, and settle audience, geography, language and business model in one decision block
 argument-hint: "<what the product is, or a path to a brief>"
 ---
 
-# mkt: intake
+# aris: intake
 
 Step 1. Everything else reads what this writes.
 
@@ -39,7 +39,7 @@ neighbouring sector because it looks close: the entry decides where the miner
 looks, which claims are regulated, and what the field charges. A wrong entry sends
 the whole run to the wrong evidence.
 
-Offer two ways forward: `/mkt-sector <name>` to bootstrap a provisional entry, or a
+Offer two ways forward: `/aris-sector <name>` to bootstrap a provisional entry, or a
 different sector from the list if the guess was simply off.
 
 A product can sit in two fields. Resolve the primary, record the rest in
@@ -70,7 +70,7 @@ Create the tree — directories only, no placeholder JSON. An empty file that pa
 is indistinguishable from a real one three commands later.
 
 ```
-.mkt/{intel,strategy,assets,verification,harness,playbook,evidence/analytics,evidence/supplied,package}
+.aris/{intel,strategy,assets,verification,harness,playbook,evidence/analytics,evidence/supplied,package}
 ```
 
 Write `state.json` to the shape in `rules/state.md`, with `status: "intake"`,
@@ -87,8 +87,8 @@ properties of the workflow, so they are known at intake, not discovered at the e
 
 ## 5. Report
 
-Print `node ${CLAUDE_PLUGIN_ROOT}/scripts/mkt-status.mjs` and say what is next:
-`/mktflow` for the whole chain, or `/mkt-category` to take it a step at a time.
+Print `node ${CLAUDE_PLUGIN_ROOT}/scripts/aris-status.mjs` and say what is next:
+`/arisflow` for the whole chain, or `/aris-category` to take it a step at a time.
 
 Say plainly what this run will and will not be able to know. The user should not
 learn at the end that the pains came from public reviews rather than from their

@@ -63,7 +63,7 @@ flags an attributed quote with no placeholder marker, because that is what a fab
 testimonial looks like.
 
 The same applies to logos, case studies, review scores and named customers. If it is
-not supplied by a human from `.mkt/evidence/supplied/`, it is a placeholder.
+not supplied by a human from `.aris/evidence/supplied/`, it is a placeholder.
 
 ## Numbers that appear in more than one asset
 

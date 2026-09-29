@@ -14,14 +14,14 @@ entry you do not know which review platforms and communities carry this field's
 public voice, which claims it regulates, or what it charges — and mining blind is
 where fabrication starts.
 
-Escape hatch: `/mkt-sector <name>` researches and writes a **provisional** entry.
+Escape hatch: `/aris-sector <name>` researches and writes a **provisional** entry.
 The flow then runs, but `state.market.sectorStatus = "provisional"` propagates into
 the manifest and the HTML says so prominently. A provisional sector is a disclosed
 weakness, never a silent one.
 
 ## The fields that do real work
 
-- **`reviewPlatforms` + `communities`** tell `/mkt-voc` where to look. Use these,
+- **`reviewPlatforms` + `communities`** tell `/aris-voc` where to look. Use these,
   not a general web search, as the primary mining targets.
 - **`regulatedClaims`** is a verify lens, and the highest-stakes one. An automated
   flow writing health, financial, employment or environmental claims with no sector
@@ -29,7 +29,7 @@ weakness, never a silent one.
   cannot appear at all; `requires_disclosure` means it may appear only with the
   named disclosure attached.
 - **`forbidden`** lists defects this field recognises and a generic check does not.
-  Treat each entry as a lens during `/mkt-verify`.
+  Treat each entry as a lens during `/aris-verify`.
 - **`reservedTerms`** are words the field has already spent on a meaning. Using one
   for something else is a misread waiting to happen, not a taste disagreement.
 - **`priceBands`** anchors the pricing recommendation. Where they are `null` and

@@ -2,7 +2,7 @@
 description: Size the market bottom-up from cited factors, as ranges, with the arithmetic stored so it can be recomputed
 ---
 
-# mkt-size: show the calculation
+# aris-size: show the calculation
 
 Step 5. The artifact is the calculation; the numbers are a consequence of it.
 
@@ -17,7 +17,7 @@ Stop unless `intel/category.json` exists — the ARPU factor comes from the pric
 
 Decide which factors the calculation needs — typically a count of entities in scope, a
 penetration proxy, and an ARPU from the price ladder. Then dispatch **one
-`mkt-sizing-analyst` per factor, concurrently**, each given only its own factor and the
+`aris-sizing-analyst` per factor, concurrently**, each given only its own factor and the
 market definition.
 
 Separating them is what stops the chain being completed to make the arithmetic work. An
@@ -58,7 +58,7 @@ assumption does to the answer, and what the estimate excludes.
 ## 4. Check
 
 ```
-/mkt-verify --only arithmetic
+/aris-verify --only arithmetic
 ```
 
 It recomputes every formula against its stated range and fails on a mismatch. It

@@ -3,7 +3,7 @@ description: Run every gate and every cross-asset consistency check, and write t
 argument-hint: "[--only pains|personas|arithmetic|claims|language|trace] [--no-write]"
 ---
 
-# mkt-verify: measure the package
+# aris-verify: measure the package
 
 Step 11, and re-runnable at any time. This is what the publish hook reads, so it is
 the difference between "it looks fine" and "it was checked".
@@ -19,7 +19,7 @@ That runs the six gates and the eleven cross-asset checks, then writes
 
 ## What it checks
 
-Scripts only. The **`mkt-compliance-reviewer`** runs inside `/mkt-assets`, where the copy
+Scripts only. The **`aris-compliance-reviewer`** runs inside `/aris-assets`, where the copy
 is still being written and a blocker is cheap to fix — not here, where it would be found
 after everything downstream already used the sentence.
 

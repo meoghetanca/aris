@@ -2,7 +2,7 @@
 description: Score channels from the evidence, recommend a price from the ladder, allocate budget as percentages, and set KPI targets with cited benchmarks
 ---
 
-# mkt-gtm: the plan
+# aris-gtm: the plan
 
 Step 9. Two decision blocks: the channel mix and the price point.
 
@@ -17,7 +17,7 @@ exist, and the sector entry resolves.
 ## 1. Score the channels
 
 Draw the candidate list from the sector's `channelNorms` and from the platforms the
-coded quotes actually came from. Then dispatch **one `mkt-channel-analyst` per
+coded quotes actually came from. Then dispatch **one `aris-channel-analyst` per
 candidate, concurrently** — each argues its own channel's case from evidence, and none
 ranks the others. An analyst who ranks has ranked against whichever channel they
 happened to think about.
@@ -64,10 +64,10 @@ spend, the landing page precedes anything linking to it. Owners are `[UNASSIGNED
 
 ## 5. Write
 
-`strategy/gtm.json`, then `/mkt-verify --only arithmetic`.
+`strategy/gtm.json`, then `/aris-verify --only arithmetic`.
 
 ## Report
 
 The mix with the evidence behind the top channel, the recommended price and its basis,
 the allocation, and the KPI targets marked where the benchmark is `unknown`. Then
-`/mkt-assets`.
+`/aris-assets`.

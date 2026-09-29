@@ -2,7 +2,7 @@
 description: Infer demand from five public signals, and state plainly what it does not prove
 ---
 
-# mkt-demand: inferred, never tested
+# aris-demand: inferred, never tested
 
 Step 6. The workflow cut the willingness-to-pay test, so this is what replaces it —
 and the single most important thing this command does is refuse to be mistaken for
@@ -17,7 +17,7 @@ Stop unless `intel/category.json` and `intel/sources.json` exist.
 
 ## The five signals
 
-Dispatch **one `mkt-demand-analyst` per signal, concurrently**. Each measures its own
+Dispatch **one `aris-demand-analyst` per signal, concurrently**. Each measures its own
 signal and returns a measurement, not a verdict — weighing them together is this
 command's job, and an analyst who concludes gets their single signal read as an answer.
 

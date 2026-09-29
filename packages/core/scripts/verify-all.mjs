@@ -17,11 +17,11 @@ import fs from "node:fs";
 import path from "node:path";
 import url from "node:url";
 import { execFileSync } from "node:child_process";
-import { requireRoot, readJson, writeJson, exists } from "./lib/mkt.mjs";
+import { requireRoot, readJson, writeJson, exists } from "./lib/aris.mjs";
 
 const HERE = path.dirname(url.fileURLToPath(import.meta.url));
 const root = requireRoot();
-const assetsDir = path.join(root, ".mkt", "assets");
+const assetsDir = path.join(root, ".aris", "assets");
 const only = (() => {
   const i = process.argv.indexOf("--only");
   return i === -1 ? null : process.argv[i + 1];
@@ -229,7 +229,7 @@ if (process.argv.includes("--json")) {
   process.stdout.write(JSON.stringify(doc, null, 2) + "\n");
 } else {
   const pad = Math.max(...checks.map((c) => c.check.length), 10);
-  process.stdout.write(`mkt-verify  ${doc.timestamp}\n\n`);
+  process.stdout.write(`aris-verify  ${doc.timestamp}\n\n`);
   for (const c of checks) {
     const mark = { passed: "PASS", failed: "FAIL", skipped: "SKIP" }[c.status];
     const cov = c.coverage != null ? `  ${Math.round(c.coverage * 100)}%` : "";

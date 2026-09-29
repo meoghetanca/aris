@@ -2,7 +2,7 @@
 description: Build the messaging library — USP, value proposition, pitches, per-persona hierarchy — every message traceable to a pain
 ---
 
-# mkt-messages: the copy library
+# aris-messages: the copy library
 
 Step 8. Everything an asset will say, with its evidence attached.
 
@@ -51,7 +51,7 @@ sentence in each tone** so the difference is visible rather than described. One
 
 ## 6. Evaluate, fanned out
 
-Dispatch one `mkt-evaluator` per persona **in a single message so they run
+Dispatch one `aris-evaluator` per persona **in a single message so they run
 concurrently**, each given only its persona, that persona's pains, and the messages
 aimed at it. None sees another's findings.
 
@@ -61,10 +61,10 @@ on — do not gold-plate bland copy.
 
 ## 7. Write
 
-`strategy/messages.json`. Then `/mkt-verify --only trace` to confirm every `evidence`
+`strategy/messages.json`. Then `/aris-verify --only trace` to confirm every `evidence`
 id resolves.
 
 ## Report
 
 The USP, the priority-1 message per persona, and the blockers the evaluators found and
-what you changed. Then `/mkt-gtm`.
+what you changed. Then `/aris-gtm`.

@@ -16,7 +16,7 @@ import fs from "node:fs";
 import path from "node:path";
 import url from "node:url";
 import { execFileSync } from "node:child_process";
-import { requireRoot, readJson, check, report } from "./lib/mkt.mjs";
+import { requireRoot, readJson, check, report } from "./lib/aris.mjs";
 
 const HERE = path.dirname(url.fileURLToPath(import.meta.url));
 
@@ -34,7 +34,7 @@ const SUPERLATIVE = new RegExp(
 const root = requireRoot();
 const state = readJson(root, "state.json") ?? {};
 const sector = state.market?.sector;
-const dir = path.join(root, ".mkt", "assets");
+const dir = path.join(root, ".aris", "assets");
 const files = fs.existsSync(dir) ? fs.readdirSync(dir).filter((f) => f.endsWith(".md")) : [];
 const claims = readJson(root, "assets/claims.json", { claims: [] }).claims ?? [];
 const cited = new Set(claims.filter((c) => (c.sourceIds ?? []).length).map((c) => c.id));

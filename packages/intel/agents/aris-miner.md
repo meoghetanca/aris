@@ -1,5 +1,5 @@
 ---
-name: mkt-miner
+name: aris-miner
 description: Mines one platform for the public voice of a market and reports quotes with sources. Never clusters across platforms, never writes artifacts, never infers a pain it did not read.
 tools: Read, Glob, Grep, Bash, WebFetch, WebSearch
 model: sonnet

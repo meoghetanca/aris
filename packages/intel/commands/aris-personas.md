@@ -2,7 +2,7 @@
 description: Derive personas from coded pains, with every attribute traceable to a quote, and choose which segment to lead with
 ---
 
-# mkt-personas: derived, not invented
+# aris-personas: derived, not invented
 
 Step 4. A persona here is a **derived object**. It has no attribute that a quote
 does not support.
@@ -14,7 +14,7 @@ Load `${CLAUDE_PLUGIN_ROOT}/rules/coding.md`, the core package's
 
 Stop unless `intel/pains.json` exists with at least one `validated` pain. **Do not
 create pains here.** If they are missing, the command that produces them is
-`/mkt-voc`.
+`/aris-voc`.
 
 ## 1. Group pains by who is speaking
 
@@ -35,7 +35,7 @@ the evidence shows them, they are a persona.
 
 `jobToBeDone`, `motivations`, `objections`, `buyingTriggers`, `channels` — each
 traceable. `channels` comes from where the quotes were actually found, which is what
-makes the channel argument honest in `/mkt-gtm`.
+makes the channel argument honest in `/aris-gtm`.
 
 **No demographics unless the evidence states them.** Age, income, seniority and
 "tech-savviness" almost never appear in publicly mined text. A persona carrying them
@@ -46,7 +46,7 @@ Insufficient pains contribute nothing. Do not borrow from them to round a person
 ## 3. Check
 
 ```
-/mkt-verify --only personas
+/aris-verify --only personas
 ```
 
 ## 4. The decision block

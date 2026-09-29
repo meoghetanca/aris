@@ -1,5 +1,5 @@
 ---
-name: mkt-channel-analyst
+name: aris-channel-analyst
 description: Assesses ONE marketing channel for this specific product - who is reachable there, whether competitors sustain spend, what production costs, what a cited CAC benchmark says. Never picks the mix.
 tools: Read, Glob, Grep, Bash, WebFetch, WebSearch
 model: sonnet

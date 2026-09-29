@@ -10,12 +10,12 @@
  *   4. publishing before a human granted launchAuthorization
  *
  * A hook is a script. It cannot know that a human said yes out loud, so authority
- * lives in .mkt/state.json, written by the mkt commands and read here.
+ * lives in .aris/state.json, written by the aris commands and read here.
  *
  * launchAuthorization is set BY HAND, outside the chain. That is the one deliberate
  * human act this workflow keeps, and keeping it outside the automation is the point.
  *
- * If there is no .mkt/state.json, this is not an mkt project and the gate stays out
+ * If there is no .aris/state.json, this is not an aris project and the gate stays out
  * of the way entirely.
  *
  * Reads the hook payload on stdin, writes a permission decision on stdout.
@@ -48,11 +48,11 @@ function deny(reason) {
 // Emit nothing and exit clean: no opinion, normal permission flow continues.
 const allow = () => process.exit(0);
 
-/** Walk up from cwd looking for .mkt/state.json, so the gate works from subdirectories. */
+/** Walk up from cwd looking for .aris/state.json, so the gate works from subdirectories. */
 function findState(start) {
   let d = path.resolve(start || process.cwd());
   for (;;) {
-    const c = path.join(d, ".mkt", "state.json");
+    const c = path.join(d, ".aris", "state.json");
     if (fs.existsSync(c)) return c;
     const p = path.dirname(d);
     if (p === d) return null;
@@ -61,14 +61,14 @@ function findState(start) {
 }
 
 /**
- * Newest mtime under .mkt/assets only.
+ * Newest mtime under .aris/assets only.
  *
- * Deliberately NOT .mkt/package: that directory is derived output, and
- * mkt-launch.html is always written after the verification it reports. Counting it
+ * Deliberately NOT .aris/package: that directory is derived output, and
+ * aris-launch.html is always written after the verification it reports. Counting it
  * would make every verification permanently stale one build later.
  */
 function newestAssetMtime(root) {
-  const d = path.join(root, ".mkt", "assets");
+  const d = path.join(root, ".aris", "assets");
   if (!fs.existsSync(d)) return 0;
   let newest = 0;
   for (const f of fs.readdirSync(d)) {
@@ -93,7 +93,7 @@ process.stdin.on("end", () => {
   const args = payload.tool_input || {};
 
   const statePath = findState(payload.cwd);
-  if (!statePath) allow(); // not an mkt project
+  if (!statePath) allow(); // not an aris project
   const root = path.dirname(path.dirname(statePath));
 
   let what;
@@ -110,15 +110,15 @@ process.stdin.on("end", () => {
   }
 
   const state = load(statePath) || {};
-  const verify = load(path.join(root, ".mkt", "verification", "verify.json"));
-  const claims = (load(path.join(root, ".mkt", "assets", "claims.json")) || {}).claims || [];
+  const verify = load(path.join(root, ".aris", "verification", "verify.json"));
+  const claims = (load(path.join(root, ".aris", "assets", "claims.json")) || {}).claims || [];
 
-  const prefix = `mkt gate: ${what} was blocked.\n\n`;
+  const prefix = `aris gate: ${what} was blocked.\n\n`;
   const tail =
-    "\n\nThis gate reads .mkt/state.json and .mkt/verification/verify.json. " +
+    "\n\nThis gate reads .aris/state.json and .aris/verification/verify.json. " +
     "It is not asking for confirmation: fix the cause, do not retry.";
 
-  if (!verify) deny(prefix + "Verification has never run. Run /mkt-verify first." + tail);
+  if (!verify) deny(prefix + "Verification has never run. Run /aris-verify first." + tail);
 
   if (!verify.passed) {
     const blocking = verify.blockingIssues || [];
@@ -130,7 +130,7 @@ process.stdin.on("end", () => {
   if (stamp && newestAssetMtime(root) > stamp)
     deny(prefix +
       "An asset changed after the last verification run, so the green result describes " +
-      "an older package. Re-run /mkt-verify." + tail);
+      "an older package. Re-run /aris-verify." + tail);
 
   const bad = claims.filter((c) => c.status === "unsupported").map((c) => c.id);
   if (bad.length)
@@ -141,8 +141,8 @@ process.stdin.on("end", () => {
   if (!state.launchAuthorization)
     deny(prefix +
       "launchAuthorization is false.\n\nThis is the one decision the workflow will not make " +
-      "for you: publishing is public and irreversible. Review .mkt/package/mkt-launch.html, " +
-      "then set launchAuthorization to true in .mkt/state.json by hand." + tail);
+      "for you: publishing is public and irreversible. Review .aris/package/aris-launch.html, " +
+      "then set launchAuthorization to true in .aris/state.json by hand." + tail);
 
   allow();
 });

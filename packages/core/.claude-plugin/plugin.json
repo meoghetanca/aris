@@ -1,6 +1,6 @@
 {
-  "name": "mkt-core",
-  "description": "mkt core: intake, the state contract, the sector knowledge base, the decision blocks, traceability and every gate.",
+  "name": "aris-core",
+  "description": "aris core: intake, the state contract, the sector knowledge base, the decision blocks, traceability and every gate.",
   "version": "0.1.0",
   "author": {
     "name": "Nhi Trinh"
@@ -13,7 +13,7 @@
     "./commands"
   ],
   "agents": [
-    "./agents/mkt-sector-researcher.md"
+    "./agents/aris-sector-researcher.md"
   ],
   "skills": [
     "./skills"
