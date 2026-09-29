@@ -16,7 +16,8 @@
   ],
   "agents": [
     "./agents/aris-copywriter.md",
-    "./agents/aris-compliance-reviewer.md"
+    "./agents/aris-compliance-reviewer.md",
+    "./agents/aris-claim-verifier.md"
   ],
   "keywords": [
     "marketing",

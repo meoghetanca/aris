@@ -58,7 +58,19 @@ unmissable. A quote this workflow wrote is fabricated evidence.
 /aris-verify --only language
 ```
 
-First, dispatch the **`aris-compliance-reviewer`** — one per sector in scope, including
+First, dispatch **one `aris-claim-verifier` per claim, concurrently**, each given one
+claim's exact sentence and the sources it cites. It opens them and answers whether the
+page supports that sentence, then writes a `verification` block back onto the claim.
+
+This is not the same check as citation completeness. That one says a claim **has** a
+source; this one says the source **supports it**. A claim citing a pricing page for a
+statement about market size passes every other gate in the workflow and lands on the
+front page under a green badge.
+
+A `partial` verdict is the common honest answer and the one most easily talked out of.
+Fix the sentence to match what the page says rather than rounding the verdict up.
+
+Then dispatch the **`aris-compliance-reviewer`** — one per sector in scope, including
 secondary sectors — with the sector entry and the finished assets, and nothing else. It
 must not see the brief or the positioning: a reviewer who knows why a claim was made
 finds reasons to let it stand.

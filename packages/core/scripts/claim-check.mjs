@@ -105,13 +105,55 @@ for (const c of claims) {
   if (!anywhere) unusedClaims.push(`${c.id} appears in no asset — a claim nothing uses is dead weight or a lost marker`);
 }
 
-const coverage = claims.length ? claims.filter((c) => (c.sourceIds ?? []).length).length / claims.length : 1;
+/**
+ * Citation completeness says a claim HAS a source. It does not say the source supports
+ * it. A claim citing a pricing page for a statement about market size passes every other
+ * check in this workflow and lands on the front page under a green badge.
+ *
+ * `aris-claim-verifier` opens the source and writes a verdict back onto the claim. This
+ * gate reads those verdicts. A claim asserting `verified` with nobody having opened its
+ * source is the exact failure the workflow exists to prevent, so it blocks.
+ */
+const unread = [];
+const wrong = [];
+const stale = [];
+const MAX_AGE_DAYS = 90;
+for (const c of claims) {
+  if (c.status === "unknown") continue;
+  const v = c.verification;
+  if (!v || !v.verdict) {
+    if ((c.sourceIds ?? []).length)
+      unread.push(`${c.id}: cites ${(c.sourceIds ?? []).join(", ")} but nobody opened them. ` +
+        `"${String(c.text ?? "").slice(0, 70)}"`);
+    continue;
+  }
+  if (v.verdict === "contradicts")
+    wrong.push(`${c.id}: the source says otherwise. ${v.note ?? ""} ${v.where ?? ""}`.trim());
+  else if (v.verdict === "absent")
+    wrong.push(`${c.id}: the source is readable and does not mention this. ${v.note ?? ""}`.trim());
+  else if (v.verdict === "partial")
+    wrong.push(`${c.id}: the source supports only part of it. ${v.note ?? ""}`.trim());
+  else if (v.verdict === "unreachable")
+    unread.push(`${c.id}: source could not be read. ${v.note ?? ""}`.trim());
+  if (v.checkedAt) {
+    const age = (Date.now() - Date.parse(v.checkedAt)) / 86400000;
+    if (Number.isFinite(age) && age > MAX_AGE_DAYS)
+      stale.push(`${c.id} was verified ${Math.round(age)} days ago; prices and pages move`);
+  }
+}
 
-report(`claim-check: ${claims.length} claims across ${files.length} assets`, [
+const coverage = claims.length ? claims.filter((c) => (c.sourceIds ?? []).length).length / claims.length : 1;
+const verified = claims.filter((c) => c.verification?.verdict === "supports").length;
+
+report(`claim-check: ${claims.length} claims across ${files.length} assets, ${verified} read at source`, [
   check("CLAIM-GATE-001", "every_marker_resolves", unknownMarker.length === 0, unknownMarker),
   check("CLAIM-GATE-002", "citation_completeness", uncited.length === 0, uncited, { coverage }),
   check("CLAIM-GATE-003", "usedIn_is_accurate", usedInWrong.length === 0, usedInWrong),
   check("CLAIM-GATE-004", "no_uncited_assertions", naked.length === 0, naked),
   check("CLAIM-GATE-005", "no_fabricated_testimonials", placeholdersFilled.length === 0, placeholdersFilled),
   { id: "CLAIM-GATE-006", check: "no_orphan_claims", status: unusedClaims.length ? "failed" : "passed", errors: unusedClaims },
+  check("CLAIM-GATE-007", "sources_actually_support_the_claim", wrong.length === 0, wrong),
+  check("CLAIM-GATE-008", "every_claim_was_read_at_source", unread.length === 0, unread,
+        { coverage: claims.length ? verified / claims.length : 1 }),
+  { id: "CLAIM-GATE-009", check: "verification_is_current", status: stale.length ? "failed" : "passed", errors: stale },
 ]);

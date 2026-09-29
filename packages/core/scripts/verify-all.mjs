@@ -201,7 +201,7 @@ if (!only) {
 // ---------- write ----------
 const failed = checks.filter((c) => c.status === "failed");
 const ADVISORY = new Set(["research_is_current", "no_orphan_claims", "reserved_terms_used_correctly",
-  "orphan_sources", "cta_consistency", "translation_complete"]);
+  "orphan_sources", "cta_consistency", "translation_complete", "verification_is_current"]);
 const blocking = failed.filter((c) => !ADVISORY.has(c.check));
 const warnings = failed.filter((c) => ADVISORY.has(c.check));
 
