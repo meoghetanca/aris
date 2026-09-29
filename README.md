@@ -250,15 +250,15 @@ Four packages: `aris-core` (state, sectors, decisions, gates, the publish hook),
 
 ### Test
 
-```
-./test/run.sh
-```
+The gates are verified against a fixture project that is **not distributed**: a run's
+fixture carries real product and market research, which belongs to whoever ran it.
 
-31 assertions, run in a temp directory. Both directions: a clean package must pass,
-and **each gate must refuse when its defect is planted** — a pain below threshold, an
-unevidenced persona attribute, a size that doesn't recompute, an uncited claim, an
-unsupported superlative, a fabricated testimonial, an invented pre-launch baseline, a
-dangling id. Plus the publish hook's full matrix.
+If you are working on aris itself, build one by running `/aris` on any product and
+pointing a harness at the resulting `.aris/` directory. What a harness must prove is
+both directions: that a clean package passes, and that **each gate refuses when its
+defect is planted** — a pain below threshold, an unevidenced persona attribute, a size
+that does not recompute, an uncited claim, an unsupported superlative, a fabricated
+testimonial, an invented pre-launch baseline, a dangling id.
 
 A gate that has never failed in testing is a gate nobody has evidence about.
 
