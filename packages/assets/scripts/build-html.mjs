@@ -16,7 +16,7 @@
  *   14  demand is stamped inferred_not_tested whatever the artifact says
  *   15  launch-ready is impossible over a failed verification
  *
- *   build-html.mjs [--out <path>] [--force]
+ *   build-html.mjs [--out <path>] [--force] [--no-open]
  *
  * --force writes the page over a failed verification. It never writes a
  * launch-ready one; nothing does.
@@ -24,6 +24,7 @@
 import fs from "node:fs";
 import path from "node:path";
 import url from "node:url";
+import { execFileSync } from "node:child_process";
 import { requireRoot, readJson } from "./lib/aris.mjs";
 
 const HERE = path.dirname(url.fileURLToPath(import.meta.url));
@@ -204,6 +205,28 @@ const out = argOut ? path.resolve(argOut) : path.join(root, ".aris", "package", 
 fs.mkdirSync(path.dirname(out), { recursive: true });
 fs.writeFileSync(out, html);
 
+/**
+ * Open the finished page.
+ *
+ * A path printed in a terminal is not a delivered package: the reader has to notice it,
+ * copy it, and decide to look. The whole point of the HTML is that someone reads it, so
+ * finishing the build and finishing the job are the same moment.
+ *
+ * This opens the viewer's default browser on a local file. It is not the headless
+ * automation the research steps use, which never shows a window; this one is meant to.
+ */
+function openInBrowser(file) {
+  const cmd = process.platform === "darwin" ? ["open", [file]]
+            : process.platform === "win32" ? ["cmd", ["/c", "start", "", file]]
+            : ["xdg-open", [file]];
+  try {
+    execFileSync(cmd[0], cmd[1], { stdio: "ignore" });
+    return true;
+  } catch {
+    return false; // headless box, no opener, or a locked-down environment: not an error
+  }
+}
+
 const kb = (n) => `${(n / 1024).toFixed(0)} KB`;
 process.stdout.write(`built  ${path.relative(root, out)}  (${kb(Buffer.byteLength(html))})\n`);
 process.stdout.write(
@@ -213,3 +236,9 @@ process.stdout.write(
 process.stdout.write(`       verification: ${DATA.verify ? (passed ? "passed" : "FAILED") : "never run"}\n`);
 for (const n of notes) warn(n);
 if (!passed) process.stdout.write(`\nThe publish gate stays closed while verification fails.\n`);
+
+if (!process.argv.includes("--no-open")) {
+  process.stdout.write(openInBrowser(out)
+    ? `\nopened in your browser\n`
+    : `\ncould not open a browser here. The file is at:\n  ${out}\n`);
+}

@@ -39,8 +39,15 @@ publish — because those are the ones that get forgotten.
 node ${CLAUDE_PLUGIN_ROOT}/scripts/build-html.mjs
 ```
 
-It reads the manifest, embeds the JSON, and writes `package/aris-launch.html`. It
-refuses to write a launch-ready page over a failed verification — requirement 15, and
+It reads the manifest, embeds the JSON, writes `package/aris-launch.html`, **and opens
+it**. A path printed in a terminal is not a delivered package: someone has to notice it,
+copy it, and decide to look. Finishing the build and finishing the job are the same
+moment, so do not print a path and stop.
+
+`--no-open` suppresses it for CI or a headless box, where the script says so rather than
+failing.
+
+It refuses to write a launch-ready page over a failed verification — requirement 15, and
 it is enforced in the generator rather than trusted to the caller.
 
 ## 4. Set state
@@ -51,7 +58,14 @@ it is enforced in the generator rather than trusted to the caller.
 keeps, and the publish gate stays closed until a person sets it by hand after reading
 the page.
 
-## 5. Report, in this order
+## 5. Offer the shareable version
+
+The file is offline-first, and opening it is enough for one person. If it needs to reach
+anyone else — a colleague, a client, a reviewer — offer to publish it as an Artifact and
+hand over the link. Do not publish unasked: it is the user's decision whether this leaves
+their machine.
+
+## 6. Report, in this order
 
 1. **The delta** — what changed since the last build.
 2. **What was chosen and why** — each decision with its rejected options.
