@@ -4,3 +4,8 @@ node_modules/
 
 # A user's own project data. The test fixture lives at test/fixture/ and is tracked.
 .aris/
+
+# The user's own test fixture and run logs. These contain real product and market
+# research and are private; the tool ships without them.
+test/
+docs/first-run-*.md
