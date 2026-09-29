@@ -125,10 +125,16 @@ if (!only) {
   const name = state.product?.name;
   if (name) {
     const variants = new Set();
-    for (const [, b] of corpus)
+    // A URL slug, a UTM campaign and a code span legitimately lowercase the product
+    // name. Comparing them against the prose spelling reports a defect that is not one.
+    const prose = corpus.map(([f, b]) => [f, b
+      .replace(/https?:\/\/\S+/g, " ")
+      .replace(/`[^`]*`/g, " ")
+      .replace(/\butm_[a-z]+=\S*/gi, " ")]);
+    for (const [, b] of prose)
       for (const m of b.matchAll(new RegExp(name.replace(/[.*+?^${}()|[\]\\]/g, "\\$&"), "gi"))) variants.add(m[0]);
     if (variants.size > 1) nameErrs.push(`the product name is spelled ${variants.size} ways: ${[...variants].join(", ")}`);
-    const absent = corpus.filter(([, b]) => !new RegExp(name, "i").test(b)).map(([f]) => f);
+    const absent = prose.filter(([, b]) => !new RegExp(name, "i").test(b)).map(([f]) => f);
     if (absent.length) nameErrs.push(`assets that never name the product: ${absent.join(", ")}`);
   }
   push("product_name_consistency", nameErrs);

@@ -51,7 +51,12 @@ if (!sector) {
       const out = execFileSync("node", [path.join(HERE, "sector-check.mjs"), "--show", n, "--json"], { encoding: "utf8" });
       const e = JSON.parse(out);
       // Constraints add; they never cancel.
-      for (const k of Object.keys(entry)) entry[k] = [...entry[k], ...(e[k] ?? [])];
+        // Union, then dedupe: a product in two fields shares a family, so the family's
+      // rules arrive twice and every finding was reported twice.
+      for (const k of Object.keys(entry)) {
+        const seen = new Set(entry[k].map((x) => JSON.stringify(x)));
+        entry[k] = [...entry[k], ...(e[k] ?? []).filter((x) => !seen.has(JSON.stringify(x)))];
+      }
     } catch {
       sectorErrs.push(`sector "${n}" could not be resolved, so its lens did not run`);
     }

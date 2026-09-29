@@ -38,6 +38,16 @@ const msgIds = new Set();
 for (const p of pains) for (const q of p.quotes ?? []) quoteIds.add(q.id);
 for (const pm of messages?.personaMessages ?? [])
   for (const m of pm.messageHierarchy ?? []) if (m.id) msgIds.add(m.id);
+/**
+ * Messages that belong to no persona.
+ *
+ * The schema assumed personas would always exist, because the chain builds them before
+ * messaging. A run that cuts voice-of-customer has no personas at all, and every message
+ * then vanished from the spine - trace reported "0 messages" while four were sitting in
+ * the file. Invisible is worse than unattached: an unattached message is a disclosed
+ * weakness, an invisible one is a hole nothing reports.
+ */
+for (const m of messages?.unattachedMessages ?? []) if (m.id) msgIds.add(m.id);
 
 const errs = [];
 const miss = (what, id, where) => errs.push(`${where}: ${what} ${id} does not exist`);
@@ -81,6 +91,8 @@ for (const pm of messages?.personaMessages ?? []) {
       if (!painIds.has(e) && !quoteIds.has(e)) miss("pain or quote", e, m.id ?? "message");
   }
 }
+
+const unattached = (messages?.unattachedMessages ?? []).map((m) => m.id).filter(Boolean);
 
 for (const c of claims) {
   if (c.messageId && !msgIds.has(c.messageId)) miss("message", c.messageId, c.id);
@@ -158,6 +170,13 @@ const counts = `${sources.length} sources, ${quoteIds.size} quotes, ${pains.leng
 report(`trace: the spine (${counts})`, [
   check("TRACE-001", "backward_links_resolve", errs.length === 0, errs),
   { id: "TRACE-002", check: "claims_reach_verification", status: forwardStatus, errors: forward },
+  {
+    id: "TRACE-004",
+    check: "messages_reach_a_persona",
+    status: unattached.length ? "failed" : "passed",
+    errors: unattached.map((id) =>
+      `${id} is attached to no persona - it answers competitive evidence, not a person`),
+  },
   {
     id: "TRACE-003",
     check: "orphan_sources",
