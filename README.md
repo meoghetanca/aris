@@ -1,13 +1,50 @@
-# aris
+<p align="center">
+  <img src="assets/banner.png" width="920"
+       alt="aris — from an unknown market to a launch you can defend. Every claim traces back to a source you can open.">
+</p>
 
-**Take a product from "we don't know this market" to a launch-ready package — and be able to prove where every claim came from.**
+<p align="center">
+  <b>Describe your product. Get a launch package your team can act on and a reviewer can check.</b><br>
+  A marketing research team for Claude Code, with the evidence built in.
+</p>
 
-**aris** is a workflow for [Claude Code](https://claude.com/claude-code). You describe your
-product; it researches the market from the public record, works out the positioning,
-writes every launch asset, checks its own work, and hands you one file you open in a
-browser where **clicking any sentence shows you the source it came from**.
+<p align="center">
+  <img src="https://img.shields.io/badge/version-0.1.0-4c566b?style=flat-square&labelColor=161b25" alt="version 0.1.0">
+  <img src="https://img.shields.io/badge/fields-62-4c566b?style=flat-square&labelColor=161b25" alt="fields 62">
+  <img src="https://img.shields.io/badge/specialists-9-4c566b?style=flat-square&labelColor=161b25" alt="specialists 9">
+  <img src="https://img.shields.io/badge/checks-39%20fail--closed-4c566b?style=flat-square&labelColor=161b25" alt="39 checks, fail-closed">
+  <img src="https://img.shields.io/badge/licence-MIT-4c566b?style=flat-square&labelColor=161b25" alt="MIT licence">
+</p>
 
 ---
+
+You describe your product; aris researches the market from the public record, works out
+the positioning, writes every launch asset, checks its own work, and hands you one file
+you open in a browser where **clicking any sentence shows you the source it came from**.
+
+---
+
+## How it runs
+
+```
+     you                                                              you
+   describe                                                         review
+      │                                                                │
+      ▼                                                                ▼
+  ┌────────┐   ┌──────────┐   ┌──────────┐   ┌─────────┐   ┌──────┐   ┌─────────┐
+  │research│──▶│ validate │──▶│ position │──▶│ message │──▶│ plan │──▶│ package │
+  └────────┘   └──────────┘   └────┬─────┘   └─────────┘   └──┬───┘   └─────────┘
+   who else       is there         │           what do        │         one HTML
+   is here,       demand,          ▼           we say         ▼         file you
+   what hurts     and for whom  you choose                 you choose   can share
+                                the direction              channels
+                                                           and price
+```
+
+It stops **only** where a person has a real choice, and shows you options it has already
+written out — never a blank question. Anything the sources cannot settle becomes a
+labelled assumption and the chain keeps going, because correcting a written positioning
+takes three seconds and inventing one from nothing takes an afternoon.
 
 ## Start here
 
