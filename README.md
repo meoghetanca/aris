@@ -94,7 +94,9 @@ channel mix and the price point. At the end:
 
 One file. Twelve sections behind three tabs — **what we know**, **what we do**,
 **what happens after**. Open it in any browser, works offline, share it by sending
-the file.
+the file. (A second build, `aris-launch.artifact.html`, is the same page as a
+fragment for publishing as an Artifact; both come from one template so they cannot
+drift.)
 
 | | | |
 |:--|:--|:--|
@@ -305,6 +307,29 @@ before you use it are these:
 - **The run was stopped by its user partway through**, because the research step
   dispatched one deep agent per competitor. Every fan-out now has a hard budget and a
   cheap default, and depth is something you ask for.
+
+**Since then the gates have been exercised against planted defects** — what the Test
+section above asks for, and the evidence v0.1.0 shipped without. Each of these reported
+PASS on the thing it exists to catch:
+
+- **the sector's `forbidden` claims never matched.** Copy reading "expected returns of
+  12 percent per year" cleared `no_forbidden_claims` in `fintech-wealth`. The matcher
+  looked for the first 28 characters of the claim *description* — "any projected,
+  expected or guaranteed return" — which is not a phrase anyone writes, so what caught
+  anything was the generic superlative wordlist, and dropping one word walked through.
+  Descriptions are matched by word overlap per sentence now: eight violations across
+  eight fields fire, six careful packages stay clean.
+- **a `tam-sam-som.json` with no `calculations` block recomputed nothing and passed.**
+  A stated 9,000,000,000 TAM with no factors and no formula cleared all four arithmetic
+  checks, including the one called `sizes_are_ranges_not_points`.
+- **one absent field blanked most of the HTML.** A cut recorded as `{step, reason}`
+  threw inside section 04, so sections 04–12 never rendered — while the masthead still
+  drew, which is why it looked built. `aris-launch.artifact.html` had never been
+  written at all: the fragment is sliced between the body tags and the template had no
+  body element, nor a doctype, so the offline page rendered in quirks mode.
+
+The lesson is the one the Test section states. Reading a gate tells you what it
+intends; only planting its defect tells you what it does.
 
 The quote thresholds have still only been exercised on one market, and every sector's
 `priceBands` are deliberately null until a run cites them.
