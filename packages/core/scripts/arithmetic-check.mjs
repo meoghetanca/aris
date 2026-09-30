@@ -47,7 +47,35 @@ if (!sizing) {
     else factors[f.id] = Number(f.value);
     if (!f.sourceId) errs.push(`${f.id}: no sourceId — a factor without a source is a guess`);
   }
-  for (const [name, calc] of Object.entries(sizing.calculations ?? {})) {
+  /**
+   * Every size must HAVE a calculation.
+   *
+   * The loop below recomputes what `calculations` contains, so a file that simply
+   * omits it was recomputing nothing and passing: a stated 9,000,000,000 TAM with
+   * no factors, no sourceIds and no formula cleared all four checks, exit 0. The
+   * gate whose whole job is "a number that does not add up fails" cannot be
+   * satisfied by declining to show the arithmetic.
+   *
+   * A size nobody could establish is still legitimate - the flow is explicit that
+   * an unknown factor stops its calculation - but it has to say so.
+   */
+  const calcs = sizing.calculations ?? {};
+  for (const k of ["tam", "sam", "som"]) {
+    if (calcs[k]) continue;
+    const bare = sizing[k];
+    if (calcs[k]?.status === "unknown" || bare?.status === "unknown") continue;
+    if (bare && bare.value != null)
+      errs.push(
+        `${k} states ${Number(bare.value).toLocaleString()} outside calculations and stores no formula — ` +
+          `it cannot be recomputed, which is the one thing this artifact exists to allow`
+      );
+    else
+      errs.push(`${k}: no calculation stored. Give it a formula, or mark it status "unknown"`);
+    if (bare && bare.value != null && !Array.isArray(bare.range))
+      pointErrs.push(`${k} is stated as a point (${Number(bare.value).toLocaleString()}). A market size stated as a point is overclaimed.`);
+  }
+
+  for (const [name, calc] of Object.entries(calcs)) {
     if (!calc || !calc.formula) {
       errs.push(`${name}: no formula stored, so the number cannot be recomputed`);
       continue;

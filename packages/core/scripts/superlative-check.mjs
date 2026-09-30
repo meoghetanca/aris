@@ -63,6 +63,67 @@ if (!sector) {
   }
 }
 
+/**
+ * Matching a regulated claim against copy.
+ *
+ * The previous matcher took the first 28 characters of the claim DESCRIPTION and
+ * looked for them literally. Descriptions are not phrases anyone writes - the
+ * entry is "any projected, expected or guaranteed return" - so no asset ever
+ * contained the needle and `no_forbidden_claims` passed on copy promising a 12%
+ * return. The gate the field's regulator is named in never fired.
+ *
+ * The entries are short (mean 4.2 words) and shaped as a disjunction, with "/"
+ * separating whole alternatives: "treats anxiety, depression or any condition".
+ * Requiring the last noun fails on exactly the realistic violation - copy names the
+ * specific disorder and never writes the catch-all "condition" - so the test is
+ * OVERLAP: a sentence trips an alternative when it carries at least two of its
+ * content words and at least half of them. A one- or two-word entry ("risk-free",
+ * "clinically proven") must appear in full.
+ *
+ * Sentence scope, not file scope: "returns" in a fee table and "expected" three
+ * paragraphs later are not a claim, and matching across a whole file said they were.
+ *
+ * This is a heuristic and it can be wrong in both directions. It is a lens for a
+ * human, which is why every finding names the claim, the authority and the sentence.
+ */
+const CLAIM_STOP = new Set(["any", "all", "the", "a", "an", "or", "and", "of", "in", "with",
+  "to", "by", "for", "on", "every", "no", "not", "is", "are", "that", "this", "it"]);
+const stemw = (w) => {
+  if (w.length < 4) return w;
+  if (w.endsWith("ies")) return w.slice(0, -3) + "y";
+  if (/(?:ses|xes|ches|shes)$/.test(w)) return w.slice(0, -2);
+  if (w.endsWith("s") && !/(?:ss|us|is)$/.test(w)) return w.slice(0, -1);
+  return w;
+};
+const wordsOf = (s) => String(s ?? "").toLowerCase().split(/[^a-z0-9%]+/).filter(Boolean).map(stemw);
+
+/** A claim description -> the content words of each "/" alternative. */
+function claimProbes(claim) {
+  return String(claim ?? "").split("/")
+    .map((alt) => [...new Set(wordsOf(alt).filter((w) => !CLAIM_STOP.has(w)))])
+    .filter((ws) => ws.length);
+}
+
+/** The sentences of `body` that trip `claim`. */
+function claimHits(body, claim) {
+  const probes = claimProbes(claim);
+  if (!probes.length) return [];
+  const out = [];
+  for (const sent of String(body).split(/(?<=[.!?])\s+|\n/)) {
+    const set = new Set(wordsOf(sent));
+    if (!set.size) continue;
+    for (const ws of probes) {
+      const n = ws.filter((w) => set.has(w)).length;
+      // Short entries are literal phrases: all of them, or it is not that claim.
+      const need = ws.length <= 2 ? ws.length : Math.max(2, Math.ceil(ws.length / 2));
+      if (n < need) continue;
+      out.push(sent.trim().replace(/\s+/g, " ").slice(0, 90));
+      break;
+    }
+  }
+  return out;
+}
+
 const supErrs = [];
 const forbiddenErrs = [];
 const disclosureErrs = [];
@@ -81,16 +142,17 @@ for (const [f, body] of corpus) {
       supErrs.push(`assets/${f}: "${[...new Set(hits.map((h) => h.toLowerCase()))].join(", ")}" with no cited claim — ${line.trim().slice(0, 80)}`);
   }
 
-  const low = body.toLowerCase();
   for (const rc of entry?.regulatedClaims ?? []) {
-    const needle = String(rc.claim ?? "").toLowerCase().split("/")[0].trim();
-    if (!needle || needle.length < 4 || !low.includes(needle.slice(0, Math.min(needle.length, 28)))) continue;
+    const where = claimHits(body, rc.claim);
+    if (!where.length) continue;
+    const at = `  \u2014 "${where[0]}"`;
     if (rc.rule === "forbidden")
-      forbiddenErrs.push(`assets/${f}: "${rc.claim}" is forbidden in this field — ${rc.authority}`);
+      forbiddenErrs.push(`assets/${f}: "${rc.claim}" is forbidden in this field \u2014 ${rc.authority}${at}`);
     else
-      disclosureErrs.push(`assets/${f}: "${rc.claim}" appears; it requires the disclosure — ${rc.authority}`);
+      disclosureErrs.push(`assets/${f}: "${rc.claim}" appears; it requires the disclosure \u2014 ${rc.authority}${at}`);
   }
 
+  const low = body.toLowerCase();
   for (const rt of entry?.reservedTerms ?? []) {
     const t = String(rt.term ?? "").toLowerCase();
     if (t && low.includes(t)) reservedErrs.push(`assets/${f}: "${rt.term}" is reserved in this field — ${rt.meaning}`);

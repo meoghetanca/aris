@@ -36,11 +36,18 @@ const invented = metrics.filter((m) => m.baseline != null).map((m) => `${m.id} h
 // Verification must be newer than the newest asset edit, or it measured an older package.
 let stale = [];
 const assetsDir = M("assets");
-if (verify?.timestamp && fs.existsSync(assetsDir)) {
-  const vt = Date.parse(verify.timestamp);
-  for (const f of fs.readdirSync(assetsDir)) {
-    const mt = fs.statSync(path.join(assetsDir, f)).mtimeMs;
-    if (Number.isFinite(vt) && mt > vt) stale.push(`assets/${f} changed after the last verify run`);
+if (verify && fs.existsSync(assetsDir)) {
+  const vt = verify.timestamp ? Date.parse(verify.timestamp) : NaN;
+  if (!Number.isFinite(vt)) {
+    // Guarding the whole block on `verify?.timestamp` meant a verify.json without one
+    // reported "verification_is_current: passed" while nothing had been compared.
+    stale.push("verify.json has no usable timestamp, so nothing could be compared against it");
+  } else {
+    for (const f of fs.readdirSync(assetsDir)) {
+      let st;
+      try { st = fs.statSync(path.join(assetsDir, f)); } catch { continue; }
+      if (st.isFile() && st.mtimeMs > vt) stale.push(`assets/${f} changed after the last verify run`);
+    }
   }
 }
 

@@ -12,7 +12,7 @@
   <img src="https://img.shields.io/badge/version-0.1.0-4c566b?style=flat-square&labelColor=161b25" alt="version 0.1.0">
   <img src="https://img.shields.io/badge/fields-53-4c566b?style=flat-square&labelColor=161b25" alt="fields 53">
   <img src="https://img.shields.io/badge/specialists-11-4c566b?style=flat-square&labelColor=161b25" alt="specialists 11">
-  <img src="https://img.shields.io/badge/checks-43%20fail--closed-4c566b?style=flat-square&labelColor=161b25" alt="43 checks, fail-closed">
+  <img src="https://img.shields.io/badge/checks-44%20fail--closed-4c566b?style=flat-square&labelColor=161b25" alt="44 checks, fail-closed">
   <img src="https://img.shields.io/badge/licence-MIT-4c566b?style=flat-square&labelColor=161b25" alt="MIT licence">
 </p>
 

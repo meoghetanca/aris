@@ -104,11 +104,21 @@ if (args.includes("--list") || args.length === 0) {
   const kids = (p) => entries.filter((e) => e.extends === p.sector);
   process.stdout.write(`Fields covered: ${entries.filter((e) => e.extends).length} specific, ` +
     `${roots.length} families\n\n`);
+  // Recurse: the chain can be deeper than one level (hr-payroll-vn extends b2b-saas-hr),
+  // and printing only a root's direct children made those entries invisible in the one
+  // listing that is supposed to say what the base covers.
+  const printKids = (p, depth) => {
+    for (const k of kids(p).sort((a, b) => a.sector.localeCompare(b.sector))) {
+      const pad = "    ".repeat(depth);
+      process.stdout.write(`${pad}${k.sector}${k.status === "provisional" ? "  [provisional]" : ""}` +
+        `${k.market ? `  [${k.market} only]` : ""}\n` +
+        (k.aliases?.length ? `${pad}    ${k.aliases.join(", ")}\n` : ""));
+      printKids(k, depth + 1);
+    }
+  };
   for (const r of roots.sort((a, b) => a.sector.localeCompare(b.sector))) {
     process.stdout.write(`${r.sector}  ${"-".repeat(Math.max(2, 34 - r.sector.length))}  [family]\n`);
-    for (const k of kids(r).sort((a, b) => a.sector.localeCompare(b.sector)))
-      process.stdout.write(`    ${k.sector}${k.status === "provisional" ? "  [provisional]" : ""}\n` +
-        (k.aliases?.length ? `        ${k.aliases.join(", ")}\n` : ""));
+    printKids(r, 1);
   }
   process.stdout.write(`\nA field not listed still resolves to its family. Nothing at all fails closed.\n`);
   process.exit(0);
@@ -131,8 +141,22 @@ const want = norm(wantRaw);
  * BI entry because both contain the word "platform". A wrong field is worse than
  * no field: it sends the miner to the wrong communities and applies the wrong
  * regulator's rules, and nothing downstream can tell.
+ *
+ * Tokens are stemmed to a singular, on BOTH sides, because exact-token matching
+ * turned one trailing letter into the difference between a researched field and a
+ * hard stop: "restaurant" resolved to hospitality-fnb and "restaurants" exited 3
+ * as not covered. Stemming is deliberately crude and symmetric - it only has to
+ * agree with itself, never to be linguistically right - and "ss"/"us" endings are
+ * left alone so "business" and "status" survive.
  */
-const tok = (x) => norm(x).split("-").filter(Boolean);
+const stem = (w) => {
+  if (w.length < 4) return w;
+  if (w.endsWith("ies")) return w.slice(0, -3) + "y";
+  if (/(?:ses|xes|ches|shes)$/.test(w)) return w.slice(0, -2);
+  if (w.endsWith("s") && !/(?:ss|us|is)$/.test(w)) return w.slice(0, -1);
+  return w;
+};
+const tok = (x) => norm(x).split("-").filter(Boolean).map(stem);
 
 // Words that describe almost every product and so identify none. They cannot
 // carry a specific match on their own, but they are exactly what a family's

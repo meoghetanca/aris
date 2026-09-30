@@ -72,8 +72,12 @@ function newestAssetMtime(root) {
   if (!fs.existsSync(d)) return 0;
   let newest = 0;
   for (const f of fs.readdirSync(d)) {
-    const fp = path.join(d, f);
-    if (fs.statSync(fp).isFile()) newest = Math.max(newest, fs.statSync(fp).mtimeMs);
+    // One stat, and a broken symlink must not throw: an exception here exits the hook
+    // non-zero with no decision on stdout, which is the one failure mode a gate may
+    // not have.
+    let st;
+    try { st = fs.statSync(path.join(d, f)); } catch { continue; }
+    if (st.isFile()) newest = Math.max(newest, st.mtimeMs);
   }
   return newest;
 }
@@ -126,8 +130,16 @@ process.stdin.on("end", () => {
     deny(prefix + "Verification failed:\n" + detail + tail);
   }
 
-  const stamp = verify.timestamp ? Date.parse(verify.timestamp) : 0;
-  if (stamp && newestAssetMtime(root) > stamp)
+  // A missing or unparseable timestamp used to disable this check silently: `stamp`
+  // became 0 or NaN and `if (stamp && ...)` was falsy, so a verify.json with no
+  // timestamp published whatever it liked. No timestamp is not "fresh", it is
+  // unknowable, and this gate exists to refuse the unknowable.
+  const stamp = verify.timestamp ? Date.parse(verify.timestamp) : NaN;
+  if (!Number.isFinite(stamp))
+    deny(prefix +
+      "verify.json carries no usable timestamp, so there is no way to tell whether it " +
+      "describes the assets as they stand now. Re-run /aris-verify." + tail);
+  if (newestAssetMtime(root) > stamp)
     deny(prefix +
       "An asset changed after the last verification run, so the green result describes " +
       "an older package. Re-run /aris-verify." + tail);

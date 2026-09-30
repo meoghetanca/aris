@@ -31,6 +31,7 @@ const unsourced = [];
 const dangling = [];
 const demographic = [];
 const painless = [];
+const incomplete = [];
 let stripped = 0;
 
 for (const pe of doc.personas ?? []) {
@@ -56,7 +57,9 @@ for (const pe of doc.personas ?? []) {
   const ps = (pe.pains ?? []).filter((id) => painIds.has(id));
   if (!ps.length) painless.push(`${pe.id} is attached to no existing pain — a persona with no pain is a demographic sketch`);
   for (const id of pe.pains ?? []) if (!painIds.has(id)) dangling.push(`${pe.id} cites ${id} which is not a pain`);
-  if (!pe.jobToBeDone) unsourced.push(`${pe.id}: no jobToBeDone`);
+  // Not an evidence failure: reporting it under every_attribute_has_evidence made a
+  // missing field read as an unsourced claim.
+  if (!pe.jobToBeDone) incomplete.push(`${pe.id}: no jobToBeDone`);
 }
 
 if (STRIP && stripped) {
@@ -70,4 +73,5 @@ report(`persona-check: ${(doc.personas ?? []).length} personas`, [
   check("PERSONA-GATE-002", "evidence_ids_resolve", dangling.length === 0, dangling),
   check("PERSONA-GATE-003", "no_unevidenced_demographics", demographic.length === 0, demographic),
   check("PERSONA-GATE-004", "every_persona_has_a_pain", painless.length === 0, painless),
+  check("PERSONA-GATE-005", "every_persona_states_a_job", incomplete.length === 0, incomplete),
 ]);
