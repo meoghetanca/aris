@@ -159,12 +159,36 @@ for (const [f, body] of corpus) {
   }
 }
 
-// Required disclosures must appear somewhere in the package.
+/**
+ * Required disclosures must appear somewhere in the package.
+ *
+ * The longest word is the most distinctive: "whether" would false-pass, "evaluative"
+ * will not. Two things made that test unable to pass on compliant copy:
+ *
+ *   - it split on `[^a-z-]+`, which KEEPS hyphens, so the entry "past-performance
+ *     warning where any figure appears" keyed on the literal "past-performance" and a
+ *     textbook footer reading "Past performance is not a guide to future results"
+ *     was reported as missing. Hyphenation is a typographic choice, not a compliance
+ *     one, so both sides are flattened now.
+ *   - the key was matched with String.includes, so it also hit inside a longer word.
+ *     It is matched as a whole word.
+ *
+ * Near-duplicates are collapsed. A leaf and its family both require the licence and
+ * the jurisdiction, the union dedupes by exact text only, and the same requirement was
+ * reported twice under two wordings.
+ */
+const flat = (x) => String(x ?? "").toLowerCase().replace(/[^a-z0-9]+/g, " ").trim();
+const discKey = (d) => {
+  const words = flat(d).split(" ").filter((w) => w.length > 4);
+  return words.sort((a, b) => b.length - a.length)[0] ?? flat(d);
+};
+const packageWords = new Set(flat(allText).split(" "));
+const seenKey = new Set();
 const missingDisc = (entry?.requiredDisclosures ?? []).filter((d) => {
-  // The longest word is the most distinctive: "whether" would false-pass, "evaluative" will not.
-  const words = String(d).toLowerCase().split(/[^a-z-]+/).filter((w) => w.length > 4);
-  const key = words.sort((a, b) => b.length - a.length)[0] ?? String(d).toLowerCase();
-  return !allText.includes(key);
+  const key = discKey(d);
+  if (seenKey.has(key)) return false;
+  seenKey.add(key);
+  return !packageWords.has(key);
 });
 
 report(`superlative-check: sector ${sector || "(unresolved)"}, ${files.length} assets`, [

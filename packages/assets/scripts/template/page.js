@@ -197,11 +197,18 @@ function betsBlock(){
   out=`<div class="grid g2">${out}</div>`;
   if(S.cuts.length) out+=`<h3 style="margin-top:26px">What this package could not know</h3>
     <p class="tnote">Deliberate omissions. They are why some of the bets above are bets.</p>
-    <div class="grid g2">`+S.cuts.map(c=>
-    `<div class="card"><div class="row" style="border:none;padding:0;grid-template-columns:1fr auto">
-      <div class="nm">${E(c.deleted.replace(/_/g,' '))}</div>
-      <span class="flag ${c.risk==='high'?'no':'wait'}">${E(c.risk??'')} risk</span></div>
-      <p>${E(c.consequence)}</p></div>`).join('')+`</div>`;
+    <div class="grid g2">`+S.cuts.map(c=>{
+    /* `deleted` is the only field in this file dereferenced without a guard, and the
+       cut schema is written by /aris rather than defined anywhere: a cut recorded as
+       {step, reason} threw on c.deleted.replace, the inline script died at section 04,
+       and sections 04-12 never rendered. The masthead still drew, so the page looked
+       built. Accept the field under any of its names and never dereference it raw. */
+    const what=c.deleted??c.step??c.what??c.name??'(unnamed cut)';
+    const why=c.consequence??c.reason??'';
+    return `<div class="card"><div class="row" style="border:none;padding:0;grid-template-columns:1fr auto">
+      <div class="nm">${E(String(what).replace(/_/g,' '))}</div>
+      <span class="flag ${c.risk==='high'?'no':'wait'}">${E(c.risk??'unstated')} risk</span></div>
+      <p>${E(why)}</p></div>`;}).join('')+`</div>`;
   return out;
 }
 function sourcesBlock(){

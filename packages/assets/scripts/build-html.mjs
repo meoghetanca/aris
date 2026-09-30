@@ -119,10 +119,19 @@ if (!passed) {
       ? `verification FAILED (${(DATA.verify.blockingIssues ?? []).length} blocking). The page shows BLOCKED.`
       : "verification has never run. The page shows NOT VERIFIED."
   );
-  if (!FORCE && !DATA.verify) {
+  /**
+   * --force is what the header says it is: the way to build over a verification that
+   * has not passed. The guard was `!FORCE && !DATA.verify`, so it only caught a
+   * verification that had never RUN - a verification that ran and FAILED built a page
+   * silently, with the refusal the file documents never firing.
+   */
+  if (!FORCE) {
     process.stderr.write(
-      "\nRefusing to build: verification has never run, so the page would have nothing to report.\n" +
-        "Run /aris-verify, or pass --force to build a page that says so.\n"
+      DATA.verify
+        ? `\nRefusing to build: verification failed (${(DATA.verify.blockingIssues ?? []).length} blocking issue(s)).\n` +
+          "Fix them and re-run /aris-verify, or pass --force to build a page that reports BLOCKED.\n"
+        : "\nRefusing to build: verification has never run, so the page would have nothing to report.\n" +
+          "Run /aris-verify, or pass --force to build a page that says so.\n"
     );
     process.exit(3);
   }
@@ -200,8 +209,6 @@ const json = JSON.stringify(DATA)
   .replace(/\u2028/g, "\\u2028")
   .replace(/\u2029/g, "\\u2029");
 
-// Three files, one page. Markup, stylesheet and behaviour are edited separately and
-// joined here, so a change to one cannot silently delete another.
 // Three files, one page. Markup, stylesheet and behaviour are edited separately and
 // joined here, so a change to one cannot silently delete another.
 //

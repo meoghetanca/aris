@@ -25,9 +25,42 @@
 const fs = require("node:fs");
 const path = require("node:path");
 
-// Bash commands that push content outward. Reading and diffing are not gated.
-const BASH_PUBLISH =
-  /\bgit\s+push\b|\bgh\s+(pr\s+create|release\s+create|gist\s+create)\b|\bnpm\s+publish\b|\b(vercel|netlify|wrangler|surge|firebase)\b[^\n]*\bdeploy\b|\baws\s+s3\s+(cp|sync)\b|\brsync\b[^\n]*@/;
+/**
+ * Bash commands that push content outward. Reading and diffing are not gated.
+ *
+ * Written as alternatives with a verb, not as a list of tool names: gating every
+ * mention of `git` or `aws` denies the reads and diffs this workflow runs constantly,
+ * and a gate that cries wolf is a gate people route around with --force.
+ *
+ * `git push` needs the option dance because `git -C ../repo push` and
+ * `git --git-dir=x push` were walking straight through a `\bgit\s+push\b` that only
+ * matched the two words adjacent. Deliberately NOT `\bgit\b[^\n]*push`, which would
+ * catch `git log --grep push`.
+ */
+const BASH_PUBLISH = new RegExp([
+  // git, including global options before the subcommand
+  // An option may carry its own argument: `git -C ../repo push`, `git -c k=v push`.
+  // Each repetition is one option plus at most one non-option word, so `git log
+  // --grep push` cannot reach `push` - `log` is not an option and stops the group.
+  String.raw`\bgit\s+(?:-{1,2}[^\s]+\s+(?:[^-\s][^\s]*\s+)?)*push\b`,
+  // github cli
+  String.raw`\bgh\s+(?:pr\s+create|release\s+(?:create|upload)|gist\s+create)\b`,
+  // package registries
+  String.raw`\b(?:npm|yarn|pnpm|bun|cargo|gem|dotnet\s+nuget)\s+(?:publish|push)\b`,
+  String.raw`\btwine\s+upload\b`,
+  // container registries
+  String.raw`\b(?:docker|podman|nerdctl)\s+push\b`,
+  // hosting platforms: deploy or publish
+  String.raw`\b(?:vercel|netlify|wrangler|surge|firebase|fly|flyctl|railway|heroku|amplify|gcloud\s+app)\b[^\n]*\b(?:deploy|publish)\b`,
+  // object storage, outbound copies only
+  String.raw`\baws\s+s3(?:api)?\s+(?:cp|sync|mv|put-object)\b`,
+  String.raw`\bgsutil\s+(?:cp|rsync|mv)\b`,
+  String.raw`\baz\s+storage\s+blob\s+(?:upload|upload-batch|sync)\b`,
+  // generic file transfer to a remote host
+  String.raw`\brsync\b[^\n]*@`,
+  String.raw`\bscp\b[^\n]*@[^\s]*:`,
+  String.raw`\bcurl\b[^\n]*(?:\s-T\b|--upload-file\b)`,
+].join("|"));
 
 // Artifact actions that only read or inspect. Everything else may put bytes online.
 const ARTIFACT_READONLY = new Set([

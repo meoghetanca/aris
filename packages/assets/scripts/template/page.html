@@ -1,3 +1,4 @@
+<!doctype html>
 <!--
   Markup only. The stylesheet is page.css and the behaviour is page.js; build-html.mjs
   assembles all three, so edit the file that owns the thing you are changing.
@@ -8,12 +9,36 @@
 
   The two upper-case slots below are filled at build time. Do not name them anywhere
   else in this file: the substitution takes the first occurrence it finds.
+
+  The document wrapper is load-bearing, in two ways that both failed silently while it
+  was absent:
+
+    - without a doctype every browser renders the page in QUIRKS MODE, which changes
+      box-sizing under the whole stylesheet. The offline file is the deliverable, so it
+      cannot be the one that renders differently.
+    - build-html.mjs slices the publishable fragment out between the opening and
+      closing BODY tags. With no body element in the file that slice bailed and
+      returned null, so aris-launch.artifact.html was never written - the file
+      /aris-package documents and publishes. The offline page and the shared link
+      could not drift because only one of them existed. (Named in prose here, not
+      in markup: the slice takes the FIRST occurrence, so a tag written inside this
+      comment becomes the boundary.)
+
+  charset and viewport are here for the same reason: the copy is full of typographic
+  quotes and em dashes, and page.css carries five media queries that a phone will not
+  honour without the viewport tag.
 -->
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
 <title>Launch package</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500&family=Literata:opsz,wght@7..72,400;7..72,600&family=Source+Sans+3:wght@400;600;700&display=swap">
 __ARIS_STYLE__
+</head>
+<body>
 <div class="doc">
   <header class="mast">
     <div class="row">
@@ -42,3 +67,5 @@ __ARIS_STYLE__
 <aside id="drawer"><button class="x" id="drawer-x" aria-label="Close">&times;</button><div id="drawer-body"></div></aside>
 <script id="aris-data" type="application/json">/*__ARIS_DATA__*/</script>
 __ARIS_SCRIPT__
+</body>
+</html>
