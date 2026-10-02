@@ -37,18 +37,49 @@ function findState(start) {
   }
 }
 
-/** Is a plugin present anywhere in the plugin cache or marketplaces? */
+/**
+ * Is a plugin present anywhere in the plugin cache or marketplaces?
+ *
+ * By its manifest name, or by a directory named exactly for it. The test used to be
+ * `entry.includes(name)`, which is true of any directory with the name as a substring:
+ * "pica" sits inside "typical", so an unrelated plugin satisfied the check and the
+ * warning this exists to print never appeared. A substring is not an identity.
+ */
 function installed(name) {
   const base = path.join(os.homedir(), ".claude", "plugins");
+
+  // The register is authoritative, and its keys are "<plugin>@<marketplace>". Read it
+  // first; the directory walk below is the fallback for a layout that does not have it.
+  try {
+    const reg = JSON.parse(fs.readFileSync(path.join(base, "installed_plugins.json"), "utf8"));
+    const keys = Object.keys(reg.plugins ?? reg ?? {});
+    if (keys.some((k) => k === name || k.split("@")[0] === name)) return true;
+    if (keys.length) return false;
+  } catch { /* no register, or unreadable: fall through to the directory walk */ }
+
+  const manifestName = (dir) => {
+    try {
+      const p = path.join(dir, ".claude-plugin", "plugin.json");
+      if (!fs.existsSync(p)) return null;
+      return JSON.parse(fs.readFileSync(p, "utf8")).name ?? null;
+    } catch { return null; }
+  };
+  // A directory is this plugin when it is named for it exactly, or when the name is one
+  // whole segment of a marketplace-qualified directory ("pica@pica", "owner__pica").
+  const named = (entry) => entry === name || entry.split(/[@_.]+/).includes(name);
+
   for (const sub of ["cache", "marketplaces"]) {
     const d = path.join(base, sub);
     if (!fs.existsSync(d)) continue;
-    for (const e of fs.readdirSync(d)) {
-      if (e === name || e.includes(name)) return true;
+    let entries;
+    try { entries = fs.readdirSync(d); } catch { continue; }
+    for (const e of entries) {
       const inner = path.join(d, e);
+      if (named(e) || manifestName(inner) === name) return true;
       try {
-        if (fs.statSync(inner).isDirectory() && fs.readdirSync(inner).some((x) => x === name || x.includes(name)))
-          return true;
+        if (!fs.statSync(inner).isDirectory()) continue;
+        for (const x of fs.readdirSync(inner))
+          if (named(x) || manifestName(path.join(inner, x)) === name) return true;
       } catch { /* unreadable entry: treat as absent */ }
     }
   }

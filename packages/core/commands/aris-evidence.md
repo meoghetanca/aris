@@ -18,7 +18,7 @@ That is a finding about the market, and it is wrong.
 ## What is missing
 
 ```
-node ${CLAUDE_PLUGIN_ROOT}/scripts/evidence.mjs
+node "${CLAUDE_PLUGIN_ROOT}/scripts/evidence.mjs"
 ```
 
 Prints every source recorded as blocked, with the URL to open and the file to paste it
@@ -27,7 +27,7 @@ into. A person with a browser reads in two minutes what a fetcher cannot read at
 ## After they paste
 
 ```
-node ${CLAUDE_PLUGIN_ROOT}/scripts/evidence.mjs --ingest
+node "${CLAUDE_PLUGIN_ROOT}/scripts/evidence.mjs" --ingest
 ```
 
 Checks each file is actually usable: **a paste with no URL in it cannot be cited, and an

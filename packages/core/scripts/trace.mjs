@@ -14,7 +14,13 @@
  * A dangling id is a blocking issue, not a warning. The spine is the only thing
  * standing between "derived from evidence" and "written by a language model".
  */
-import { requireRoot, readJson, check, report } from "./lib/aris.mjs";
+import { requireRoot, readJson, check, advisory, report, help } from "./lib/aris.mjs";
+
+help(`trace.mjs [--id CLAIM-014] [--in-verify] [--json]
+
+Walks the traceability spine in both directions and fails on a dangling id.
+  --id <id>     print one chain, backwards to its sources
+  --in-verify   called from verify-all, before verify.json exists`);
 
 const root = requireRoot();
 const R = (rel) => readJson(root, rel, null);
@@ -175,13 +181,9 @@ report(`trace: the spine (${counts})`, [
     errors: unattached.map((id) =>
       `${id} is attached to no persona - it answers competitive evidence, not a person`),
   },
-  {
-    // Report-only, as the comment above always said. A source nobody ended up citing is
-    // leftover research, not a defect, and failing it here put a blocking issue in
-    // verify.json over a harmless one - which then stopped the publish hook.
-    id: "TRACE-003",
-    check: "orphan_sources",
-    status: "passed",
-    errors: orphanSources.map((id) => `${id} is cited by nothing  [review, not blocking]`),
-  },
+  // Report-only, as the comment always said. A source nobody ended up citing is
+  // leftover research, not a defect, and failing it blocked the publish hook over a
+  // harmless finding. Declared advisory now rather than reported as a pass.
+  advisory("TRACE-003", "orphan_sources", orphanSources.length === 0,
+           orphanSources.map((id) => `${id} is cited by nothing  [review, not blocking]`)),
 ]);

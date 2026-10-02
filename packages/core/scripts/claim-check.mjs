@@ -13,9 +13,12 @@
  *   - asset -> marker: sentences carrying numbers or comparatives that have NO
  *     claim id at all, which is how an uncited claim hides
  */
-import fs from "node:fs";
-import path from "node:path";
-import { requireRoot, readJson, check, report } from "./lib/aris.mjs";
+import { requireRoot, readJson, check, advisory, report, help, assetCorpus } from "./lib/aris.mjs";
+
+help(`claim-check.mjs [--json]
+
+Checks every claim in every asset against the registry in four directions: marker to
+registry, registry to source, registry to asset, and asset to marker.`);
 
 /**
  * An attributed quote the workflow wrote is fabricated evidence.
@@ -45,7 +48,6 @@ function fabricatedQuotes(body) {
 }
 
 const root = requireRoot();
-const dir = path.join(root, ".aris", "assets");
 const doc = readJson(root, "assets/claims.json");
 if (!doc) {
   process.stderr.write("assets/claims.json is absent. Run /aris-assets first.\n");
@@ -54,8 +56,11 @@ if (!doc) {
 const claims = doc.claims ?? [];
 const byId = new Map(claims.map((c) => [c.id, c]));
 
-const files = fs.existsSync(dir) ? fs.readdirSync(dir).filter((f) => f.endsWith(".md")) : [];
-const text = new Map(files.map((f) => [f, fs.readFileSync(path.join(dir, f), "utf8")]));
+// Recursive, and keyed by the path relative to .aris/assets. A flat readdir meant an
+// asset in a subdirectory carried no markers as far as this gate could tell, so every
+// claim in it read as an orphan and every uncited sentence in it was never seen.
+const text = new Map(assetCorpus(root));
+const files = [...text.keys()];
 
 const unknownMarker = [];
 const uncited = [];
@@ -96,7 +101,12 @@ for (const c of claims) {
   if (c.status === "unsupported") uncited.push(`${c.id} is marked unsupported: "${String(c.text ?? "").slice(0, 80)}"`);
 
   for (const rel of c.usedIn ?? []) {
-    const f = path.basename(rel);
+    // usedIn is written by hand, so accept the asset path with or without its
+    // "assets/" prefix, and a bare filename when exactly one asset has that name.
+    const stripped = String(rel).replace(/^\.?\/?(?:\.aris\/)?assets\//, "");
+    const base = stripped.split("/").pop();
+    const sameName = files.filter((x) => x.split("/").pop() === base);
+    const f = text.has(stripped) ? stripped : sameName.length === 1 ? sameName[0] : stripped;
     if (!text.has(f)) usedInWrong.push(`${c.id}.usedIn names ${rel}, which does not exist`);
     else if (!markersIn(text.get(f)).includes(c.id))
       usedInWrong.push(`${c.id}.usedIn names ${rel}, but that file does not carry the marker`);
@@ -151,9 +161,11 @@ report(`claim-check: ${claims.length} claims across ${files.length} assets, ${ve
   check("CLAIM-GATE-003", "usedIn_is_accurate", usedInWrong.length === 0, usedInWrong),
   check("CLAIM-GATE-004", "no_uncited_assertions", naked.length === 0, naked),
   check("CLAIM-GATE-005", "no_fabricated_testimonials", placeholdersFilled.length === 0, placeholdersFilled),
-  { id: "CLAIM-GATE-006", check: "no_orphan_claims", status: unusedClaims.length ? "failed" : "passed", errors: unusedClaims },
+  // A claim nothing uses is dead weight or a lost marker. Both are worth reading and
+  // neither is worth refusing to publish over.
+  advisory("CLAIM-GATE-006", "no_orphan_claims", unusedClaims.length === 0, unusedClaims),
   check("CLAIM-GATE-007", "sources_actually_support_the_claim", wrong.length === 0, wrong),
   check("CLAIM-GATE-008", "every_claim_was_read_at_source", unread.length === 0, unread,
         { coverage: claims.length ? verified / claims.length : 1 }),
-  { id: "CLAIM-GATE-009", check: "verification_is_current", status: stale.length ? "failed" : "passed", errors: stale },
+  advisory("CLAIM-GATE-009", "verification_is_current", stale.length === 0, stale),
 ]);

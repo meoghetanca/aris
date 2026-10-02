@@ -25,7 +25,14 @@ import fs from "node:fs";
 import path from "node:path";
 import url from "node:url";
 import { execFileSync } from "node:child_process";
-import { requireRoot, readJson } from "./lib/aris.mjs";
+import { requireRoot, readJson, help, assetCorpus } from "./lib/aris.mjs";
+
+help(`build-html.mjs [--out <path>] [--force] [--open]
+
+Builds .aris/package/aris-launch.html from the .aris artifact tree, plus the
+fragment build for publishing as an Artifact.
+  --force   write a page over a failed verification. It never writes a launch-ready one.
+  --open    open the finished page in the default browser`);
 
 const HERE = path.dirname(url.fileURLToPath(import.meta.url));
 const TPL_DIR = path.join(HERE, "template");
@@ -81,11 +88,9 @@ const DATA = {
   assets: {},
 };
 
-/* Asset Markdown, embedded verbatim: requirement 16. */
-const assetsDir = path.join(root, ".aris", "assets");
-if (fs.existsSync(assetsDir))
-  for (const f of fs.readdirSync(assetsDir).filter((x) => x.endsWith(".md")).sort())
-    DATA.assets[f] = fs.readFileSync(path.join(assetsDir, f), "utf8");
+/* Asset Markdown, embedded verbatim: requirement 16. Recursive, so an asset written
+   to a subdirectory appears on the page instead of silently missing from it. */
+for (const [file, body] of assetCorpus(root)) DATA.assets[file] = body;
 
 /* If no manifest listed the artifacts, derive the list so the readiness meter is real. */
 if (!manifest) {
@@ -265,8 +270,11 @@ if (frag) fs.writeFileSync(fragPath, frag);
  * automation the research steps use, which never shows a window; this one is meant to.
  */
 function openInBrowser(file) {
+  // Not `cmd /c start "" <file>`: cmd.exe re-parses its arguments, so a project path
+  // containing & or a quote stops being a path and starts being a command. rundll32
+  // takes the file as one opaque argument and interprets nothing in it.
   const cmd = process.platform === "darwin" ? ["open", [file]]
-            : process.platform === "win32" ? ["cmd", ["/c", "start", "", file]]
+            : process.platform === "win32" ? ["rundll32", ["url.dll,FileProtocolHandler", file]]
             : ["xdg-open", [file]];
   try {
     execFileSync(cmd[0], cmd[1], { stdio: "ignore" });

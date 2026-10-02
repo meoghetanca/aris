@@ -1,0 +1,43 @@
+name: gates
+
+# The gates are the product. A change that breaks one has to fail here, because the
+# alternative is finding out on someone's launch.
+on:
+  push:
+    branches: [main]
+  pull_request:
+
+jobs:
+  gates:
+    runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        node: ["20.x", "22.x", "24.x"]
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: ${{ matrix.node }}
+
+      - name: every script parses
+        run: |
+          for f in $(find packages -name '*.mjs'); do node --check "$f"; done
+          node --check packages/core/hooks/gate-publish
+          node --check packages/core/hooks/session-start
+          node --check packages/assets/scripts/template/page.js
+
+      - name: every manifest is valid JSON
+        run: |
+          for f in .claude-plugin/marketplace.json packages/*/.claude-plugin/plugin.json packages/core/hooks/hooks.json; do
+            node -e "JSON.parse(require('fs').readFileSync('$f','utf8'))" || exit 1
+          done
+
+      - name: every sector entry is valid JSON and resolves
+        run: |
+          for f in packages/core/data/sectors/*.json; do
+            node -e "JSON.parse(require('fs').readFileSync('$f','utf8'))" || exit 1
+          done
+          node packages/core/scripts/sector-check.mjs --list > /dev/null
+
+      - name: the gate harness
+        run: node test/run.mjs

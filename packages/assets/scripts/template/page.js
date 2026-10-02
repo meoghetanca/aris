@@ -1,4 +1,12 @@
 const DATA = JSON.parse(document.getElementById('aris-data').textContent);
+/* Every URL in this page came out of the public record, and the page gets published.
+   E() escapes the quotes that would break out of the attribute, and does nothing about
+   the scheme: a mined javascript: or data: href stays clickable through it. Anything
+   that is not plainly a web link renders as text instead of a link. */
+const SAFE_URL = u => {
+  const s = String(u ?? '').trim();
+  return /^(?:https?:\/\/|mailto:|#|\/|\.\/)/i.test(s) && !/^\s*(?:javascript|data|vbscript):/i.test(s) ? s : null;
+};
 const E = s => String(s ?? '').replace(/[&<>"']/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
 const has = x => Array.isArray(x) ? x.length > 0 : (x && typeof x === 'object' ? Object.keys(x).length > 0 : x != null && x !== '');
 const S = {
@@ -219,8 +227,12 @@ function sourcesBlock(){
   for(const c of S.claims) for(const x of c.sourceIds??[]) note(x,c.id);
   let out=`<div class="srclist">`+S.sources.map(x=>{
     const u=[...new Set(used.get(x.id)??[])];
+    const href = SAFE_URL(x.url);
+    const label = E(x.title || x.url || 'untitled');
     return `<div class="src"><div class="id">${E(x.id)}</div>
-      <div><a href="${E(x.url??'#')}" target="_blank" rel="noopener">${E(x.title||x.url||'untitled')}</a>
+      <div>${href ? `<a href="${E(href)}" target="_blank" rel="noopener noreferrer">${label}</a>`
+                  : `${label} <span class="unk">(not a usable link)</span>`}`
+      + `
         <div class="sub">${E(x.publisher??'')} \u00b7 read ${E(x.accessedAt??'')} \u00b7
         ${u.length?'used by '+u.map(E).join(', '):'<span class="unk">used by nothing</span>'}</div></div></div>`;
   }).join('')+`</div>`;

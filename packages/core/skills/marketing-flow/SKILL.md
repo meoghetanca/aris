@@ -14,7 +14,7 @@ Work out where they are, then run the command that owns that step.
 ## 1. Is there a project?
 
 ```
-node ${CLAUDE_PLUGIN_ROOT}/scripts/aris-status.mjs
+node "${CLAUDE_PLUGIN_ROOT}/scripts/aris-status.mjs"
 ```
 
 **No `.aris/` in the tree** → this is a new product. Run `/aris "<what they described>"`.

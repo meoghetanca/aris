@@ -79,7 +79,7 @@ re-run the decisions that matter.
 ## `--resume`
 
 ```
-node ${CLAUDE_PLUGIN_ROOT}/scripts/next.mjs --all
+node "${CLAUDE_PLUGIN_ROOT}/scripts/next.mjs" --all
 ```
 
 It prints the whole chain with what is done, what is waiting and what is **failing** —

@@ -14,6 +14,7 @@
     ],
     "PreToolUse": [
       {
+        "_comment": "Bash is here because a publish is usually a shell command, which means this runs on every shell command in every project while aris-core is installed. The hook exits before reading stdin when CLAUDE_PROJECT_DIR has no .aris, so the cost outside an aris project is one Node start. A matcher cannot see a tool's arguments, so there is no narrower way to ask.",
         "matcher": "Artifact|mcp__claude_ai_Gmail__send_message|mcp__claude_ai_Gmail__create_draft|Bash",
         "hooks": [
           {

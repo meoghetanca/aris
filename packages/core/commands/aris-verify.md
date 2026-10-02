@@ -9,7 +9,7 @@ Step 11, and re-runnable at any time. This is what the publish hook reads, so it
 the difference between "it looks fine" and "it was checked".
 
 ```
-node ${CLAUDE_PLUGIN_ROOT}/scripts/verify-all.mjs $ARGUMENTS
+node "${CLAUDE_PLUGIN_ROOT}/scripts/verify-all.mjs" $ARGUMENTS
 ```
 
 That runs the six gates and the eleven cross-asset checks, then writes
@@ -28,19 +28,34 @@ after everything downstream already used the sentence.
 recompute, claims resolve to sources, language passes the sector lens, the spine
 has no dangling ids.
 
-**Consistency, which nobody owns and so rots** — broken or placeholder links, UTM
-completeness and a single campaign value, tracking present at all, one price across
-every asset, one product-name spelling, no past dates, a bounded set of CTAs, a
-privacy reference, declared languages actually produced, no stray TODO or lorem
-ipsum, and research age.
+**Consistency, which nobody owns and so rots** - broken, unparseable or placeholder
+links, UTM completeness and a single campaign value, tracking present at all, one price
+per unit across every asset, one product-name spelling, one launch date, a bounded set
+of CTAs, a privacy reference, declared languages actually produced, no stray TODO or
+lorem ipsum, and research age.
+
+Assets are read **recursively**: `assets/social/post-1.md` is checked exactly like
+`assets/launch-post.md`. It was not, and an asset in a subdirectory used to publish
+without being read by anything.
 
 ## Advisory versus blocking
 
-`research_is_current`, `no_orphan_claims`, `orphan_sources` and
-`reserved_terms_used_correctly` are warnings: they need judgement, not a refusal.
-Everything else blocks. The split lives in `verify-all.mjs`; if you find yourself
-wanting to move a check into the advisory set to get a green run, that is the check
-doing its job.
+46 checks run here. 36 block a publish and 10 are warnings that need judgement rather
+than a refusal: `research_is_current`, `no_orphan_claims`, `orphan_sources`,
+`reserved_terms_used_correctly`, `insufficient_pains_are_marked_not_dropped`,
+`verification_is_current`, `cta_consistency`, `translation_complete`,
+`dates_in_the_past` and `money_figures_carry_a_unit`.
+
+Severity lives **on the check**, declared where the check is written, as
+`advisory(...)` instead of `check(...)`. It used to live in a list of names inside
+`verify-all.mjs`, which is how a check that flags the year a company was founded ended
+up refusing to let a correct package publish. If you find yourself wanting to move a
+check to advisory to get a green run, that is the check doing its job; if you find
+yourself wanting to because it fires on something that is not a defect, that is a bug in
+the check and it belongs in `test/run.mjs` before it is reclassified.
+
+Releasable is a separate question with its own nine checks, and `/aris-package` runs
+`close-check.mjs` for it. Nothing there is advisory.
 
 ## Reading a failure
 

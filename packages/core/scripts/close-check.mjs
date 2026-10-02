@@ -8,7 +8,12 @@
  */
 import fs from "node:fs";
 import path from "node:path";
-import { requireRoot, readJson, exists, check, report } from "./lib/aris.mjs";
+import { requireRoot, readJson, exists, check, report, help, walkAssets } from "./lib/aris.mjs";
+
+help(`close-check.mjs [--json]
+
+The release gate. Refuses to call a package launch-ready while anything is missing,
+unverified or stale. Nothing here is advisory, and /aris-package reads it.`);
 
 const root = requireRoot();
 const M = (rel) => path.join(root, ".aris", rel);
@@ -43,10 +48,12 @@ if (verify && fs.existsSync(assetsDir)) {
     // reported "verification_is_current: passed" while nothing had been compared.
     stale.push("verify.json has no usable timestamp, so nothing could be compared against it");
   } else {
-    for (const f of fs.readdirSync(assetsDir)) {
+    // Recursive, for the same reason the other gates are: an asset edited in a
+    // subdirectory did not make a green verification stale.
+    for (const { file, abs } of walkAssets(root, { ext: null })) {
       let st;
-      try { st = fs.statSync(path.join(assetsDir, f)); } catch { continue; }
-      if (st.isFile() && st.mtimeMs > vt) stale.push(`assets/${f} changed after the last verify run`);
+      try { st = fs.statSync(abs); } catch { continue; }
+      if (st.isFile() && st.mtimeMs > vt) stale.push(`assets/${file} changed after the last verify run`);
     }
   }
 }

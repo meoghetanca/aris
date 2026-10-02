@@ -2,7 +2,11 @@
 /**
  * Where is this project. Reads state and counts what exists; asserts nothing.
  */
-import { findRoot, readJson, exists } from "./lib/aris.mjs";
+import { findRoot, readJson, exists, help } from "./lib/aris.mjs";
+
+help(`aris-status.mjs
+
+Where is this project. Reads state and counts what exists; asserts nothing.`);
 
 const root = findRoot();
 if (!root) {
