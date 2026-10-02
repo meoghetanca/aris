@@ -2,12 +2,25 @@
 /**
  * PreToolUse gate for anything that makes content public.
  *
- * Four things this makes impossible rather than merely discouraged:
+ * Four things this refuses, rather than merely discouraging:
  *
  *   1. publishing an asset while verification has not passed
  *   2. publishing after an asset changed but before verification was re-run
  *   3. publishing an asset carrying a claim with no evidence
  *   4. publishing before a human granted launchAuthorization
+ *
+ * WHAT IT DOES NOT DO, stated here because a gate whose limits are undocumented gets
+ * trusted past them:
+ *
+ *   - it sees the tools it is registered for, which is Bash, Artifact and the Gmail
+ *     writes. A different MCP server that posts outward is not gated, and neither is
+ *     writing a file into a directory something else syncs.
+ *   - on Bash it matches a pattern list. The list below is long and it resolves one
+ *     level of indirection (a local script, a make target, an npm script), but a
+ *     denylist is a denylist: a publisher nobody enumerated goes through.
+ *
+ * So this closes the paths people actually take. It is not a sandbox, and the thing
+ * that makes publishing deliberate is still launchAuthorization.
  *
  * A hook is a script. It cannot know that a human said yes out loud, so authority
  * lives in .aris/state.json, written by the aris commands and read here.
@@ -42,25 +55,153 @@ const BASH_PUBLISH = new RegExp([
   // An option may carry its own argument: `git -C ../repo push`, `git -c k=v push`.
   // Each repetition is one option plus at most one non-option word, so `git log
   // --grep push` cannot reach `push` - `log` is not an option and stops the group.
-  String.raw`\bgit\s+(?:-{1,2}[^\s]+\s+(?:[^-\s][^\s]*\s+)?)*push\b`,
-  // github cli
-  String.raw`\bgh\s+(?:pr\s+create|release\s+(?:create|upload)|gist\s+create)\b`,
+  String.raw`\bgit\s+(?:-{1,2}[^\s]+\s+(?:[^-\s][^\s]*\s+)?)*(?:push|subtree\s+push)\b`,
+  // forge clis
+  String.raw`\bgh\s+(?:pr\s+create|release\s+(?:create|upload)|gist\s+create|repo\s+create)\b`,
+  String.raw`\bglab\s+(?:mr\s+create|release\s+create)\b`,
   // package registries
-  String.raw`\b(?:npm|yarn|pnpm|bun|cargo|gem|dotnet\s+nuget)\s+(?:publish|push)\b`,
+  String.raw`\b(?:npm|yarn|pnpm|bun|cargo|gem|composer|dotnet\s+nuget)\s+(?:publish|push)\b`,
   String.raw`\btwine\s+upload\b`,
+  String.raw`\bpython3?\s+-m\s+twine\s+upload\b`,
   // container registries
-  String.raw`\b(?:docker|podman|nerdctl)\s+push\b`,
+  String.raw`\b(?:docker|podman|nerdctl|skopeo)\s+(?:push|copy)\b`,
   // hosting platforms: deploy or publish
-  String.raw`\b(?:vercel|netlify|wrangler|surge|firebase|fly|flyctl|railway|heroku|amplify|gcloud\s+app)\b[^\n]*\b(?:deploy|publish)\b`,
+  String.raw`\b(?:vercel|netlify|wrangler|surge|firebase|fly|flyctl|railway|heroku|amplify|render|deno|gcloud\s+app|gcloud\s+run|az\s+webapp|eb)\b[^\n]*\b(?:deploy|publish|up)\b`,
   // object storage, outbound copies only
   String.raw`\baws\s+s3(?:api)?\s+(?:cp|sync|mv|put-object)\b`,
   String.raw`\bgsutil\s+(?:cp|rsync|mv)\b`,
   String.raw`\baz\s+storage\s+blob\s+(?:upload|upload-batch|sync)\b`,
+  String.raw`\bs3cmd\s+(?:put|sync)\b`,
+  String.raw`\b(?:rclone|mc)\s+(?:copy|copyto|sync|move|mirror|cp)\b`,
   // generic file transfer to a remote host
   String.raw`\brsync\b[^\n]*@`,
   String.raw`\bscp\b[^\n]*@[^\s]*:`,
-  String.raw`\bcurl\b[^\n]*(?:\s-T\b|--upload-file\b)`,
-].join("|"));
+  String.raw`\b(?:sftp|lftp)\b[^\n]*@`,
+  String.raw`\bssh\b[^\n]*>\s*[^\s]`,
+  // http uploads. -d/-F with a file, and the explicit upload flags.
+  String.raw`\bcurl\b[^\n]*(?:\s-T\b|--upload-file\b|--data-binary\s*@|\s-F\s*[^\s]*@|\s--form\s*[^\s]*@|\s-d\s*@)`,
+  String.raw`\bcurl\b[^\n]*(?:\s-X\s*(?:POST|PUT|PATCH)\b|--request\s*(?:POST|PUT|PATCH)\b)`,
+  String.raw`\bwget\b[^\n]*(?:--post-file|--post-data)\b`,
+  String.raw`\bhttpie?\b[^\n]*\b(?:POST|PUT|PATCH)\b`,
+].join("|"), "i");
+
+/**
+ * Commands that run something else, where the publish is in the thing being run.
+ *
+ * `./deploy.sh`, `make deploy` and `npm run release` all walked straight through a
+ * pattern list that only looked at the command line in front of it, which made the
+ * list's coverage mostly decorative: wrapping a push in a file was enough. Each of
+ * these resolves to text this script can read and test.
+ *
+ * Capture 1 is always the thing to resolve.
+ */
+const INDIRECT = [
+  { kind: "file", re: /(?:^|[\s;&|(])(?:bash|sh|zsh|ksh|source|\.)\s+([^\s;&|)]+)/gi },
+  { kind: "file", re: /(?:^|[\s;&|(])(\.{1,2}\/[^\s;&|)]+)/g },
+  { kind: "make", re: /\bmake\s+(?:-[^\s]+\s+)*([A-Za-z0-9_.\-/]+)?/gi },
+  { kind: "npm", re: /\b(?:npm|pnpm|bun)\s+run\s+([A-Za-z0-9_:.\-]+)/gi },
+  { kind: "npm", re: /\byarn\s+(?:run\s+)?([A-Za-z0-9_:.\-]+)/gi },
+  { kind: "just", re: /\bjust\s+(?:-[^\s]+\s+)*([A-Za-z0-9_.\-]+)?/gi },
+];
+
+/** A name that says what it is for. Used only when the target cannot be read. */
+const PUBLISHY = /\b(?:deploy|publish|release|ship|launch|upload|push|promote|go-?live)\b/i;
+
+const MAX_READ = 256 * 1024;
+
+const readIfSmall = (p) => {
+  try {
+    const st = fs.statSync(p);
+    if (!st.isFile() || st.size > MAX_READ) return null;
+    return fs.readFileSync(p, "utf8");
+  } catch { return null; }
+};
+
+/**
+ * One target's recipe out of a Makefile or justfile.
+ *
+ * Taking the whole file as "the honest superset" was honest and useless: a repo whose
+ * Makefile has a deploy target would see `make test` blocked, and a gate that fires on
+ * `make test` is a gate someone turns off. A recipe is the indented block under its
+ * header, which is all this needs to read.
+ *
+ * Prerequisites are followed one level, because `deploy: build` puts the push in
+ * `deploy` and the work in `build`, and a recipe that calls another target is normal.
+ * An unknown target falls back to the whole file: better a false positive on a name
+ * nobody can resolve than a silent pass.
+ */
+function recipe(text, target, depth = 0) {
+  const lines = String(text).split("\n");
+  const headers = new Map(); // target -> { prereqs, body[] }
+  let cur = null;
+  for (const line of lines) {
+    const h = line.match(/^([A-Za-z0-9_.\-/ ]+?)\s*:(?!=)\s*(.*)$/);
+    if (h && !/^\s/.test(line)) {
+      for (const name of h[1].trim().split(/\s+/)) {
+        cur = { prereqs: h[2].trim().split(/\s+/).filter(Boolean), body: [] };
+        headers.set(name, cur);
+      }
+      continue;
+    }
+    if (cur && /^(?:\t| {2,})/.test(line)) { cur.body.push(line); continue; }
+    if (!line.trim()) continue;
+    cur = null;
+  }
+  const want = target || [...headers.keys()].find((k) => !k.startsWith("."));
+  const found = want != null ? headers.get(want) : null;
+  if (!found) return null;
+  const parts = [found.body.join("\n")];
+  if (depth < 1)
+    for (const p of found.prereqs) {
+      const sub = headers.get(p);
+      if (sub) parts.push(sub.body.join("\n"));
+    }
+  return parts.join("\n");
+}
+
+/**
+ * The command, plus the text of whatever it runs, one level down.
+ *
+ * Returns { text, unreadable }: `unreadable` names targets that look like they publish
+ * but could not be read, which the caller treats as a reason to stop and ask rather
+ * than as a silent pass.
+ */
+function expand(command, cwd) {
+  const parts = [command];
+  const unreadable = [];
+  for (const { kind, re } of INDIRECT) {
+    re.lastIndex = 0;
+    for (const m of String(command).matchAll(re)) {
+      const target = m[1];
+      if (kind === "file") {
+        if (!target) continue;
+        const abs = path.resolve(cwd, target);
+        const body = readIfSmall(abs);
+        if (body != null) parts.push(body);
+        else if (PUBLISHY.test(target)) unreadable.push(target);
+      } else if (kind === "make") {
+        const mk = readIfSmall(path.join(cwd, "Makefile")) ?? readIfSmall(path.join(cwd, "makefile"));
+        if (mk == null) { if (!target || PUBLISHY.test(target)) unreadable.push(`make ${target ?? ""}`.trim()); continue; }
+        parts.push(recipe(mk, target) ?? mk);
+      } else if (kind === "npm") {
+        const pkg = readIfSmall(path.join(cwd, "package.json"));
+        if (pkg == null) { if (PUBLISHY.test(target ?? "")) unreadable.push(`npm run ${target}`); continue; }
+        try {
+          const scripts = (JSON.parse(pkg).scripts) ?? {};
+          if (scripts[target]) parts.push(String(scripts[target]));
+          // A script that calls another script is the common shape, so take them all:
+          // the alternative is resolving npm's own indirection, one level further down.
+          else if (PUBLISHY.test(target ?? "")) unreadable.push(`npm run ${target}`);
+        } catch { unreadable.push(`npm run ${target}`); }
+      } else if (kind === "just") {
+        const jf = readIfSmall(path.join(cwd, "justfile")) ?? readIfSmall(path.join(cwd, "Justfile"));
+        if (jf == null) { if (!target || PUBLISHY.test(target)) unreadable.push(`just ${target ?? ""}`.trim()); continue; }
+        parts.push(recipe(jf, target) ?? jf);
+      }
+    }
+  }
+  return { text: parts.join("\n"), unreadable };
+}
 
 // Artifact actions that only read or inspect. Everything else may put bytes online.
 const ARTIFACT_READONLY = new Set([
@@ -94,24 +235,34 @@ function findState(start) {
 }
 
 /**
- * Newest mtime under .aris/assets only.
+ * Newest mtime anywhere under .aris/assets, RECURSIVELY.
+ *
+ * A flat readdir meant an asset edited in a subdirectory did not make a green
+ * verification stale, so the package published with that edit unexamined. The whole
+ * point of this comparison is "did anything change since we measured".
  *
  * Deliberately NOT .aris/package: that directory is derived output, and
  * aris-launch.html is always written after the verification it reports. Counting it
  * would make every verification permanently stale one build later.
  */
 function newestAssetMtime(root) {
-  const d = path.join(root, ".aris", "assets");
-  if (!fs.existsSync(d)) return 0;
+  const base = path.join(root, ".aris", "assets");
   let newest = 0;
-  for (const f of fs.readdirSync(d)) {
-    // One stat, and a broken symlink must not throw: an exception here exits the hook
-    // non-zero with no decision on stdout, which is the one failure mode a gate may
-    // not have.
-    let st;
-    try { st = fs.statSync(path.join(d, f)); } catch { continue; }
-    if (st.isFile()) newest = Math.max(newest, st.mtimeMs);
-  }
+  const walk = (dir) => {
+    let entries;
+    try { entries = fs.readdirSync(dir, { withFileTypes: true }); } catch { return; }
+    for (const e of entries) {
+      const p = path.join(dir, e.name);
+      // One stat, and a broken symlink must not throw: an exception here exits the hook
+      // non-zero with no decision on stdout, which is the one failure mode a gate may
+      // not have.
+      if (e.isDirectory()) { walk(p); continue; }
+      let st;
+      try { st = fs.statSync(p); } catch { continue; }
+      if (st.isFile()) newest = Math.max(newest, st.mtimeMs);
+    }
+  };
+  walk(base);
   return newest;
 }
 
@@ -119,10 +270,29 @@ const load = (p) => {
   try { return JSON.parse(fs.readFileSync(p, "utf8")); } catch { return null; }
 };
 
+/**
+ * Fast path out of a project that is nothing to do with aris.
+ *
+ * This hook is registered on Bash, so it runs on every shell command in every project
+ * for anyone who has aris-core installed. Node's startup is unavoidable; waiting on
+ * stdin after it is not.
+ */
+if (process.env.CLAUDE_PROJECT_DIR && !findState(process.env.CLAUDE_PROJECT_DIR) && !findState()) allow();
+
+/**
+ * A gate that never answers is worse than one that answers wrong: registered with
+ * async false, a hook that waits forever on a stdin nobody closes hangs the tool call.
+ * Three seconds is far longer than a payload takes and far shorter than a person waits.
+ */
+const bail = setTimeout(allow, 3000);
+bail.unref?.();
+
 let raw = "";
 process.stdin.setEncoding("utf8");
+process.stdin.on("error", allow);
 process.stdin.on("data", (c) => (raw += c));
 process.stdin.on("end", () => {
+  clearTimeout(bail);
   let payload;
   try { payload = JSON.parse(raw); } catch { allow(); }
 
@@ -134,9 +304,16 @@ process.stdin.on("end", () => {
   const root = path.dirname(path.dirname(statePath));
 
   let what;
+  let unresolved = [];
   if (tool === "Bash") {
-    if (!BASH_PUBLISH.test(String(args.command || ""))) allow();
-    what = "a shell command that publishes";
+    const command = String(args.command || "");
+    const { text, unreadable } = expand(command, payload.cwd || root);
+    if (!BASH_PUBLISH.test(text)) {
+      // Nothing matched, and nothing that looked like a publisher was unreadable.
+      if (!unreadable.length) allow();
+      unresolved = unreadable;
+    }
+    what = unresolved.length ? "a command that runs something this gate could not read" : "a shell command that publishes";
   } else if (tool.startsWith("mcp__claude_ai_Gmail__")) {
     what = "an outbound email";
   } else if (tool === "Artifact") {
@@ -154,6 +331,20 @@ process.stdin.on("end", () => {
   const tail =
     "\n\nThis gate reads .aris/state.json and .aris/verification/verify.json. " +
     "It is not asking for confirmation: fix the cause, do not retry.";
+
+  // An unreadable target is only a reason to stop while the package is not cleared to
+  // publish. Once verification passes and a human has authorised the launch, running a
+  // deploy script is the point.
+  const clearedToPublish = verify && verify.passed && state.launchAuthorization &&
+    Number.isFinite(verify.timestamp ? Date.parse(verify.timestamp) : NaN) &&
+    newestAssetMtime(root) <= Date.parse(verify.timestamp) &&
+    !claims.some((c) => c.status === "unsupported");
+  if (unresolved.length && clearedToPublish) allow();
+  if (unresolved.length)
+    deny(prefix +
+      `It runs ${unresolved.join(", ")}, which this gate could not read, and the name says it ` +
+      "publishes. Either run the publishing command directly so the gate can see it, or finish " +
+      "verification and set launchAuthorization." + tail);
 
   if (!verify) deny(prefix + "Verification has never run. Run /aris-verify first." + tail);
 

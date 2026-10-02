@@ -41,7 +41,7 @@ mode they are in rather than failing.
 ## 3. The sector knowledge base
 
 ```
-node ${CLAUDE_PLUGIN_ROOT}/scripts/sector-check.mjs --list
+node "${CLAUDE_PLUGIN_ROOT}/scripts/sector-check.mjs" --list
 ```
 
 Show the covered fields. If the product they mentioned is not among them, say so now
@@ -50,7 +50,7 @@ rather than at step 2 of a run, and offer `/aris-sector <name>`.
 ## 4. Confirm the gates run
 
 ```
-node ${CLAUDE_PLUGIN_ROOT}/scripts/aris-status.mjs
+node "${CLAUDE_PLUGIN_ROOT}/scripts/aris-status.mjs"
 ```
 
 Outside a project this prints the "not an aris project" line, which is the correct

@@ -12,7 +12,7 @@
   <img src="https://img.shields.io/badge/version-0.1.0-4c566b?style=flat-square&labelColor=161b25" alt="version 0.1.0">
   <img src="https://img.shields.io/badge/fields-53-4c566b?style=flat-square&labelColor=161b25" alt="fields 53">
   <img src="https://img.shields.io/badge/specialists-11-4c566b?style=flat-square&labelColor=161b25" alt="specialists 11">
-  <img src="https://img.shields.io/badge/checks-44%20fail--closed-4c566b?style=flat-square&labelColor=161b25" alt="44 checks, fail-closed">
+  <img src="https://img.shields.io/badge/checks-55%20%7C%2036%20fail--closed-4c566b?style=flat-square&labelColor=161b25" alt="55 checks, 36 of them fail-closed">
   <img src="https://img.shields.io/badge/licence-MIT-4c566b?style=flat-square&labelColor=161b25" alt="MIT licence">
 </p>
 
@@ -60,7 +60,16 @@ takes three seconds and inventing one from nothing takes an afternoon.
 /plugin install aris-assets@aris
 ```
 
-That pulls everything else it needs automatically.
+That pulls the other three aris packages and `superpowers`. One optional extra lives in
+a different marketplace, which a dependency cannot add for you, so if you want aris to
+build the landing page rather than stop at the copy deck:
+
+```
+/plugin marketplace add vqdungwork/pica
+/plugin install pica@pica
+```
+
+`/aris-setup` tells you which of these are missing and what each absence costs.
 
 **3. Check it's ready:**
 
@@ -205,6 +214,29 @@ Honest limits, because they matter more than the feature list:
   `assets/landing-brief.md` and hands that to
   [pica](https://github.com/vqdungwork/pica), which builds the page and the Figma file.
 
+### What the publish gate does and does not cover
+
+The hook refuses an Artifact publish, an outbound email and a shell command that
+publishes, while verification has not passed, an asset has changed since it did, a claim
+has no evidence, or a human has not set `launchAuthorization`. On shell commands it also
+resolves one level of indirection, so a push wrapped in `./deploy.sh`, `make ship` or
+`npm run deploy` is seen rather than missed.
+
+It is not a sandbox. It sees the tools it is registered for, so another MCP server that
+posts outward is not gated, and nor is writing a file into a directory something else
+syncs. On shell commands it matches a pattern list, and a publisher nobody enumerated
+goes through. The thing that makes publishing deliberate is `launchAuthorization`, which
+is why that is set by hand and nothing in the chain can set it.
+
+### Your research is in the repo
+
+`.aris/` holds the quotes, the sources, the rejected positioning and its reasons, the
+pricing basis and every assumption. That is the point of it, and none of it is written
+for an audience outside the team. If the project is a git repo, decide whether `.aris/`
+belongs in it, and add it to `.gitignore` if the repo is public. The same question
+applies to the launch page before it is shared: it is the whole working file, not a
+summary of it.
+
 ---
 
 ## Commands
@@ -267,23 +299,40 @@ Four packages: `aris-core` (state, sectors, decisions, gates, the publish hook),
 
 ### Test
 
-The gates are verified against a fixture project that is **not distributed**: a run's
-fixture carries real product and market research, which belongs to whoever ran it.
+```
+node test/run.mjs            every case
+node test/run.mjs pricing    only the ones whose name matches
+```
 
-If you are working on aris itself, build one by running `/aris` on any product and
-pointing a harness at the resulting `.aris/` directory. What a harness must prove is
-both directions: that a clean package passes, and that **each gate refuses when its
-defect is planted** — a pain below threshold, an unevidenced persona attribute, a size
-that does not recompute, an uncited claim, an unsupported superlative, a fabricated
-testimonial, an invented pre-launch baseline, a dangling id.
+88 cases, no dependencies, about four seconds. It proves three things:
 
-A gate that has never failed in testing is a gate nobody has evidence about.
+1. **a clean package passes every gate**, and builds a page, and is releasable
+2. **each gate refuses when its own defect is planted** — a pain below threshold, an
+   unevidenced persona attribute, a size that recomputes to nothing, an uncited number,
+   a fabricated testimonial, a claim the field forbids, a dangling id, two prices for
+   the same unit, two launch dates
+3. **the false positives that used to refuse correct packages do not** — a past date in
+   copy, a market size quoted beside a price, a product name containing `+` or `(`
+
+`test/fixture.mjs` generates the project the cases run against. It is synthetic, so it
+is nobody's property and it ships; and it is generated rather than stored because half
+the gates compare a stored date against today, so a fixture with dates baked in passes
+on the day it was written and fails every day after.
+
+A gate that has never failed in testing is a gate nobody has evidence about. The same
+goes for a gate that has never passed on something correct.
 
 ### Requires
 
-Node (Claude Code needs it anyway). Nothing else — no Python, no package install, no
-build step. `superpowers` and `pica` install automatically and aris degrades gracefully
-without either.
+**Node 20 or later, on PATH.** Nothing else: no Python, no package install, no build
+step. Claude Code ships as a native binary and no longer guarantees a Node on your PATH,
+so this is a real requirement rather than a free one. Every script and both hooks are
+plain Node with no dependencies, and CI runs them on 20, 22 and 24.
+
+`superpowers` installs as a dependency. `pica` has to be added by hand, as above. aris
+degrades gracefully without either: without `superpowers` it takes the recommended
+option at every decision and records it as an assumption, and without `pica` it writes
+the landing brief and stops there.
 
 ---
 
@@ -330,6 +379,50 @@ PASS on the thing it exists to catch:
 
 The lesson is the one the Test section states. Reading a gate tells you what it
 intends; only planting its defect tells you what it does.
+
+### Then the whole thing was audited, and the suite was written
+
+A read of every script, both hooks, the agent definitions and this file, with the
+findings fixed and a case in `test/run.mjs` for each one. What it turned up:
+
+- **every research agent held `Bash` while reading attacker-controlled text.** The
+  miners, the scouts and the analysts fetch competitor pages, reviews, forums, ad
+  libraries and job ads, and nothing anywhere told them that fetched text is data rather
+  than instruction. Seven of them also said "you do not have Write or Edit. That is
+  deliberate" while their frontmatter granted a shell, which writes files. Ten agents
+  lost `Bash`; the one that keeps it runs a local script and fetches nothing.
+- **the sector's `forbidden` list was collected and never read.** Layer 3 of
+  `superlative-check` was documented as "the sector's `forbidden` and `reservedTerms`"
+  and only ever checked `reservedTerms`. Several hundred entries across 62 fields could
+  not fire. `b2b-saas` forbids "an ROI or time-saved figure with no baseline and no
+  sample size", and copy stating exactly that passed. This one was found by the test
+  suite, on its first run, which is the argument for the suite.
+- **two cross-asset checks refused correct packages.** `pricing_consistency` blocked on
+  any two money figures, so a deck quoting a market size beside a price was permanently
+  unpublishable; `date_consistency` blocked on any date in the past, so "in testing since
+  2024-03-01" was a defect. Meanwhile the "one launch date" half of that check was
+  collected into a set and never read, so it never ran at all.
+- **a flat `readdir` in five places** meant an asset in a subdirectory was read by no
+  cross-asset check, carried no claims as far as the claim gate could tell, and did not
+  make a green verification stale. It published unexamined.
+- **the publish gate was a pattern list with no indirection.** `./deploy.sh`,
+  `make ship` and `npm run deploy` all walked through it, which made the list's coverage
+  mostly decorative. It now reads the script, the make recipe or the npm script.
+- **`verify-all` crashed on two ordinary inputs.** A product name containing `+` or `(`
+  hit an unescaped `new RegExp` two lines below an escaped copy of itself; a malformed
+  link reached `new URL` unguarded. Both took down the run with no `verify.json` written.
+- smaller: `execFileSync("node")` where Node may not be on PATH, with no timeout and a
+  1 MB buffer that reported a large result as "could not run"; an unquoted
+  `${CLAUDE_PLUGIN_ROOT}` in twelve command files, breaking on any install path with a
+  space in it; a substring test that let a plugin named `typical` satisfy a check for
+  `pica`; a hook that would wait forever on a stdin nobody closed; an `extends` cycle
+  that silently truncated at twelve hops and hid both entries from `--list`; a Windows
+  opener that went through `cmd.exe` with an unescaped path; a mined `javascript:` URL
+  rendered as a clickable link in the published page.
+
+Severity lives on each check now, next to the thing it describes, rather than in a
+hand-kept list of names in the aggregator. That list is how a date check became a hard
+publish gate.
 
 The quote thresholds have still only been exercised on one market, and every sector's
 `priceBands` are deliberately null until a run cites them.

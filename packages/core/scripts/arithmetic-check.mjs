@@ -10,7 +10,12 @@
  * Also checks budget percentages sum to 100, because that is the other place a
  * confident wrong number hides.
  */
-import { requireRoot, readJson, check, report } from "./lib/aris.mjs";
+import { requireRoot, readJson, check, report, help } from "./lib/aris.mjs";
+
+help(`arithmetic-check.mjs [--json]
+
+Recomputes every stated size from its factors, and checks budget percentages sum
+to 100. A formula this script cannot parse is rejected, not evaluated.`);
 
 const SAFE = /^[\s\d.+\-*/()eE]*$/;
 

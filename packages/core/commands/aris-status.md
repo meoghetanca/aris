@@ -5,8 +5,8 @@ description: Where this aris project stands — what exists, what is validated, 
 # aris-status
 
 ```
-node ${CLAUDE_PLUGIN_ROOT}/scripts/next.mjs --all
-node ${CLAUDE_PLUGIN_ROOT}/scripts/aris-status.mjs
+node "${CLAUDE_PLUGIN_ROOT}/scripts/next.mjs" --all
+node "${CLAUDE_PLUGIN_ROOT}/scripts/aris-status.mjs"
 ```
 
 **Lead with the next command, not the inventory.** Someone running status wants to know

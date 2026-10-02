@@ -11,17 +11,28 @@
  * hear a human say "it's fine", so the decision has to be on disk, produced by
  * something that actually measured.
  *
+ * Severity lives on each check, not in a list kept here. A hand-maintained set of
+ * advisory names in this file is how a check that flags the year a company was
+ * founded became a hard publish gate.
+ *
  * Exit 0 only when nothing blocking failed.
  */
-import fs from "node:fs";
-import path from "node:path";
 import url from "node:url";
-import { execFileSync } from "node:child_process";
-import { requireRoot, readJson, writeJson, exists } from "./lib/aris.mjs";
+import path from "node:path";
+import { requireRoot, readJson, writeJson, exists, help, runScript, assetCorpus } from "./lib/aris.mjs";
+
+help(`verify-all.mjs [--only <gate>] [--no-write] [--json]
+
+Runs every gate plus the cross-asset consistency checks, then writes
+.aris/verification/verify.json, which is the file the publish hook reads.
+
+  --only <gate>   one of: pains personas arithmetic claims language trace.
+                  Writes nothing: a partial run must not leave a whole-package verdict.
+  --no-write      report only
+  --json          machine-readable`);
 
 const HERE = path.dirname(url.fileURLToPath(import.meta.url));
 const root = requireRoot();
-const assetsDir = path.join(root, ".aris", "assets");
 const only = (() => {
   const i = process.argv.indexOf("--only");
   return i === -1 ? null : process.argv[i + 1];
@@ -36,6 +47,11 @@ const GATES = [
   { key: "trace", script: "trace.mjs", needs: "intel/sources.json", args: ["--in-verify"] },
 ];
 
+if (only && !GATES.some((g) => g.key === only)) {
+  process.stderr.write(`--only ${only} is not a gate. One of: ${GATES.map((g) => g.key).join(" ")}\n`);
+  process.exit(2);
+}
+
 const checks = [];
 let seq = 0;
 const id = () => `VERIFY-${String(++seq).padStart(3, "0")}`;
@@ -47,7 +63,7 @@ for (const g of GATES) {
     continue;
   }
   try {
-    const out = execFileSync("node", [path.join(HERE, g.script), ...(g.args ?? []), "--json"], { encoding: "utf8", cwd: root });
+    const out = runScript(path.join(HERE, g.script), [...(g.args ?? []), "--json"], { cwd: root });
     for (const c of JSON.parse(out).checks ?? []) checks.push({ ...c, id: id(), gate: g.key });
   } catch (e) {
     // A failing gate exits non-zero but still printed its JSON on stdout.
@@ -62,20 +78,34 @@ for (const g of GATES) {
 
 // ---------- cross-asset consistency: nobody owns these, so they rot ----------
 if (!only) {
-  const files = fs.existsSync(assetsDir) ? fs.readdirSync(assetsDir).filter((f) => f.endsWith(".md")) : [];
-  const corpus = files.map((f) => [f, fs.readFileSync(path.join(assetsDir, f), "utf8")]);
+  // Recursive. A flat readdir left an asset in a subdirectory invisible to every
+  // check below, which is the widest hole the gates had.
+  const corpus = assetCorpus(root);
+  const files = corpus.map(([f]) => f);
   const state = readJson(root, "state.json") ?? {};
   const gtm = readJson(root, "strategy/gtm.json");
-  const push = (name, errors, status) => checks.push({ id: id(), check: name, status: status ?? (errors.length ? "failed" : "passed"), errors });
+  /** `adv: true` marks a finding as worth reading rather than worth blocking. */
+  const push = (name, errors, { status, adv = false } = {}) =>
+    checks.push({
+      id: id(),
+      check: name,
+      status: status ?? (errors.length ? "failed" : "passed"),
+      errors,
+      ...(adv ? { advisory: true } : {}),
+    });
 
   // links: shape only. A 404 sweep needs the network and belongs to the miner.
   const linkErrs = [];
-  const urls = new Set();
+  const parsed = [];
   for (const [f, b] of corpus)
     for (const m of b.matchAll(/\]\((https?:\/\/[^)\s]+)\)/g)) {
-      urls.add(m[1]);
-      if (/\s/.test(m[1]) || m[1].includes("example.com") || m[1].endsWith("//"))
-        linkErrs.push(`assets/${f}: placeholder or malformed link ${m[1]}`);
+      const raw = m[1];
+      if (raw.includes("example.com") || raw.endsWith("//")) linkErrs.push(`assets/${f}: placeholder or malformed link ${raw}`);
+      // A URL the standard parser rejects is malformed, and this is where that is
+      // reported. It used to reach new URL() in the UTM check below unguarded, where
+      // it threw and took the whole run down without writing verify.json at all.
+      try { parsed.push(new URL(raw)); }
+      catch { linkErrs.push(`assets/${f}: ${raw} is not a parseable URL`); }
     }
   for (const [f, b] of corpus)
     for (const m of b.matchAll(/\]\((?!https?:|#|mailto:)([^)\s]*)\)/g))
@@ -85,11 +115,11 @@ if (!only) {
   // UTM: every campaign link must carry a consistent, complete tag set.
   const utmErrs = [];
   const campaigns = new Set();
-  for (const u of urls) {
-    if (!u.includes("utm_")) continue;
-    const q = new URL(u).searchParams;
-    for (const k of ["utm_source", "utm_medium", "utm_campaign"]) if (!q.get(k)) utmErrs.push(`${u} is missing ${k}`);
-    if (q.get("utm_campaign")) campaigns.add(q.get("utm_campaign"));
+  for (const u of parsed) {
+    if (!u.href.includes("utm_")) continue;
+    for (const k of ["utm_source", "utm_medium", "utm_campaign"])
+      if (!u.searchParams.get(k)) utmErrs.push(`${u.href} is missing ${k}`);
+    if (u.searchParams.get("utm_campaign")) campaigns.add(u.searchParams.get("utm_campaign"));
   }
   if (campaigns.size > 1) utmErrs.push(`${campaigns.size} different utm_campaign values across the package: ${[...campaigns].join(", ")}`);
   push("utm_consistency", utmErrs);
@@ -100,30 +130,67 @@ if (!only) {
     trackErrs.push("no asset mentions tracking or a UTM tag: the launch will produce traffic nobody can attribute");
   push("tracking_present", trackErrs);
 
-  // pricing: one price, everywhere
+  /**
+   * Pricing: one price per unit, everywhere.
+   *
+   * This used to block on "more than one distinct money figure in the package", which
+   * is the normal state of a correct package. A deck quoting a 4.2B market and a 29/mo
+   * price is two figures, so the gate closed permanently over copy that was right.
+   * Two things separate a price from a number that merely carries a currency symbol:
+   *
+   *   - a magnitude suffix (4.2B, 500k, 12 million) is a market size, never a price
+   *   - a price carries a unit, and two figures conflict only when they claim the
+   *     same unit
+   *
+   * Bare amounts still count towards "does any asset state the recommended price",
+   * and a spread of them is reported as advisory, because it is worth a look and is
+   * not by itself evidence of a defect.
+   */
   const priceErrs = [];
-  const prices = new Map();
+  const priceAdv = [];
+  const MONEY = /(?:[$€£]|USD|EUR|GBP|VND)\s?([\d][\d.,]*)\s*(k|m|bn|b|million|billion)?\s*(?:\/\s*|per\s+)?(mo|month|seat|user|yr|year)?/gi;
+  const byUnit = new Map(); // unit -> Map(amount -> Set(file))
+  const bare = new Map();   // amount -> Set(file)
   for (const [f, b] of corpus)
-    for (const m of b.matchAll(/(?:[$€£]|USD\s?|VND\s?)\s?([\d][\d.,]*)\s*(?:\/\s*(mo|month|seat|user|yr|year))?/gi)) {
-      const key = `${m[1]}${m[2] ? "/" + m[2].toLowerCase() : ""}`;
-      if (!prices.has(key)) prices.set(key, new Set());
-      prices.get(key).add(f);
+    for (const m of b.matchAll(MONEY)) {
+      if (m[2]) continue; // a magnitude suffix means a market size, not a price
+      const amount = m[1].replace(/,/g, "").replace(/\.$/, "");
+      const unit = (m[3] || "").toLowerCase().replace(/^month$/, "mo").replace(/^year$/, "yr");
+      if (unit && !byUnit.has(unit)) byUnit.set(unit, new Map());
+      const target = unit ? byUnit.get(unit) : bare;
+      if (!target.has(amount)) target.set(amount, new Set());
+      target.get(amount).add(f);
     }
+  for (const [unit, amounts] of byUnit)
+    if (amounts.size > 1)
+      priceErrs.push(
+        `${amounts.size} different prices per ${unit} across the package: ` +
+          [...amounts].map(([a, fs]) => `${a} (${[...fs].join(", ")})`).join(" vs ") +
+          ". One of them is wrong."
+      );
+  if (bare.size > 1)
+    priceAdv.push(
+      `${bare.size} money figures carry no unit: ${[...bare.keys()].join(", ")}. ` +
+        "Check none of them is meant to be the price."
+    );
+
   const rec = gtm?.pricing?.recommended;
-  const recNum = rec && typeof rec === "object" ? Object.values(rec).find((v) => Number.isFinite(Number(v))) : rec;
-  if (prices.size > 1)
-    priceErrs.push(`${prices.size} distinct price figures across the package: ${[...prices.keys()].join(", ")} — one of them is wrong`);
-  if (recNum != null && prices.size) {
+  const recNum = rec && typeof rec === "object"
+    ? (rec.amount ?? rec.value ?? Object.values(rec).find((v) => Number.isFinite(Number(v))))
+    : rec;
+  const stated = [...[...byUnit.values()].flatMap((m) => [...m.keys()]), ...bare.keys()].map((k) => k.replace(/[^\d.]/g, ""));
+  if (recNum != null && stated.length) {
     const want = String(recNum).replace(/[^\d.]/g, "");
-    if (![...prices.keys()].some((k) => k.replace(/[^\d.]/g, "") === want))
-      priceErrs.push(`no asset states the recommended price (${recNum}) from gtm.json`);
+    if (want && !stated.includes(want)) priceErrs.push(`no asset states the recommended price (${recNum}) from gtm.json`);
   }
   push("pricing_consistency", priceErrs);
+  push("money_figures_carry_a_unit", priceAdv, { adv: true });
 
   // product name: one spelling
   const nameErrs = [];
   const name = state.product?.name;
   if (name) {
+    const esc = name.replace(/[.*+?^${}()|[\]\\]/g, "\\$&");
     const variants = new Set();
     // A URL slug, a UTM campaign and a code span legitimately lowercase the product
     // name. Comparing them against the prose spelling reports a defect that is not one.
@@ -132,22 +199,39 @@ if (!only) {
       .replace(/`[^`]*`/g, " ")
       .replace(/\butm_[a-z]+=\S*/gi, " ")]);
     for (const [, b] of prose)
-      for (const m of b.matchAll(new RegExp(name.replace(/[.*+?^${}()|[\]\\]/g, "\\$&"), "gi"))) variants.add(m[0]);
+      for (const m of b.matchAll(new RegExp(esc, "gi"))) variants.add(m[0]);
     if (variants.size > 1) nameErrs.push(`the product name is spelled ${variants.size} ways: ${[...variants].join(", ")}`);
-    const absent = prose.filter(([, b]) => !new RegExp(name, "i").test(b)).map(([f]) => f);
+    // Escaped here too. It was not, two lines below an escaped copy of itself, so a
+    // product called "Notion+" or "Acme (EU)" threw SyntaxError and killed the run.
+    const absent = prose.filter(([, b]) => !new RegExp(esc, "i").test(b)).map(([f]) => f);
     if (absent.length) nameErrs.push(`assets that never name the product: ${absent.join(", ")}`);
   }
   push("product_name_consistency", nameErrs);
 
-  // dates: nothing in the past, one launch date
+  /**
+   * Dates: one launch date, and nothing silently out of date.
+   *
+   * The blocking half is what the comment always claimed and the code never did. The
+   * set of dates was collected and then never read, so "one launch date" was never
+   * tested at all. The half that WAS implemented failed the package for every date in
+   * the past, which flags "trusted since 2019-03-01" and the access date on a citation.
+   * A stale date is worth reading. It is not worth refusing to publish over.
+   */
   const dateErrs = [];
-  const dates = new Set();
+  const pastErrs = [];
+  const future = new Set();
+  const yesterday = Date.now() - 86400000;
   for (const [f, b] of corpus)
     for (const m of b.matchAll(/\b(20\d{2}-\d{2}-\d{2})\b/g)) {
-      dates.add(m[1]);
-      if (Date.parse(m[1]) < Date.now() - 86400000) dateErrs.push(`assets/${f}: ${m[1]} is in the past`);
+      const t = Date.parse(m[1]);
+      if (!Number.isFinite(t)) { dateErrs.push(`assets/${f}: ${m[1]} is not a real date`); continue; }
+      if (t < yesterday) pastErrs.push(`assets/${f}: ${m[1]} is in the past`);
+      else future.add(m[1]);
     }
+  if (future.size > 1)
+    dateErrs.push(`${future.size} different future dates across the package: ${[...future].sort().join(", ")}. A launch has one date.`);
   push("date_consistency", dateErrs);
+  push("dates_in_the_past", pastErrs, { adv: true });
 
   // CTA: one primary action
   const ctaErrs = [];
@@ -155,8 +239,8 @@ if (!only) {
   for (const [, b] of corpus)
     for (const m of b.matchAll(/\*\*\[?([A-Z][^*\]\n]{2,40})\]?\*\*\s*$/gm)) ctas.add(m[1].trim().toLowerCase());
   // Advisory: a twelve-post social set legitimately varies its CTA. Worth a look, not a block.
-  if (ctas.size > 6) ctaErrs.push(`${ctas.size} distinct call-to-action phrasings — check there is still one primary action`);
-  push("cta_consistency", ctaErrs);
+  if (ctas.size > 6) ctaErrs.push(`${ctas.size} distinct call-to-action phrasings. Check there is still one primary action.`);
+  push("cta_consistency", ctaErrs, { adv: true });
 
   // legal
   const legalErrs = [];
@@ -175,11 +259,11 @@ if (!only) {
     const tag = String(lang).toLowerCase().slice(0, 2);
     // Either a language-tagged file (copy.vi.md) or substantial non-ASCII copy in place.
     const tagged = files.some((f) => f.includes(`.${tag}.`));
-    const inline = corpus.some(([, b]) => (b.match(/[^\u0000-\u024f]/g) ?? []).length > 40);
+    const inline = corpus.some(([, b]) => (b.match(/[^ -ɏ]/g) ?? []).length > 40);
     if (!tagged && !inline)
       transErrs.push(`${lang} is a declared market language: no .${tag}.md asset and no substantial ${lang} copy inline`);
   }
-  push("translation_complete", transErrs);
+  push("translation_complete", transErrs, { adv: true });
 
   // placeholders must still be placeholders, and must still be there
   const phErrs = [];
@@ -195,15 +279,13 @@ if (!only) {
   const MAXAGE = 180;
   const old = sources.filter((s) => s.accessedAt && (Date.now() - Date.parse(s.accessedAt)) / 86400000 > MAXAGE);
   if (old.length) staleErrs.push(`${old.length} source(s) were accessed more than ${MAXAGE} days ago; pricing and competitor claims decay fastest`);
-  push("research_is_current", staleErrs, staleErrs.length ? "failed" : "passed");
+  push("research_is_current", staleErrs, { adv: true });
 }
 
 // ---------- write ----------
 const failed = checks.filter((c) => c.status === "failed");
-const ADVISORY = new Set(["research_is_current", "no_orphan_claims", "reserved_terms_used_correctly",
-  "orphan_sources", "cta_consistency", "translation_complete", "verification_is_current"]);
-const blocking = failed.filter((c) => !ADVISORY.has(c.check));
-const warnings = failed.filter((c) => ADVISORY.has(c.check));
+const blocking = failed.filter((c) => !c.advisory);
+const warnings = failed.filter((c) => c.advisory);
 
 const doc = {
   passed: blocking.length === 0 && checks.some((c) => c.status === "passed"),
@@ -237,7 +319,7 @@ if (process.argv.includes("--json")) {
   const pad = Math.max(...checks.map((c) => c.check.length), 10);
   process.stdout.write(`aris-verify  ${doc.timestamp}\n\n`);
   for (const c of checks) {
-    const mark = { passed: "PASS", failed: "FAIL", skipped: "SKIP" }[c.status];
+    const mark = c.status === "failed" && c.advisory ? "WARN" : { passed: "PASS", failed: "FAIL", skipped: "SKIP" }[c.status];
     const cov = c.coverage != null ? `  ${Math.round(c.coverage * 100)}%` : "";
     process.stdout.write(`  ${mark}  ${c.check.padEnd(pad)}${cov}\n`);
     for (const e of (c.errors ?? []).slice(0, 6)) process.stdout.write(`        ${e}\n`);
@@ -247,5 +329,7 @@ if (process.argv.includes("--json")) {
     `\n  ${doc.passed ? "PASSED" : "FAILED"} - ${doc.blockingIssues.length} blocking, ${doc.warnings.length} warnings\n`
   );
   if (!doc.passed) process.stdout.write(`  The publish gate stays closed while this fails.\n`);
+  if (only) process.stdout.write(`  --only ${only}: nothing was written. Run the whole gate set to update verify.json.\n`);
+  else process.stdout.write(`  Releasable is a separate question: /aris-package runs close-check.mjs for that.\n`);
 }
 process.exit(doc.passed ? 0 : 1);

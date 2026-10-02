@@ -11,7 +11,12 @@
  * mined evidence, so a persona carrying them is usually a persona that was
  * imagined.
  */
-import { requireRoot, readJson, writeJson, check, report } from "./lib/aris.mjs";
+import { requireRoot, readJson, writeJson, check, report, help } from "./lib/aris.mjs";
+
+help(`persona-check.mjs [--strip] [--json]
+
+A persona is derived: no attribute without evidence. --strip removes unsourced
+attributes from personas.json rather than only reporting them.`);
 
 const STRIP = process.argv.includes("--strip");
 const DEMOGRAPHIC = /\b(age|aged|income|salary|years old|gender|male|female|tech-savv|education level|household)\b/i;

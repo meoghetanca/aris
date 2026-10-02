@@ -18,7 +18,13 @@
  */
 import fs from "node:fs";
 import path from "node:path";
-import { requireRoot, readJson, exists } from "./lib/aris.mjs";
+import { requireRoot, readJson, exists, help } from "./lib/aris.mjs";
+
+help(`evidence.mjs [--ingest] [--json]
+
+What the run could not read, and what a person can do about it.
+  (no flag)  what is blocked, and the exact paste list
+  --ingest   what has been supplied, and whether it is usable`);
 
 const root = requireRoot();
 const SUPPLIED = path.join(root, ".aris", "evidence", "supplied");

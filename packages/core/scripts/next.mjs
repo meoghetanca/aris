@@ -11,17 +11,21 @@
  * A step is done when its output exists AND its gate passes: a file that exists but
  * fails its gate is not progress, and resuming past it buries the failure.
  */
-import { requireRoot, readJson, exists } from "./lib/aris.mjs";
-import { execFileSync } from "node:child_process";
+import { requireRoot, readJson, exists, help, runScript } from "./lib/aris.mjs";
 import path from "node:path";
 import url from "node:url";
+
+help(`next.mjs [--all] [--json]
+
+What to run next, and where a stopped run left off. A step is done when its output
+exists AND its gate passes.`);
 
 const HERE = path.dirname(url.fileURLToPath(import.meta.url));
 const root = requireRoot();
 const state = readJson(root, "state.json") ?? {};
 
 const gate = (script, ...args) => {
-  try { execFileSync("node", [path.join(HERE, script), ...args, "--json"], { encoding: "utf8", cwd: root }); return true; }
+  try { runScript(path.join(HERE, script), [...args, "--json"], { cwd: root }); return true; }
   catch { return false; }
 };
 

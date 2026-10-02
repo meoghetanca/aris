@@ -38,7 +38,7 @@ publish — because those are the ones that get forgotten.
 ## 3. Build it
 
 ```
-node ${CLAUDE_PLUGIN_ROOT}/scripts/build-html.mjs
+node "${CLAUDE_PLUGIN_ROOT}/scripts/build-html.mjs"
 ```
 
 Two files come out of one template, so they can never drift:
@@ -80,6 +80,18 @@ nothing. The page falls back to the link when opened from disk, so one build ser
 
 Artifacts are private to the user until they share them. Say so, and leave sharing to
 them.
+
+**Say what is on the page before they share it.** This page is the whole working file,
+not a summary of it: the rejected positioning directions and why each was rejected, the
+pricing basis, every assumption with its confidence, every step that was cut, and the
+full source list. That is exactly right for a colleague or whoever signs off, and some
+of it is not what anyone would hand a prospect or a competitor. Name those four things
+in the handover and let the user decide who gets the link.
+
+The same goes for the repository. `.aris/` holds the research, the claim registry and
+the internal reasoning, so if the project is a git repo, tell the user whether `.aris/`
+is committed and offer to add it to `.gitignore`. A public repo makes that directory
+public.
 
 Republish to the **same file path** to keep the same URL. A fresh publish from a
 conversation that did not create it makes a second artifact and strands the link people

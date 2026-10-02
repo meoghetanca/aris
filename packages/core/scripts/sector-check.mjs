@@ -27,6 +27,16 @@ import fs from "node:fs";
 import path from "node:path";
 import url from "node:url";
 
+import { help } from "./lib/aris.mjs";
+
+help(`sector-check.mjs --list | --show <field> [--market XX] | --why <field> [--json]
+
+Resolves a field from the knowledge base, or fails closed.
+  --list          every entry, by family
+  --show <field>  the resolved profile
+  --why <field>   where each part of the profile came from
+Exit 0 resolved, 2 usage, 3 not covered.`);
+
 const HERE = path.dirname(url.fileURLToPath(import.meta.url));
 const BUILTIN = path.join(HERE, "..", "data", "sectors");
 
@@ -71,8 +81,20 @@ const ARRAYS = ["aliases", "reviewPlatforms", "communities", "buyingCommittee", 
 /** Walk the extends chain, root first, and record which entry contributed what. */
 function resolve(entry) {
   const chain = [];
-  let cur = entry, guard = 0;
-  while (cur && guard++ < 12) {
+  const seenSectors = new Set();
+  let cur = entry;
+  while (cur) {
+    // A cycle used to be truncated silently at twelve hops, which resolved an entry
+    // against a chain nobody wrote. It is a data defect in the knowledge base, so it
+    // is named on stderr rather than quietly worked around.
+    if (seenSectors.has(cur.sector)) {
+      process.stderr.write(
+        `sector-check: "extends" forms a cycle at ${cur.sector} (${[...seenSectors].join(" -> ")}). ` +
+        "Resolution stopped there; fix the entry.\n"
+      );
+      break;
+    }
+    seenSectors.add(cur.sector);
     chain.unshift(cur);
     cur = cur.extends ? byName.get(cur.extends) : null;
   }
@@ -107,8 +129,12 @@ if (args.includes("--list") || args.length === 0) {
   // Recurse: the chain can be deeper than one level (hr-payroll-vn extends b2b-saas-hr),
   // and printing only a root's direct children made those entries invisible in the one
   // listing that is supposed to say what the base covers.
+  const printed = new Set();
   const printKids = (p, depth) => {
+    if (depth > 12) return;
     for (const k of kids(p).sort((a, b) => a.sector.localeCompare(b.sector))) {
+      if (printed.has(k.sector)) continue;
+      printed.add(k.sector);
       const pad = "    ".repeat(depth);
       process.stdout.write(`${pad}${k.sector}${k.status === "provisional" ? "  [provisional]" : ""}` +
         `${k.market ? `  [${k.market} only]` : ""}\n` +
@@ -117,9 +143,18 @@ if (args.includes("--list") || args.length === 0) {
     }
   };
   for (const r of roots.sort((a, b) => a.sector.localeCompare(b.sector))) {
+    printed.add(r.sector);
     process.stdout.write(`${r.sector}  ${"-".repeat(Math.max(2, 34 - r.sector.length))}  [family]\n`);
     printKids(r, 1);
   }
+  // An entry in an extends cycle has no root, so the walk above never reaches it and
+  // the listing claimed a coverage it did not show. Name them instead of hiding them.
+  const unreachable = entries.filter((e) => !printed.has(e.sector));
+  if (unreachable.length)
+    process.stdout.write(
+      `\nNOT REACHABLE from any family (check their "extends"): ` +
+      unreachable.map((e) => e.sector).join(", ") + "\n"
+    );
   process.stdout.write(`\nA field not listed still resolves to its family. Nothing at all fails closed.\n`);
   process.exit(0);
 }

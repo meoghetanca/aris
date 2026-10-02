@@ -6,7 +6,7 @@ producing the same document twice.
 ## Resolve first, fail closed
 
 ```
-node ${CLAUDE_PLUGIN_ROOT}/scripts/sector-check.mjs --show "<sector>"
+node "${CLAUDE_PLUGIN_ROOT}/scripts/sector-check.mjs" --show "<sector>"
 ```
 
 Exit 3 means the field is not covered. **Stop.** Do not mine anyway. Without the

@@ -12,7 +12,13 @@
  * actually stored, duplicate quote text across pains (one post counted twice),
  * and quotes that look paraphrased rather than verbatim.
  */
-import { requireRoot, readJson, check, report } from "./lib/aris.mjs";
+import { requireRoot, readJson, check, advisory, report, help } from "./lib/aris.mjs";
+
+help(`pain-check.mjs [--min-quotes N] [--min-sources N] [--json]
+
+A pain may be marked validated only on evidence: at least 8 quotes across at least 3
+sources by default. Also catches a frequency that disagrees with the stored quotes,
+one post counted under two pains, and a quote with no link.`);
 
 const arg = (flag, dflt) => {
   const i = process.argv.indexOf(flag);
@@ -72,10 +78,6 @@ report(`pain-check: ${summary}`, [
   check("PAIN-GATE-002", "stated_frequency_matches_stored_quotes", countErrs.length === 0, countErrs),
   check("PAIN-GATE-003", "no_quote_counted_twice", dupErrs.length === 0, dupErrs),
   check("PAIN-GATE-004", "quotes_are_checkable", verbatimErrs.length === 0, verbatimErrs),
-  {
-    id: "PAIN-GATE-005",
-    check: "insufficient_pains_are_marked_not_dropped",
-    status: "passed",
-    errors: insufficient.map((p) => `${p.id} is insufficient (${(p.quotes ?? []).length} quotes) — correct to keep, do not promote`),
-  },
+  advisory("PAIN-GATE-005", "insufficient_pains_are_marked_not_dropped", insufficient.length === 0,
+           insufficient.map((p) => `${p.id} is insufficient (${(p.quotes ?? []).length} quotes), correct to keep, do not promote`)),
 ]);

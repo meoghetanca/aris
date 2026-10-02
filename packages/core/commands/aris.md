@@ -30,8 +30,8 @@ become assumptions, each one labelled.
 ## 2. Resolve the sector — before anything else
 
 ```
-node ${CLAUDE_PLUGIN_ROOT}/scripts/sector-check.mjs --list
-node ${CLAUDE_PLUGIN_ROOT}/scripts/sector-check.mjs --show "<your best guess>"
+node "${CLAUDE_PLUGIN_ROOT}/scripts/sector-check.mjs" --list
+node "${CLAUDE_PLUGIN_ROOT}/scripts/sector-check.mjs" --show "<your best guess>"
 ```
 
 **Exit 3 means the field is not covered. Stop and say so.** Do not proceed with a
@@ -87,7 +87,7 @@ properties of the workflow, so they are known at intake, not discovered at the e
 
 ## 5. Report
 
-Print `node ${CLAUDE_PLUGIN_ROOT}/scripts/aris-status.mjs` and say what is next:
+Print `node "${CLAUDE_PLUGIN_ROOT}/scripts/aris-status.mjs"` and say what is next:
 `/arisflow` for the whole chain, or `/aris-category` to take it a step at a time.
 
 Say plainly what this run will and will not be able to know. The user should not

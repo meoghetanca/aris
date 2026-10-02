@@ -12,11 +12,15 @@
  * Fails closed on an unresolved sector: with no entry there is no lens, and a
  * pass would mean "we did not look".
  */
-import fs from "node:fs";
 import path from "node:path";
 import url from "node:url";
-import { execFileSync } from "node:child_process";
-import { requireRoot, readJson, check, report } from "./lib/aris.mjs";
+import { requireRoot, readJson, check, advisory, report, help, runScript, assetCorpus } from "./lib/aris.mjs";
+
+help(`superlative-check.mjs [--json]
+
+Reads the resolved sector entry and checks the assets against it in three layers:
+unsupported superlatives, the field's regulated claims, and its reserved terms.
+Fails closed when the sector does not resolve.`);
 
 const HERE = path.dirname(url.fileURLToPath(import.meta.url));
 
@@ -34,8 +38,9 @@ const SUPERLATIVE = new RegExp(
 const root = requireRoot();
 const state = readJson(root, "state.json") ?? {};
 const sector = state.market?.sector;
-const dir = path.join(root, ".aris", "assets");
-const files = fs.existsSync(dir) ? fs.readdirSync(dir).filter((f) => f.endsWith(".md")) : [];
+// Recursive: an asset in a subdirectory used to get no sector lens at all.
+const corpus = assetCorpus(root);
+const files = corpus.map(([f]) => f);
 const claims = readJson(root, "assets/claims.json", { claims: [] }).claims ?? [];
 const cited = new Set(claims.filter((c) => (c.sourceIds ?? []).length).map((c) => c.id));
 
@@ -48,7 +53,7 @@ if (!sector) {
   entry = { regulatedClaims: [], forbidden: [], reservedTerms: [], requiredDisclosures: [] };
   for (const n of names) {
     try {
-      const out = execFileSync("node", [path.join(HERE, "sector-check.mjs"), "--show", n, "--json"], { encoding: "utf8" });
+      const out = runScript(path.join(HERE, "sector-check.mjs"), ["--show", n, "--json"]);
       const e = JSON.parse(out);
       // Constraints add; they never cancel.
         // Union, then dedupe: a product in two fields shares a family, so the family's
@@ -104,8 +109,15 @@ function claimProbes(claim) {
     .filter((ws) => ws.length);
 }
 
-/** The sentences of `body` that trip `claim`. */
-function claimHits(body, claim) {
+/**
+ * The sentences of `body` that trip `claim`.
+ *
+ * `floor` is the smallest overlap that counts. The regulatedClaims entries are short
+ * and phrase-shaped, so two words is enough. The `forbidden` list is longer prose
+ * describing a defect ("an ROI or time-saved figure with no baseline and no sample
+ * size"), where two words apart is a coincidence, so it asks for three.
+ */
+function claimHits(body, claim, floor = 2) {
   const probes = claimProbes(claim);
   if (!probes.length) return [];
   const out = [];
@@ -115,7 +127,7 @@ function claimHits(body, claim) {
     for (const ws of probes) {
       const n = ws.filter((w) => set.has(w)).length;
       // Short entries are literal phrases: all of them, or it is not that claim.
-      const need = ws.length <= 2 ? ws.length : Math.max(2, Math.ceil(ws.length / 2));
+      const need = ws.length <= floor ? ws.length : Math.max(floor, Math.ceil(ws.length / 2));
       if (n < need) continue;
       out.push(sent.trim().replace(/\s+/g, " ").slice(0, 90));
       break;
@@ -129,7 +141,6 @@ const forbiddenErrs = [];
 const disclosureErrs = [];
 const reservedErrs = [];
 
-const corpus = files.map((f) => [f, fs.readFileSync(path.join(dir, f), "utf8")]);
 const allText = corpus.map(([, b]) => b).join("\n").toLowerCase();
 
 for (const [f, body] of corpus) {
@@ -150,6 +161,33 @@ for (const [f, body] of corpus) {
       forbiddenErrs.push(`assets/${f}: "${rc.claim}" is forbidden in this field \u2014 ${rc.authority}${at}`);
     else
       disclosureErrs.push(`assets/${f}: "${rc.claim}" appears; it requires the disclosure \u2014 ${rc.authority}${at}`);
+  }
+
+  /**
+   * The sector's own `forbidden` list, which this script collected and never read.
+   *
+   * The header has always said layer 3 checks "the sector's forbidden and
+   * reservedTerms". Only reservedTerms was checked: `entry.forbidden` was unioned along
+   * the extends chain and then never looked at, so several hundred entries across the
+   * knowledge base could not fire. b2b-saas forbids "an ROI or time-saved figure with
+   * no baseline and no sample size", and copy stating exactly that passed.
+   *
+   * These entries are prose describing a defect rather than a phrase anyone writes, so
+   * the overlap floor is three rather than two, and every finding names the entry and
+   * the sentence. It is a lens for a human, like the layer above it.
+   *
+   * Its known false positive is copy that STATES the rule: a security page reading "a
+   * benchmark without a reproducible method is a number nobody can check" trips "a
+   * benchmark with no reproducible method", because word overlap cannot tell a sentence
+   * that breaks a rule from one that quotes it. Run across all 62 fields against neutral
+   * copy that discusses benchmarks on purpose, two fields fired and sixty did not. The
+   * finding prints the sentence, so a reader sees which kind it is immediately.
+   */
+  for (const fb of entry?.forbidden ?? []) {
+    const text = typeof fb === "string" ? fb : fb?.rule ?? fb?.claim ?? "";
+    const where = claimHits(body, text, 3);
+    if (!where.length) continue;
+    forbiddenErrs.push(`assets/${f}: this field does not permit "${text}"\u2014 "${where[0]}"`);
   }
 
   const low = body.toLowerCase();
@@ -207,10 +245,6 @@ report(`superlative-check: sector ${sector || "(unresolved)"}, ${files.length} a
     status: missingDisc.length ? "failed" : "passed",
     errors: missingDisc.map((d) => `the package never states: ${d}`),
   },
-  {
-    id: "LANG-006",
-    check: "reserved_terms_used_correctly",
-    status: "passed",
-    errors: reservedErrs.map((e) => `${e}  [review, not automatic]`),
-  },
+  advisory("LANG-006", "reserved_terms_used_correctly", reservedErrs.length === 0,
+           reservedErrs.map((e) => `${e}  [review, not automatic]`)),
 ]);

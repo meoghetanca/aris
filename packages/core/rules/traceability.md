@@ -33,8 +33,8 @@ reference silently resolves to new content.
 ## Check it, do not trust it
 
 ```
-node ${CLAUDE_PLUGIN_ROOT}/scripts/trace.mjs
-node ${CLAUDE_PLUGIN_ROOT}/scripts/trace.mjs --id CLAIM-014
+node "${CLAUDE_PLUGIN_ROOT}/scripts/trace.mjs"
+node "${CLAUDE_PLUGIN_ROOT}/scripts/trace.mjs" --id CLAIM-014
 ```
 
 A dangling id is a blocking issue, never a warning. Run it after any command that

@@ -18,7 +18,7 @@ Load `${CLAUDE_PLUGIN_ROOT}/rules/sector-discipline.md` and
 ## 1. Check it is really absent
 
 ```
-node ${CLAUDE_PLUGIN_ROOT}/scripts/sector-check.mjs --list
+node "${CLAUDE_PLUGIN_ROOT}/scripts/sector-check.mjs" --list
 ```
 
 Alias matching is loose, so the field may already be covered under another name. If
@@ -65,7 +65,7 @@ disclosed weakness, never a silent one.**
 ## 4. Verify it resolves
 
 ```
-node ${CLAUDE_PLUGIN_ROOT}/scripts/sector-check.mjs --show "<slug>"
+node "${CLAUDE_PLUGIN_ROOT}/scripts/sector-check.mjs" --show "<slug>"
 ```
 
 ## `--refresh`
