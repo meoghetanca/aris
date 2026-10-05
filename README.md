@@ -13,7 +13,7 @@
   <img src="https://img.shields.io/badge/sectors-62-4c566b?style=flat-square&labelColor=161b25" alt="62 sectors">
   <img src="https://img.shields.io/badge/specialists-11-4c566b?style=flat-square&labelColor=161b25" alt="specialists 11">
   <img src="https://img.shields.io/badge/checks-46%20%7C%2036%20fail--closed-4c566b?style=flat-square&labelColor=161b25" alt="46 checks, 36 of them fail-closed">
-  <img src="https://img.shields.io/badge/tests-88-4c566b?style=flat-square&labelColor=161b25" alt="88 tests">
+  <img src="https://img.shields.io/badge/tests-176-4c566b?style=flat-square&labelColor=161b25" alt="176 tests">
   <img src="https://img.shields.io/badge/licence-MIT-4c566b?style=flat-square&labelColor=161b25" alt="MIT licence">
 </p>
 
@@ -183,7 +183,7 @@ node test/run.mjs            every case
 node test/run.mjs pricing    only the ones whose name matches
 ```
 
-88 cases, no dependencies, about four seconds, run on Node 20, 22 and 24 in CI. They prove that a
+176 cases, no dependencies, about four seconds, run on Node 20, 22 and 24 in CI. They prove that a
 clean package passes every gate and builds a page, that **each gate refuses when its own defect is
 planted**, and that the false positives which used to refuse correct packages do not.
 `test/fixture.mjs` generates the project they run against, because half the gates compare a stored

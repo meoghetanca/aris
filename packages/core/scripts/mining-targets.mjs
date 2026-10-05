@@ -22,6 +22,7 @@ import fs from "node:fs";
 import path from "node:path";
 import url from "node:url";
 import { runScript, help } from "./lib/aris.mjs";
+import { hostForPlatform, whyNoHost, hostFromUrl, matchHost } from "./lib/hosts.mjs";
 
 help(`
 mining-targets — split a sector's platforms into what a miner can read and what needs a paste.
@@ -49,22 +50,12 @@ try {
 
 const reg = JSON.parse(fs.readFileSync(path.join(HERE, "..", "data", "fetchability.json"), "utf8"));
 
-/** Longest suffix wins, so community.zoom.com is not answered by a zoom.com rule. */
-const lookup = (host) => {
-  let best = null;
-  for (const k of Object.keys(reg.hosts ?? {}))
-    if ((host === k || host.endsWith("." + k)) && (!best || k.length > best.length)) best = k;
-  return best ? { host: best, ...reg.hosts[best] } : null;
-};
-
-/** A community is named by handle, not url. A bare platform word resolves to its host. */
+/** The registry entry for a target, or null to make no claim. */
 const statusOf = (t) => {
-  if (t.url) {
-    try { return lookup(new URL(t.url).hostname.replace(/^www\./, "")); } catch { return null; }
-  }
-  const p = typeof t.platform === "string" ? t.platform.trim().toLowerCase() : "";
-  if (!p || /\s/.test(p)) return null;
-  return lookup(`${p}.com`);
+  const host = t.url ? hostFromUrl(t.url) : hostForPlatform(t.platform);
+  if (!host) return null;
+  const key = matchHost(reg.hosts, host);
+  return key ? { host: key, ...reg.hosts[key] } : { host, status: "unobserved" };
 };
 
 const targets = [
@@ -75,17 +66,23 @@ const targets = [
 const open = [];
 const walled = [];
 const unknown = [];
+const noHost = [];
 for (const t of targets) {
   const s = statusOf(t);
   const row = { kind: t.kind, label: t.label, handle: t.handle, url: t.url, coverage: t.coverage,
-                status: s?.status ?? "unknown", reason: s?.reason };
-  if (!s) unknown.push(row);
+                host: s?.host ?? null, status: s?.status ?? "no-host", reason: s?.reason };
+  /**
+   * No host is not the same as never observed. A kind with no address cannot be
+   * probed, so offering it as "try one" wastes a fetch on a domain that was guessed.
+   */
+  if (!s) { row.reason = whyNoHost(t.platform) ?? "no hostname could be resolved for this entry"; noHost.push(row); }
   else if (s.status === "open") open.push(row);
+  else if (s.status === "unobserved") unknown.push(row);
   else walled.push(row);
 }
 
 if (args.includes("--json")) {
-  process.stdout.write(JSON.stringify({ sector: resolved.sector, open, walled, unknown }, null, 2) + "\n");
+  process.stdout.write(JSON.stringify({ sector: resolved.sector, open, walled, unknown, noHost }, null, 2) + "\n");
   process.exit(open.length || unknown.length ? 0 : 3);
 }
 
@@ -115,6 +112,14 @@ if (walled.length) {
     process.stdout.write(`      [${String(r.status).toUpperCase()}] ${r.reason ?? ""}\n`);
   }
   process.stdout.write("\n  Run /aris-evidence to turn these into paste tasks. Do not work around them.\n");
+}
+
+if (noHost.length) {
+  process.stdout.write(`\nNOT A FETCHABLE SURFACE (${noHost.length}) — nothing to probe here\n`);
+  for (const r of noHost) {
+    process.stdout.write(line(r));
+    process.stdout.write(`      ${r.reason}\n`);
+  }
 }
 
 if (!open.length && !unknown.length) {

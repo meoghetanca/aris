@@ -5,7 +5,8 @@
     "open": "a plain fetch returns usable page text",
     "blocked-403": "refused outright. Not a reason to work around: no user-agent rotation, no proxy, no reconstructing the page. It becomes an /aris-evidence paste task, which a person may do in two minutes",
     "blocked-user-agent": "refused at the crawler-policy layer before the request reaches the site. Needs a logged-in human session or the platform's official API",
-    "js-rendered": "the fetch succeeds and returns a shell. The content is loaded by a later client-side call a plain fetch never makes, so an empty result here means nothing about the market"
+    "js-rendered": "the fetch succeeds and returns a shell. The content is loaded by a later client-side call a plain fetch never makes, so an empty result here means nothing about the market",
+    "login-required": "responds, and the content you came for is behind an account. A person who is a member can read it; a fetch cannot. Treat as a paste task, not as a dead end"
   },
   "remedyDefault": "/aris-evidence",
   "hosts": {
@@ -127,6 +128,31 @@
     "feedbackportal.microsoft.com": {
       "status": "js-rendered",
       "reason": "Returns a Power Apps community shell. Vote counts and dated feature requests are exactly the salience measurement wanted, and none is retrievable.",
+      "observed": "2026-10-05"
+    },
+    "linkedin.com": {
+      "status": "login-required",
+      "reason": "The public homepage renders navigation and marketing text, so a naive check reads as success. Practitioner group discussion, which is what 16 sector entries point at, needs an account. Referenced by more sectors than any other unobserved host, and it is a paste task rather than a miner target.",
+      "observed": "2026-10-05"
+    },
+    "instagram.com": {
+      "status": "login-required",
+      "reason": "Returns an authentication form with no post content.",
+      "observed": "2026-10-05"
+    },
+    "discord.com": {
+      "status": "login-required",
+      "reason": "The marketing homepage renders; no server or channel content is readable without joining.",
+      "observed": "2026-10-05"
+    },
+    "tiktok.com": {
+      "status": "js-rendered",
+      "reason": "Returns the string \"Please wait...\" and nothing else.",
+      "observed": "2026-10-05"
+    },
+    "maps.google.com": {
+      "status": "js-rendered",
+      "reason": "302 to google.com/maps, which returns only the words \"Google Maps\". Business reviews, which 8 sector entries point at, are not readable by fetch.",
       "observed": "2026-10-05"
     }
   }
