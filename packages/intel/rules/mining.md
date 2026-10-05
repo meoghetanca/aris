@@ -4,6 +4,18 @@ The workflow has no interviews, so this is the entire evidence base. Everything
 downstream — pains, personas, positioning, every message — rests on what this step
 collects and on how honestly it is recorded.
 
+## Ask what opens before you choose where to look
+
+```
+node "${CLAUDE_PLUGIN_ROOT}/scripts/mining-targets.mjs" --sector "<sector>"
+```
+
+`coverage` says a platform is worth mining. `fetchability.json` says whether a fetch can
+read it. Those are different questions, and the order below answers only the first, so
+run the script and let it pick. A platform absent from the registry is UNKNOWN, not open:
+one fetch settles it, and recording the result with its date is how the next run avoids
+paying again.
+
 ## Where to look, and in what order
 
 The sector entry decides. Run the core command `/aris-sector`'s check first, or read

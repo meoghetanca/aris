@@ -222,6 +222,30 @@ function deny(reason) {
 // Emit nothing and exit clean: no opinion, normal permission flow continues.
 const allow = () => process.exit(0);
 
+/**
+ * Which directory is this command actually acting on?
+ *
+ * The gate guards one project. It used to resolve that project by walking up from the
+ * shell cwd, which answers the wrong question: a push aimed somewhere else entirely was
+ * refused merely because an unverified project happened to sit above the cwd. That is
+ * how this gate blocked a push to its OWN repository, from a session whose cwd was
+ * inside an unrelated aris project, with a message about running /aris-verify.
+ *
+ * git states its target explicitly, so read it. Everything else keeps the cwd, because
+ * a publisher that does not name a directory is publishing from where it stands.
+ *
+ * Deliberately narrow: only -C and --git-dir, only for git. A gate that guesses which
+ * repo an arbitrary command touches would be worse than one that over-blocks.
+ */
+function commandTarget(command, cwd) {
+  const m = /\bgit\s+(?:[^\s]+\s+)*?(?:-C\s+([^\s]+)|--git-dir(?:=|\s+)([^\s]+))/.exec(command || "");
+  if (!m) return cwd;
+  const named = m[1] || m[2];
+  if (!named) return cwd;
+  const abs = path.resolve(cwd || process.cwd(), named.replace(/\/\.git\/?$/, ""));
+  try { return fs.statSync(abs).isDirectory() ? abs : cwd; } catch { return cwd; }
+}
+
 /** Walk up from cwd looking for .aris/state.json, so the gate works from subdirectories. */
 function findState(start) {
   let d = path.resolve(start || process.cwd());
@@ -299,8 +323,16 @@ process.stdin.on("end", () => {
   const tool = payload.tool_name || "";
   const args = payload.tool_input || {};
 
-  const statePath = findState(payload.cwd);
-  if (!statePath) allow(); // not an aris project
+  /**
+   * Resolve the project from what the command targets, not from where the shell happens
+   * to be standing. If the target sits outside any aris project, this gate has no
+   * business refusing it.
+   */
+  const target = tool === "Bash"
+    ? commandTarget(String((payload.tool_input || {}).command || ""), payload.cwd)
+    : payload.cwd;
+  const statePath = findState(target);
+  if (!statePath) allow(); // the thing being acted on is not in an aris project
   const root = path.dirname(path.dirname(statePath));
 
   let what;

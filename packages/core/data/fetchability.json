@@ -9,23 +9,125 @@
   },
   "remedyDefault": "/aris-evidence",
   "hosts": {
-    "g2.com": { "status": "blocked-403", "reason": "403 to a plain fetch. Named coverage high in most sector entries, so this is the single most common place a miner is sent and cannot read.", "observed": "2026-10-02" },
-    "capterra.com": { "status": "blocked-403", "reason": "403 to a plain fetch. Its translation directory also mixes adjacent categories, so sort carefully once pasted.", "observed": "2026-10-02" },
-    "trustradius.com": { "status": "blocked-403", "reason": "403 to a plain fetch.", "observed": "2026-10-02" },
-    "reddit.com": { "status": "blocked-user-agent", "reason": "Refused by crawler policy before reaching the site; mirrors and proxies hit Reddit's own edge block. A thin Reddit result is therefore UNVERIFIABLE rather than evidence the market is quiet.", "observed": "2026-10-02" },
-    "techcommunity.microsoft.com": { "status": "blocked-403", "reason": "403 to a plain fetch, while learn.microsoft.com answers the same questions and is open.", "observed": "2026-10-02" },
-    "community.cisco.com": { "status": "blocked-403", "reason": "403 to a plain fetch.", "observed": "2026-10-02" },
-    "community.zoom.com": { "status": "js-rendered", "reason": "Search-indexed thread ids 404 and the pages that do resolve return a shell with no post text. Threads exist; a browser shows them.", "observed": "2026-10-02" },
-    "play.google.com": { "status": "js-rendered", "reason": "Review widgets never render to a plain fetch. A structural gap across the whole Play surface, not an absence of reviews.", "observed": "2026-10-02" },
-    "youtube.com": { "status": "js-rendered", "reason": "Comments load via a separate dynamic call. This matters because comments are often the designated route to non-English market voice.", "observed": "2026-10-02" },
-    "facebook.com": { "status": "js-rendered", "reason": "Group and page fetches return the title only. Existence is confirmable, activity and post content are not.", "observed": "2026-10-02" },
-    "deepl.com": { "status": "js-rendered", "reason": "Product feature pages return a heading with an empty body.", "observed": "2026-10-02" },
-    "trustpilot.com": { "status": "open", "reason": "Renders full review bodies with dates and star filters. The most reliable open review surface found.", "observed": "2026-10-02" },
-    "producthunt.com": { "status": "open", "reason": "Launch comments render. Treat uniformly enthusiastic threads with suspicion rather than as organic voice.", "observed": "2026-10-02" },
-    "learn.microsoft.com": { "status": "open", "reason": "Q&A threads render clean, dated, role-labelled text. Highest-yield open forum in this run.", "observed": "2026-10-02" },
-    "apps.apple.com": { "status": "open", "reason": "Review bodies render, including non-English storefronts. Per-review star ratings are often not exposed.", "observed": "2026-10-02" },
-    "support.google.com": { "status": "open", "reason": "Official help articles render. Community threads under it were not locatable.", "observed": "2026-10-02" },
-    "slator.com": { "status": "open", "reason": "Trade-press pages render.", "observed": "2026-10-02" },
-    "aiic.org": { "status": "open", "reason": "Professional-body standards pages render.", "observed": "2026-10-02" }
+    "g2.com": {
+      "status": "blocked-403",
+      "reason": "403 to a plain fetch. Named coverage high in most sector entries, so this is the single most common place a miner is sent and cannot read.",
+      "observed": "2026-10-02"
+    },
+    "capterra.com": {
+      "status": "blocked-403",
+      "reason": "403 to a plain fetch. Its translation directory also mixes adjacent categories, so sort carefully once pasted.",
+      "observed": "2026-10-02"
+    },
+    "trustradius.com": {
+      "status": "blocked-403",
+      "reason": "403 to a plain fetch.",
+      "observed": "2026-10-02"
+    },
+    "reddit.com": {
+      "status": "blocked-user-agent",
+      "reason": "Refused by crawler policy before reaching the site; mirrors and proxies hit Reddit's own edge block. A thin Reddit result is therefore UNVERIFIABLE rather than evidence the market is quiet.",
+      "observed": "2026-10-02"
+    },
+    "techcommunity.microsoft.com": {
+      "status": "blocked-403",
+      "reason": "403 to a plain fetch, while learn.microsoft.com answers the same questions and is open.",
+      "observed": "2026-10-02"
+    },
+    "community.cisco.com": {
+      "status": "blocked-403",
+      "reason": "403 to a plain fetch.",
+      "observed": "2026-10-02"
+    },
+    "community.zoom.com": {
+      "status": "js-rendered",
+      "reason": "Search-indexed thread ids 404 and the pages that do resolve return a shell with no post text. Threads exist; a browser shows them.",
+      "observed": "2026-10-02"
+    },
+    "play.google.com": {
+      "status": "js-rendered",
+      "reason": "Review widgets never render to a plain fetch. A structural gap across the whole Play surface, not an absence of reviews.",
+      "observed": "2026-10-02"
+    },
+    "youtube.com": {
+      "status": "js-rendered",
+      "reason": "Comments load via a separate dynamic call. This matters because comments are often the designated route to non-English market voice.",
+      "observed": "2026-10-02"
+    },
+    "facebook.com": {
+      "status": "js-rendered",
+      "reason": "Group and page fetches return the title only. Existence is confirmable, activity and post content are not.",
+      "observed": "2026-10-02"
+    },
+    "deepl.com": {
+      "status": "js-rendered",
+      "reason": "Product feature pages return a heading with an empty body.",
+      "observed": "2026-10-02"
+    },
+    "trustpilot.com": {
+      "status": "open",
+      "reason": "Renders full review bodies with dates and star filters. The most reliable open review surface found.",
+      "observed": "2026-10-02"
+    },
+    "producthunt.com": {
+      "status": "open",
+      "reason": "Launch comments render. Treat uniformly enthusiastic threads with suspicion rather than as organic voice.",
+      "observed": "2026-10-02"
+    },
+    "learn.microsoft.com": {
+      "status": "open",
+      "reason": "Q&A thread PERMALINKS render clean, dated, role-labelled text and are the highest-yield open forum found. Its /answers/search page does NOT: it is JS-rendered and ignores the query, returning the same 20 site-wide questions for any search, so per-period thread counts cannot be computed from it. Reach threads by external search, then fetch the permalink.",
+      "observed": "2026-10-02"
+    },
+    "apps.apple.com": {
+      "status": "open",
+      "reason": "Review bodies render, including non-English storefronts. Per-review star ratings are often not exposed.",
+      "observed": "2026-10-02"
+    },
+    "support.google.com": {
+      "status": "open",
+      "reason": "Official help articles render. Community threads under it were not locatable.",
+      "observed": "2026-10-02"
+    },
+    "slator.com": {
+      "status": "open",
+      "reason": "Trade-press pages render.",
+      "observed": "2026-10-02"
+    },
+    "aiic.org": {
+      "status": "open",
+      "reason": "Professional-body standards pages render.",
+      "observed": "2026-10-02"
+    },
+    "web.archive.org": {
+      "status": "blocked-user-agent",
+      "reason": "Refused at the tool level, page view and CDX API alike, on six attempts across every path and query form. The single most costly absence in the registry: it is the standard route to EVERY historical measurement this workflow asks for, so price survival and review growth both die on it alone and /aris-demand loses its two strongest signals at once.",
+      "observed": "2026-10-05"
+    },
+    "stackoverflow.com": {
+      "status": "blocked-user-agent",
+      "reason": "Refused at the tool level. No indexed tag page surfaced via search either, so developer-side question counts are unavailable as a salience signal.",
+      "observed": "2026-10-05"
+    },
+    "trends.google.com": {
+      "status": "js-rendered",
+      "reason": "HTTP 429 on three attempts, and it serves chart data by authenticated XHR after page load, so a static fetch cannot read it even unthrottled. Search-volume trends are unavailable by this route in any language.",
+      "observed": "2026-10-05"
+    },
+    "adstransparency.google.com": {
+      "status": "js-rendered",
+      "reason": "Returns only its navigation shell; advertiser cards and date ranges render client-side. An empty result here is a rendering failure and NOT evidence that nobody advertises, which is the most tempting wrong conclusion in the whole registry.",
+      "observed": "2026-10-05"
+    },
+    "ahrefs.com": {
+      "status": "js-rendered",
+      "reason": "The free keyword generator is a static marketing page; results need an interactive client-side query.",
+      "observed": "2026-10-05"
+    },
+    "feedbackportal.microsoft.com": {
+      "status": "js-rendered",
+      "reason": "Returns a Power Apps community shell. Vote counts and dated feature requests are exactly the salience measurement wanted, and none is retrievable.",
+      "observed": "2026-10-05"
+    }
   }
 }
