@@ -252,6 +252,27 @@ const ok = (name, cond, detail = "") => {
 };
 const want = (name) => !filter || name.toLowerCase().includes(filter.toLowerCase());
 
+/**
+ * fs.globSync is Node 22+. Guarding it with `fs.globSync ? ... : []` meant that on
+ * Node 20 the agent and doc checks silently iterated NOTHING: 16 cases vanished, the
+ * unquoted-path check passed vacuously, and CI reported green on all three versions
+ * while only two of them actually ran the suite. A test that disappears on one runtime
+ * is worse than a test that fails on it.
+ */
+function allFiles(dir, out = []) {
+  for (const e of fs.readdirSync(dir, { withFileTypes: true })) {
+    const p = path.join(dir, e.name);
+    if (e.isDirectory()) allFiles(p, out);
+    else out.push(p);
+  }
+  return out;
+}
+const repoFiles = (re) =>
+  allFiles(path.join(REPO, "packages"))
+    .map((p) => path.relative(REPO, p).split(path.sep).join("/"))
+    .filter((rel) => re.test(rel))
+    .sort();
+
 process.stdout.write("\nthe clean package\n");
 const clean = tmp();
 build(clean);
@@ -411,9 +432,9 @@ if (want("repo") || !filter) {
      "they are duplicated on purpose and nothing but this check keeps them in step");
 
   // Every agent that fetches from the web must hold no shell.
-  const agents = fs.globSync
-    ? fs.globSync("packages/*/agents/*.md", { cwd: REPO }).map((p) => path.join(REPO, p))
-    : [];
+  const agents = repoFiles(/^packages\/[^/]+\/agents\/[^/]+\.md$/).map((rel) => path.join(REPO, rel));
+  ok("the agent list is not empty, so these cases cannot vanish on a runtime", agents.length > 0,
+     "no agent files found: the suite would silently skip every agent check");
   for (const f of agents) {
     const text = fs.readFileSync(f, "utf8");
     const tools = (text.match(/^tools:\s*(.*)$/m) ?? [])[1] ?? "";
@@ -424,9 +445,15 @@ if (want("repo") || !filter) {
   }
 
   // Every script invocation in the docs must quote the plugin path.
-  const docs = fs.globSync ? fs.globSync("packages/**/*.md", { cwd: REPO }) : [];
+  const docs = repoFiles(/\.md$/);
+  ok("the doc list is not empty, so the unquoted-path check cannot pass vacuously", docs.length > 0,
+     "no docs found");
   const unquoted = docs.filter((rel) => /node \$\{CLAUDE_PLUGIN_ROOT\}/.test(fs.readFileSync(path.join(REPO, rel), "utf8")));
   ok("no unquoted ${CLAUDE_PLUGIN_ROOT} invocation in the docs", unquoted.length === 0, unquoted.join(", "));
+
+  ok("the suite does not depend on fs.globSync, which does not exist on Node 20",
+     !/fs\.globSync\(/.test(fs.readFileSync(path.join(REPO, "test/run.mjs"), "utf8")),
+     "a fs.globSync fallback silently skips cases on Node 20");
 }
 
 process.stdout.write("\nthe flow's own consistency\n");
