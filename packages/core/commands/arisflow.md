@@ -35,39 +35,76 @@ Load `${CLAUDE_PLUGIN_ROOT}/rules/decisions.md`,
 
 ## The chain
 
-| | Command | Decision block |
+| Wave | Command | Decision block |
 |:--:|:--|:--|
 | 1 | `/aris` | audience, market, language, model, out-of-scope |
 | 2 | `/aris-category` | — |
 | 3 | `/aris-voc` | — |
+| 3 | `/aris-size` | — |
+| 3 | `/aris-demand` | — |
+| 3* | `/aris-evidence` | **conditional.** Only when sources were blocked. See "Where it stops" |
 | 4 | `/aris-personas` | which segment to lead with |
-| 5 | `/aris-size` | — |
-| 6 | `/aris-demand` | — |
-| 7 | `/aris-position` | which of three directions |
-| 8 | `/aris-messages` | tone of voice |
-| 9 | `/aris-gtm` | channel mix, price point |
-| 10 | `/aris-assets` | asset scope |
-| 11 | `/aris-verify` | — |
-| 12 | `/aris-harness` | — |
-| 13 | `/aris-playbook` | — |
-| 14 | `/aris-runway` | — |
-| 15 | `/aris-package` | — |
+| 5 | `/aris-position` | which of three directions |
+| 6 | `/aris-messages` | tone of voice |
+| 7 | `/aris-gtm` | channel mix, price point |
+| 8 | `/aris-assets` | asset scope |
+| 9 | `/aris-verify` | — |
+| 10 | `/aris-harness` | — |
+| 11 | `/aris-playbook` | — |
+| 12 | `/aris-runway` | — |
+| 13 | `/aris-package` | — |
+
+**Same wave means concurrent, not merely adjacent.** `/aris-voc`, `/aris-size` and
+`/aris-demand` each need only `intel/category.json`, and none of them feeds another, so
+dispatch all three at once. Running them one after another is the single most common
+reason a run feels slow, and nothing in the dependency graph asks for it.
+
+Later steps admit concurrency too, `/aris-harness` needs only `strategy/gtm.json` and so
+can run beside `/aris-assets`. Rather than hard-code that here, ask the tool:
+
+```
+node "${CLAUDE_PLUGIN_ROOT}/scripts/next.mjs" --all
+```
+
+It prints `Can run now:` with every step whose inputs exist. That line is the authority
+on ordering; this table is a map.
 
 Run each as its own command, in order, honouring its preconditions. Do not inline a
 step's work here: the commands carry the rules, and a step run from memory of them
 is a step run without them.
 
-## Stopping is not optional
+## Where it stops
 
-If a step's gate refuses — a sector with no entry, pains below threshold, an
-unresolvable formula — **stop the chain there and report**. Do not skip to the next
-step, and never synthesise the missing artifact to keep moving. A chain that
-produces a complete-looking package from a failed gate is worse than one that stops,
-because nobody can see where it went wrong.
+Three kinds of stop, and only the first is a decision:
 
-The one exception is evidence that is merely thin: a pain at 5 quotes stays
-`insufficient`, is excluded from personas, and the run continues with fewer pains
-and an assumption recording the thinness.
+**A decision block.** Six of them: intake, which segment to lead with, the positioning
+direction, tone of voice, channel mix and price, asset scope. Each presents options
+generated from the evidence, recommended first. Silence becomes a labelled assumption at
+the recommended option's confidence and the chain continues.
+
+**The evidence stop.** `/aris-voc` can only mine what a fetch can read, and this field's
+highest-coverage review platforms usually cannot be read at all: G2, Capterra and
+TrustRadius return 403, and Reddit refuses the crawler outright. `sector-check --show`
+marks every such platform, and `/aris-evidence` turns each one into "open this and paste
+it here", which a person may do and a fetcher may not. **This stop is not a decision and
+not a failure. It is data entry, and the chain cannot route around it.** Budget for it.
+
+**A gate refusal.** Then stop and report. Do not skip the step, and never synthesise the
+artifact the gate asked for. A chain that produces a complete-looking package from a
+failed gate is worse than one that stops, because nobody can see where it went wrong.
+
+### What counts as a refusal, for pains specifically
+
+This used to be ambiguous and the ambiguity cost a whole run, so it is now spelt out:
+
+| Evidence | What happens |
+|:--|:--|
+| Some pains validated, others thin | **Continue.** The thin ones keep `status: "insufficient"`, are excluded from personas, and an assumption records the thinness. |
+| **Zero validated** pains | **Stop.** Not because the threshold is sacred, but because `/aris-personas` would have nothing to derive from, so every attribute would be invented and `persona-check` would strip them all. Run `/aris-evidence`, or accept that the honest next step is interviews. |
+| A gate error: counts disagree with stored quotes, a quote has no URL, one post inflating two pains | **Stop and fix the clustering**, not the numbers. |
+
+The same three cases apply wherever a threshold exists. Thin is not empty, and empty is
+not a smaller version of thin, it is a different answer.
 
 ## `--auto`
 

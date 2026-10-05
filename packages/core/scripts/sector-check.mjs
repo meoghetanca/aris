@@ -39,6 +39,54 @@ Exit 0 resolved, 2 usage, 3 not covered.`);
 
 const HERE = path.dirname(url.fileURLToPath(import.meta.url));
 const BUILTIN = path.join(HERE, "..", "data", "sectors");
+const FETCHABILITY = path.join(HERE, "..", "data", "fetchability.json");
+const ALLOWED_FETCH = ["open", "blocked-403", "blocked-user-agent", "js-rendered"];
+
+/**
+ * coverage says a platform is worth mining. This says whether a miner can read it.
+ * Keeping them apart is the point: a sector may rate G2 "high" and be right, while a
+ * miner sent there spends its whole budget discovering a 403.
+ */
+const fetchReg = (() => {
+  try { return JSON.parse(fs.readFileSync(FETCHABILITY, "utf8")); } catch { return { hosts: {} }; }
+})();
+for (const [host, h] of Object.entries(fetchReg.hosts ?? {}))
+  if (!ALLOWED_FETCH.includes(h?.status)) {
+    process.stderr.write(
+      `sector-check: fetchability.json gives ${host} the unknown status "${h?.status}".\n` +
+      `Allowed: ${ALLOWED_FETCH.join(", ")}. An unrecognised status would be rendered as\n` +
+      `silence, and a miner would read that as "open".\n`);
+    process.exit(2);
+  }
+
+/** Longest suffix wins, so community.zoom.com is not answered by zoom.com. */
+function fetchStatus(u) {
+  let host;
+  try { host = new URL(u).hostname.replace(/^www\./, ""); } catch { return null; }
+  let best = null;
+  for (const k of Object.keys(fetchReg.hosts ?? {}))
+    if ((host === k || host.endsWith("." + k)) && (!best || k.length > best.length)) best = k;
+  return best ? { host: best, ...fetchReg.hosts[best] } : null;
+}
+
+/**
+ * Communities are named by handle ("r/SaaS"), not by url, so a url-only lookup misses
+ * reddit, which is the host that has actually broken a run. Resolve a bare platform
+ * word to its obvious host; anything with whitespace is a description, not a host.
+ */
+function fetchNoteFor(x) {
+  if (x.url) return fetchNote(x.url);
+  const p = typeof x.platform === "string" ? x.platform.trim().toLowerCase() : "";
+  if (!p || /\s/.test(p)) return "";
+  return fetchNote(`https://${p}.com`);
+}
+
+/** Annotation for a platform line. Open and unknown hosts stay quiet; unknown is not a claim. */
+function fetchNote(u) {
+  const s = fetchStatus(u);
+  if (!s || s.status === "open") return "";
+  return `  [${s.status.toUpperCase()} -> ${s.remedy ?? fetchReg.remedyDefault ?? "/aris-evidence"} paste task]`;
+}
 
 /** Project-local entries override built-ins, so /aris-sector adds a field without touching the plugin. */
 function projectDir() {
@@ -331,7 +379,7 @@ const L = (label, v) => {
       const head = x.name ?? x.term ?? x.claim ?? x.role ?? x.platform ?? "";
       const rest = Object.entries(x).filter(([k]) => !["name","term","claim","role","platform"].includes(k))
         .map(([k, val]) => `${k}: ${val}`).join("  ");
-      process.stdout.write(`  - ${head}${rest ? "  (" + rest + ")" : ""}\n`);
+      process.stdout.write(`  - ${head}${rest ? "  (" + rest + ")" : ""}${fetchNoteFor(x)}\n`);
     }
   else process.stdout.write(`  ${Object.entries(v).map(([k, val]) =>
     `${k}: ${Array.isArray(val) ? val.join(", ") : val}`).join("\n  ")}\n`);

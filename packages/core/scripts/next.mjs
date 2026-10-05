@@ -72,10 +72,12 @@ const status = STEPS.map((s) => {
 });
 
 const failing = status.find((s) => s.state === "failing");
-const next = failing ?? status.find((s) => s.state === "ready");
+const ready = status.filter((s) => s.state === "ready");
+const next = failing ?? ready[0];
 
 if (process.argv.includes("--json")) {
-  process.stdout.write(JSON.stringify({ next: next?.cmd ?? null, steps: status }, null, 2) + "\n");
+  process.stdout.write(JSON.stringify(
+    { next: next?.cmd ?? null, canRunNow: ready.map((s) => s.cmd), steps: status }, null, 2) + "\n");
   process.exit(0);
 }
 
@@ -102,5 +104,10 @@ process.stdout.write(
     ? `Next:  ${next.cmd}   (re-run it)\n\n` +
       `${next.makes} exists but its gate fails, so nothing after it is trustworthy.\n` +
       `Resuming past a failing step buries the failure rather than fixing it.\n`
-    : `Next:  ${next.cmd}\n\n${next.why}.\n`
+    : `Can run now:  ${ready.map((s) => s.cmd).join("  ")}\n\n` +
+      (ready.length > 1
+        ? `Those share no inputs and none feeds another, so they can run concurrently.\n` +
+          `Running them one after another is the most common reason a run feels slow.\n\n`
+        : "") +
+      `${next.cmd}: ${next.why}.\n`
 );

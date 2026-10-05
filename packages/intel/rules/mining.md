@@ -72,7 +72,12 @@ text and put the translation beside it, never instead of it.
 ## Automated reading, and where it is not allowed
 
 Some of the places named above forbid automated access in their terms, and some block
-it outright: G2, Capterra and TrustRadius all return 403 to a plain fetch. Neither fact
+it outright. **Which ones is data, not lore:** `packages/core/data/fetchability.json`
+records each host's status with the date it was observed, and `sector-check --show`
+prints it beside every platform, so you learn a source is unreadable before a miner
+spends its budget finding out. At the time of writing G2, Capterra and TrustRadius
+return 403 and Reddit refuses the crawler outright, but read the annotation rather than
+this sentence, because this sentence is the thing that goes stale. Neither fact
 is a reason to work around them. A blocked source becomes a `/aris-evidence` paste
 task, which a person can do in two minutes and is allowed to do; a source whose terms
 forbid automated collection is recorded as a gap with that reason. Do not rotate a user

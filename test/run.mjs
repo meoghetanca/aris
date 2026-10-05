@@ -429,5 +429,89 @@ if (want("repo") || !filter) {
   ok("no unquoted ${CLAUDE_PLUGIN_ROOT} invocation in the docs", unquoted.length === 0, unquoted.join(", "));
 }
 
+process.stdout.write("\nthe flow's own consistency\n");
+if (want("flow") || !filter) {
+  const FETCH = path.join(REPO, "packages/core/data/fetchability.json");
+  const ALLOWED = ["open", "blocked-403", "blocked-user-agent", "js-rendered"];
+  const read = (rel) => { try { return fs.readFileSync(path.join(REPO, rel), "utf8"); } catch { return ""; } };
+
+  // --- fix 1: a central, machine-readable fetchability registry ---
+  ok("fetchability.json exists", fs.existsSync(FETCH), FETCH);
+  let reg = null;
+  try { reg = JSON.parse(fs.readFileSync(FETCH, "utf8")); } catch { /* reported below */ }
+  ok("fetchability.json parses", reg !== null);
+  const hosts = reg?.hosts ?? {};
+  const names = Object.keys(hosts);
+  ok("fetchability names the three review sites mining.md says return 403",
+     ["g2.com", "capterra.com", "trustradius.com"].every((h) => h in hosts), names.join(", "));
+  ok("fetchability records reddit.com, blocked at the user-agent level",
+     hosts["reddit.com"]?.status === "blocked-user-agent", JSON.stringify(hosts["reddit.com"] ?? null));
+  ok("every fetchability host carries a status and a reason",
+     names.length > 0 && names.every((h) => hosts[h].status && hosts[h].reason),
+     names.filter((h) => !hosts[h].status || !hosts[h].reason).join(", "));
+  ok("every fetchability status is from the allowed set",
+     names.length > 0 && names.every((h) => ALLOWED.includes(hosts[h].status)),
+     names.filter((h) => !ALLOWED.includes(hosts[h].status)).join(", "));
+
+  // sector-check must SURFACE that, so a miner is not sent where it cannot read.
+  const shown = run(path.join(CORE, "sector-check.mjs"), ["--show", "b2b-saas"], REPO);
+  ok("sector-check annotates a blocked platform", /blocked/i.test(shown.out), shown.out.slice(0, 160));
+  ok("sector-check routes a blocked platform to /aris-evidence", /aris-evidence/.test(shown.out));
+
+  // Communities are named by handle, not url. Reddit is the host that actually broke a
+  // run, so an annotation that only covers url-bearing entries misses the real case.
+  const community = (shown.out.match(/^\s+- reddit\b.*$/im) ?? [""])[0];
+  ok("sector-check annotates a blocked community platform, not just url-bearing ones",
+     /BLOCKED-USER-AGENT/.test(community), community || "no reddit community line found");
+  ok("sector-check leaves an unregistered community quiet rather than implying it is open",
+     !/\[/.test((shown.out.match(/^\s+- slack\b.*$/im) ?? [""])[0]),
+     (shown.out.match(/^\s+- slack\b.*$/im) ?? [""])[0]);
+
+  // mining.md must stop carrying the host list as prose that drifts from the data.
+  const mining = read("packages/intel/rules/mining.md");
+  ok("mining.md points at the fetchability registry rather than only naming hosts in prose",
+     /fetchability|sector-check --show/.test(mining));
+
+  // Plant the defect: an unrecognised status must be refused, not quietly rendered.
+  if (fs.existsSync(FETCH)) {
+    const original = fs.readFileSync(FETCH, "utf8");
+    try {
+      const bad = JSON.parse(original);
+      bad.hosts["planted.example"] = { status: "sometimes", reason: "planted by the suite" };
+      fs.writeFileSync(FETCH, JSON.stringify(bad, null, 2) + "\n");
+      const r = run(path.join(CORE, "sector-check.mjs"), ["--show", "b2b-saas"], REPO);
+      ok("sector-check refuses an unknown fetch status", r.code !== 0, `exit ${r.code}`);
+    } finally { fs.writeFileSync(FETCH, original); }
+  } else {
+    ok("sector-check refuses an unknown fetch status", false, "no registry to plant into");
+  }
+
+  // --- fix 2: the paste step is a documented stop ---
+  const arisflow = read("packages/core/commands/arisflow.md");
+  const voc = read("packages/intel/commands/aris-voc.md");
+  ok("arisflow names /aris-evidence as a stop", /aris-evidence/.test(arisflow));
+
+  // --- fix 3: concurrency is stated, and next.mjs offers every runnable step ---
+  ok("arisflow marks voc, size and demand as one concurrent wave",
+     /\bwave\b/i.test(arisflow) && /concurrent/i.test(arisflow));
+  const partial = tmp();
+  fs.mkdirSync(path.join(partial, ".aris", "intel"), { recursive: true });
+  fs.writeFileSync(path.join(partial, ".aris", "state.json"),
+    JSON.stringify({ product: { name: "T" }, market: { sector: "b2b-saas" }, status: "researching", decisions: [] }, null, 2));
+  fs.writeFileSync(path.join(partial, ".aris", "intel", "category.json"), JSON.stringify({ players: [] }, null, 2));
+  const nx = run(path.join(CORE, "next.mjs"), ["--all"], partial);
+  const runnable = (nx.out.match(/^Can run now:.*$/im) ?? [""])[0];
+  ok("next offers every runnable step rather than a single Next", runnable !== "", nx.out.slice(0, 200));
+  ok("next lists voc, size and demand together as runnable",
+     ["/aris-voc", "/aris-size", "/aris-demand"].every((c) => runnable.includes(c)), runnable);
+
+  // --- fix 4: the zero-validated-pains case is explicit and the two docs agree ---
+  ok("arisflow no longer exempts a 5-quote pain from the stop rule",
+     !/pain at 5 quotes/i.test(arisflow));
+  ok("arisflow states what happens at zero validated pains", /zero validated/i.test(arisflow));
+  ok("aris-voc states what happens at zero validated pains", /zero validated/i.test(voc));
+}
+
+
 process.stdout.write(`\n${pass} passed, ${fail} failed\n`);
 process.exit(fail ? 1 : 0);

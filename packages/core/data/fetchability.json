@@ -1,0 +1,31 @@
+{
+  "note": "Whether an automated fetch can READ a platform, which is a different question from how much a platform CARRIES. coverage says it is worth mining; status says whether a miner can. A sector entry that rates G2 coverage high is correct and still sends a miner somewhere it will spend its whole budget discovering a 403.",
+  "rule": "A host absent from this file is UNKNOWN, not open. Add one only after a fetch actually succeeded or failed; do not seed it from expectation.",
+  "statuses": {
+    "open": "a plain fetch returns usable page text",
+    "blocked-403": "refused outright. Not a reason to work around: no user-agent rotation, no proxy, no reconstructing the page. It becomes an /aris-evidence paste task, which a person may do in two minutes",
+    "blocked-user-agent": "refused at the crawler-policy layer before the request reaches the site. Needs a logged-in human session or the platform's official API",
+    "js-rendered": "the fetch succeeds and returns a shell. The content is loaded by a later client-side call a plain fetch never makes, so an empty result here means nothing about the market"
+  },
+  "remedyDefault": "/aris-evidence",
+  "hosts": {
+    "g2.com": { "status": "blocked-403", "reason": "403 to a plain fetch. Named coverage high in most sector entries, so this is the single most common place a miner is sent and cannot read.", "observed": "2026-10-02" },
+    "capterra.com": { "status": "blocked-403", "reason": "403 to a plain fetch. Its translation directory also mixes adjacent categories, so sort carefully once pasted.", "observed": "2026-10-02" },
+    "trustradius.com": { "status": "blocked-403", "reason": "403 to a plain fetch.", "observed": "2026-10-02" },
+    "reddit.com": { "status": "blocked-user-agent", "reason": "Refused by crawler policy before reaching the site; mirrors and proxies hit Reddit's own edge block. A thin Reddit result is therefore UNVERIFIABLE rather than evidence the market is quiet.", "observed": "2026-10-02" },
+    "techcommunity.microsoft.com": { "status": "blocked-403", "reason": "403 to a plain fetch, while learn.microsoft.com answers the same questions and is open.", "observed": "2026-10-02" },
+    "community.cisco.com": { "status": "blocked-403", "reason": "403 to a plain fetch.", "observed": "2026-10-02" },
+    "community.zoom.com": { "status": "js-rendered", "reason": "Search-indexed thread ids 404 and the pages that do resolve return a shell with no post text. Threads exist; a browser shows them.", "observed": "2026-10-02" },
+    "play.google.com": { "status": "js-rendered", "reason": "Review widgets never render to a plain fetch. A structural gap across the whole Play surface, not an absence of reviews.", "observed": "2026-10-02" },
+    "youtube.com": { "status": "js-rendered", "reason": "Comments load via a separate dynamic call. This matters because comments are often the designated route to non-English market voice.", "observed": "2026-10-02" },
+    "facebook.com": { "status": "js-rendered", "reason": "Group and page fetches return the title only. Existence is confirmable, activity and post content are not.", "observed": "2026-10-02" },
+    "deepl.com": { "status": "js-rendered", "reason": "Product feature pages return a heading with an empty body.", "observed": "2026-10-02" },
+    "trustpilot.com": { "status": "open", "reason": "Renders full review bodies with dates and star filters. The most reliable open review surface found.", "observed": "2026-10-02" },
+    "producthunt.com": { "status": "open", "reason": "Launch comments render. Treat uniformly enthusiastic threads with suspicion rather than as organic voice.", "observed": "2026-10-02" },
+    "learn.microsoft.com": { "status": "open", "reason": "Q&A threads render clean, dated, role-labelled text. Highest-yield open forum in this run.", "observed": "2026-10-02" },
+    "apps.apple.com": { "status": "open", "reason": "Review bodies render, including non-English storefronts. Per-review star ratings are often not exposed.", "observed": "2026-10-02" },
+    "support.google.com": { "status": "open", "reason": "Official help articles render. Community threads under it were not locatable.", "observed": "2026-10-02" },
+    "slator.com": { "status": "open", "reason": "Trade-press pages render.", "observed": "2026-10-02" },
+    "aiic.org": { "status": "open", "reason": "Professional-body standards pages render.", "observed": "2026-10-02" }
+  }
+}
