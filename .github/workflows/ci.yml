@@ -15,6 +15,8 @@ jobs:
         node: ["20.x", "22.x", "24.x"]
     steps:
       - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
       - uses: actions/setup-node@v4
         with:
           node-version: ${{ matrix.node }}
@@ -41,3 +43,30 @@ jobs:
 
       - name: the gate harness
         run: node test/run.mjs
+
+      # The README is the first thing a stranger reads, and its test badge sat at 88
+      # while the suite had grown past 150. A number nobody checks is a number that rots.
+      - name: the README test count matches the suite
+        run: |
+          N=$(node test/run.mjs | grep -oE "[0-9]+ passed" | grep -oE "[0-9]+")
+          echo "suite reports $N passed"
+          grep -q "tests-$N-" README.md || { echo "::error::README badge does not say $N tests"; exit 1; }
+          grep -q "$N cases" README.md || { echo "::error::README prose does not say $N cases"; exit 1; }
+
+      # claude plugin update is version-keyed, so a behaviour change that does not move
+      # the version reaches nobody however green this run is. Two merged PRs shipped to
+      # an install still sitting on 0.1.0 before this step existed.
+      - name: version-bump guard, a packages change must move the version
+        if: github.event_name == 'pull_request'
+        run: |
+          BASE="origin/${{ github.base_ref }}"
+          git fetch -q origin "${{ github.base_ref }}"
+          if [ -n "$(git diff --name-only "$BASE...HEAD" -- packages/)" ]; then
+            if [ -z "$(git diff "$BASE...HEAD" -- 'packages/*/.claude-plugin/plugin.json' | grep "^+.*\"version\"")" ]; then
+              echo "::error::packages/ changed but no plugin.json version moved. Users update by version, so this change would reach nobody."
+              exit 1
+            fi
+            echo "packages/ changed and a version moved"
+          else
+            echo "no packages/ change, nothing to assert"
+          fi

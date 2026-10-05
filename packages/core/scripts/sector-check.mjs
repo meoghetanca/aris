@@ -24,6 +24,7 @@
  *   absent    nothing matched. Exit 3; the flow stops.
  */
 import fs from "node:fs";
+import { hostForPlatform, hostFromUrl, matchHost, FETCH_STATUSES } from "./lib/hosts.mjs";
 import path from "node:path";
 import url from "node:url";
 
@@ -40,7 +41,7 @@ Exit 0 resolved, 2 usage, 3 not covered.`);
 const HERE = path.dirname(url.fileURLToPath(import.meta.url));
 const BUILTIN = path.join(HERE, "..", "data", "sectors");
 const FETCHABILITY = path.join(HERE, "..", "data", "fetchability.json");
-const ALLOWED_FETCH = ["open", "blocked-403", "blocked-user-agent", "js-rendered"];
+const ALLOWED_FETCH = FETCH_STATUSES;
 
 /**
  * coverage says a platform is worth mining. This says whether a miner can read it.
@@ -61,12 +62,8 @@ for (const [host, h] of Object.entries(fetchReg.hosts ?? {}))
 
 /** Longest suffix wins, so community.zoom.com is not answered by zoom.com. */
 function fetchStatus(u) {
-  let host;
-  try { host = new URL(u).hostname.replace(/^www\./, ""); } catch { return null; }
-  let best = null;
-  for (const k of Object.keys(fetchReg.hosts ?? {}))
-    if ((host === k || host.endsWith("." + k)) && (!best || k.length > best.length)) best = k;
-  return best ? { host: best, ...fetchReg.hosts[best] } : null;
+  const key = matchHost(fetchReg.hosts, hostFromUrl(u));
+  return key ? { host: key, ...fetchReg.hosts[key] } : null;
 }
 
 /**
@@ -76,9 +73,8 @@ function fetchStatus(u) {
  */
 function fetchNoteFor(x) {
   if (x.url) return fetchNote(x.url);
-  const p = typeof x.platform === "string" ? x.platform.trim().toLowerCase() : "";
-  if (!p || /\s/.test(p)) return "";
-  return fetchNote(`https://${p}.com`);
+  const h = hostForPlatform(x.platform);
+  return h ? fetchNote(`https://${h}`) : "";
 }
 
 /** Annotation for a platform line. Open and unknown hosts stay quiet; unknown is not a claim. */

@@ -432,7 +432,7 @@ if (want("repo") || !filter) {
 process.stdout.write("\nthe flow's own consistency\n");
 if (want("flow") || !filter) {
   const FETCH = path.join(REPO, "packages/core/data/fetchability.json");
-  const ALLOWED = ["open", "blocked-403", "blocked-user-agent", "js-rendered"];
+  const ALLOWED = ["open", "blocked-403", "blocked-user-agent", "js-rendered", "login-required"];
   const read = (rel) => { try { return fs.readFileSync(path.join(REPO, rel), "utf8"); } catch { return ""; } };
 
   // --- fix 1: a central, machine-readable fetchability registry ---
@@ -757,6 +757,91 @@ if (want("targets") || want("scope") || !filter) {
     ok("git -C pointed at an unrelated repo is allowed",
        elsewhere === "allow",
        `the gate blocked a push to a repo outside the project: ${String(elsewhere).slice(0, 160)}`);
+  }
+}
+
+
+process.stdout.write("\nplatform words are not hostnames\n");
+if (want("hosts") || want("guards") || !filter) {
+  const HOSTS = path.join(REPO, "packages/core/scripts/lib/hosts.mjs");
+  ok("lib/hosts.mjs exists", fs.existsSync(HOSTS), HOSTS);
+  ok("hosts.mjs is identical in both script copies", (() => {
+    const b = path.join(REPO, "packages/assets/scripts/lib/hosts.mjs");
+    return fs.existsSync(HOSTS) && fs.existsSync(b) &&
+      fs.readFileSync(HOSTS, "utf8") === fs.readFileSync(b, "utf8");
+  })(), "duplicated on purpose; only this check keeps them in step");
+
+  // A platform word is a KIND, not a domain. Appending .com invented forum.com for
+  // 10 sectors and hackernews.com for one, and both invite a wasted probe.
+  const probe = run(path.join(CORE, "host-resolve.mjs"), [
+    "forum", "hackernews", "twitch", "reddit", "facebook", "slack", "linkedin",
+  ], REPO);
+  let map = null;
+  try { map = JSON.parse(probe.out); } catch { /* reported below */ }
+  ok("host resolution is inspectable", map !== null, (probe.out + (probe.err ?? "")).slice(0, 180));
+
+  ok('"forum" resolves to no host at all', map?.forum === null, JSON.stringify(map?.forum));
+  ok('"slack" resolves to no host, since Slack communities are closed', map?.slack === null, JSON.stringify(map?.slack));
+  ok('"hackernews" resolves to news.ycombinator.com', map?.hackernews === "news.ycombinator.com", JSON.stringify(map?.hackernews));
+  ok('"twitch" resolves to twitch.tv', map?.twitch === "twitch.tv", JSON.stringify(map?.twitch));
+  ok('"reddit" still resolves to reddit.com', map?.reddit === "reddit.com", JSON.stringify(map?.reddit));
+  ok('"facebook" still resolves to facebook.com', map?.facebook === "facebook.com", JSON.stringify(map?.facebook));
+  ok('"linkedin" still resolves to linkedin.com', map?.linkedin === "linkedin.com", JSON.stringify(map?.linkedin));
+
+  // End to end: a sector whose community is a bare "forum" must not produce a target.
+  {
+    const d = tmp();
+    fs.mkdirSync(path.join(d, ".aris", "sectors"), { recursive: true });
+    fs.writeFileSync(path.join(d, ".aris", "state.json"),
+      JSON.stringify({ product: { name: "T" }, market: { sector: "kinds" }, status: "researching" }, null, 2));
+    fs.writeFileSync(path.join(d, ".aris", "sectors", "kinds.json"), JSON.stringify({
+      sector: "kinds", aliases: ["kinds"], status: "provisional",
+      reviewPlatforms: [{ name: "Trustpilot", url: "https://www.trustpilot.com", coverage: "high" }],
+      communities: [{ platform: "forum", handle: "the trade forum" }, { platform: "slack", handle: "a closed workspace" }],
+    }, null, 2));
+    const r = run(path.join(CORE, "mining-targets.mjs"), ["--sector", "kinds"], d);
+    const unobserved = (r.out.split(/NOT OBSERVED/)[1] ?? "").split(/NOT A FETCHABLE|PASTE TASKS/)[0];
+    // A kind with no host must not be offered as something to probe: there is nothing to try.
+    ok("a bare \"forum\" is not offered as a host to probe",
+       !/forum/i.test(unobserved), unobserved.slice(0, 200));
+    ok("a closed \"slack\" workspace is not offered as a host to probe",
+       !/slack/i.test(unobserved), unobserved.slice(0, 200));
+    ok("mining-targets says plainly that those are not fetchable surfaces",
+       /NOT A FETCHABLE/i.test(r.out), r.out.slice(0, 300));
+    const rj = run(path.join(CORE, "mining-targets.mjs"), ["--sector", "kinds", "--json"], d);
+    let jj=null; try { jj = JSON.parse(rj.out); } catch {}
+    ok("--json exposes the resolved host so this is debuggable",
+       jj !== null && jj.open.some((x) => x.host === "trustpilot.com"),
+       JSON.stringify(jj?.open?.[0] ?? null));
+  }
+
+  // --- item 2: the five highest-reach hosts, probed and recorded ---
+  {
+    const reg = JSON.parse(fs.readFileSync(path.join(REPO, "packages/core/data/fetchability.json"), "utf8"));
+    const ALLOWED = ["open", "blocked-403", "blocked-user-agent", "js-rendered", "login-required"];
+    for (const h of ["linkedin.com", "maps.google.com", "tiktok.com", "discord.com", "instagram.com"]) {
+      const e = reg.hosts?.[h];
+      ok(`fetchability now carries ${h}, observed and dated`,
+         !!e && ALLOWED.includes(e.status) && /^\d{4}-\d{2}-\d{2}$/.test(e.observed ?? ""),
+         JSON.stringify(e ?? null));
+    }
+  }
+
+  // --- items 3 and 5: the two guards exist in CI ---
+  {
+    const ci = fs.readFileSync(path.join(REPO, ".github/workflows/ci.yml"), "utf8");
+    ok("CI checks the README test count against the suite", /README/i.test(ci) && /passed/.test(ci),
+       "ci.yml has no README count guard");
+    ok("CI fails a packages change that does not move the version",
+       /version-bump|version bump/i.test(ci) && /git diff/.test(ci),
+       "ci.yml has no step that diffs packages against the base ref");
+  }
+
+  // --- item 3: the README number is actually right now ---
+  {
+    const readme = fs.readFileSync(path.join(REPO, "README.md"), "utf8");
+    ok("README no longer claims 88 tests", !/\b88\b/.test(readme),
+       (readme.match(/^.*\b88\b.*$/m) ?? [""])[0]);
   }
 }
 
