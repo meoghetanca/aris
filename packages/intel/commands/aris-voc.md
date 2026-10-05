@@ -63,13 +63,34 @@ counted twice, one of the clusters is wrong.
 
 ## 5. If the thresholds cannot be met
 
-**Stop and report.** Say which platforms you searched, what you found, and how far
-short the evidence falls. Offer the two honest ways forward: a different set of
-platforms if the sector entry pointed at the wrong places, or human fieldwork —
-interviews, which is exactly the cut this workflow made and this is where it bites.
+Three cases, and they are not the same answer. `arisflow` states the same table; keep
+them in step.
 
-Do not write plausible pains. A package built on invented pains is confidently wrong
-in a way nobody downstream can detect.
+**Some validated, others thin.** Continue. The thin ones keep `status: "insufficient"`,
+stay in the file, are excluded from personas, and an assumption records the thinness.
+
+**Zero validated.** Stop and report. Not because the threshold is sacred, but because
+`/aris-personas` has nothing to derive from: every attribute would be invented and
+`persona-check` would strip all of them. Say which platforms you searched, what you
+found, and how far short it falls.
+
+**A gate error.** Counts disagreeing with stored quotes, a quote with no URL, one post
+inflating two pains. Fix the clustering, never the numbers.
+
+### Before concluding the market is quiet
+
+Check what you were actually able to read. Run `sector-check --show <sector>` and look at
+the fetch annotations: if the platforms this field keeps its voice on are marked
+`BLOCKED-403` or `BLOCKED-USER-AGENT`, then a thin result measures your access, not the
+market. **A blocked source and an empty source produce the same silence and mean opposite
+things.** Run `/aris-evidence` and say plainly which it was.
+
+Then offer the honest ways forward: paste the blocked sources, re-point at platforms the
+sector entry got wrong, or human fieldwork. Interviews are exactly the cut this workflow
+made, and this is where it bites.
+
+Do not write plausible pains. A package built on invented pains is confidently wrong in
+a way nobody downstream can detect.
 
 ## Report
 
