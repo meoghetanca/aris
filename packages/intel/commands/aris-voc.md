@@ -20,20 +20,34 @@ Stop, naming the failure, unless:
 - `intel/category.json` exists — you need the competitor names to search for
 - `state.market.sector` is set and its entry resolves
 
-## 1. Fan out, one miner per platform
+## 1. Compute the fan-out, do not judge it
 
-Dispatch a `aris-miner` per platform, **in a single message so they run concurrently**,
+```
+node "${CLAUDE_PLUGIN_ROOT}/scripts/mining-targets.mjs" --sector "<sector>"
+```
+
+It splits this field's platforms into three lists: what a miner can read, what has never
+been tried, and what is a paste task. **Dispatch miners only to the first two.**
+
+This used to be a judgement call and the judgement kept going wrong in one direction.
+A sector entry rating G2 `coverage: high` is correct and a miner sent there still spends
+its entire budget discovering a 403. On the run this command was rewritten after, the
+Reddit miner burned 12 of 14 fetches establishing that the domain is refused outright,
+and then reported honestly that it could not even confirm whether Reddit is thin for the
+field. That is 12 fetches to learn nothing, and the registry already knew.
+
+Exit 3 means every target is walled. **That is a finding about access, not about the
+market.** Do not mine, and do not report a quiet field.
+
+## 2. Fan out, one miner per platform
+
+Dispatch a `aris-miner` per platform **in a single message so they run concurrently**,
 each given its platform, the competitor names and the category. None sees another's
-findings.
+findings: a miner that has read the G2 reviews codes a Reddit thread in G2's vocabulary,
+and the clustering then reflects the framing rather than the market.
 
-**Cap the fan-out at four miners, and pick the four by what actually opens.** The sector
-entry's `coverage` says how much a platform carries, not whether a miner can retrieve it
-— G2, Capterra, TrustRadius and most help centres return 403 to automated fetching, and
-a miner sent to one burns its whole budget discovering that. Prefer open sources: the
-market's own forums, Reddit, GitHub issues, app stores, and vendors' own docs.
-
-Each miner has a hard page budget and stops when it hits it. Four bounded miners beat
-eight unbounded ones, and the run finishes while the human is still watching.
+**Cap the fan-out at four.** Four bounded miners beat eight unbounded ones, and the run
+finishes while the human is still watching. Each has a hard page budget and stops there.
 
 Do not mine yourself in parallel with them. Wait for the returns.
 

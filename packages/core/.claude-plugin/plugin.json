@@ -1,7 +1,7 @@
 {
   "name": "aris-core",
   "description": "aris core: intake, the state contract, the sector knowledge base, the decision blocks, traceability and every gate.",
-  "version": "0.1.2",
+  "version": "0.1.3",
   "author": {
     "name": "Nhi Trinh"
   },

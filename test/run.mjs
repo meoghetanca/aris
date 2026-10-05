@@ -650,6 +650,116 @@ if (want("loud") || want("ready") || !filter) {
   }
 }
 
+process.stdout.write("\nmining targets, and a gate that knows which repo it is guarding\n");
+if (want("targets") || want("scope") || !filter) {
+  const TARGETS = path.join(CORE, "mining-targets.mjs");
+  const FETCH = path.join(REPO, "packages/core/data/fetchability.json");
+  const reg = fs.existsSync(FETCH) ? JSON.parse(fs.readFileSync(FETCH, "utf8")) : { hosts: {} };
+
+  // --- item 4: the hosts this run proved unreadable ---
+  for (const [host, status] of [
+    ["web.archive.org", "blocked-user-agent"],
+    ["stackoverflow.com", "blocked-user-agent"],
+    ["trends.google.com", "js-rendered"],
+    ["adstransparency.google.com", "js-rendered"],
+    ["ahrefs.com", "js-rendered"],
+    ["feedbackportal.microsoft.com", "js-rendered"],
+  ])
+    ok(`fetchability records ${host} as ${status}`,
+       reg.hosts?.[host]?.status === status, JSON.stringify(reg.hosts?.[host] ?? null));
+
+  ok("fetchability warns that the Microsoft Q&A search page is not its permalinks",
+     /search/i.test(reg.hosts?.["learn.microsoft.com"]?.reason ?? ""),
+     reg.hosts?.["learn.microsoft.com"]?.reason ?? "(absent)");
+
+  // --- item 3: the selection is computed, not judged ---
+  ok("mining-targets.mjs exists", fs.existsSync(TARGETS), TARGETS);
+  {
+    const r = run(TARGETS, ["--sector", "b2b-saas"], REPO);
+    const out = r.out + (r.err ?? "");
+    ok("mining-targets separates what can be read from what cannot",
+       /can be read|open/i.test(out) && /paste|blocked/i.test(out), out.slice(0, 220));
+    const openHalf = out.split(/paste|blocked/i)[0] ?? "";
+    ok("mining-targets does not offer G2, which returns 403",
+       /trustpilot|open/i.test(out) && !/g2\.com/i.test(openHalf),
+       openHalf.slice(0, 200));
+    const readable = out.split(/NOT OBSERVED|PASTE TASKS/)[0] ?? "";
+    const pasteHalf = out.split(/PASTE TASKS/)[1] ?? "";
+    ok("mining-targets names Reddit as a paste task, not a target",
+       /reddit/i.test(pasteHalf) && !/reddit/i.test(readable),
+       `readable half: ${readable.slice(0, 120)}`);
+    // b2b-saas names no confirmed-open surface at all, which is itself a finding about the
+    // family profile. professional-services does, so the open path is asserted there.
+    const ps = run(TARGETS, ["--sector", "professional-services"], REPO);
+    const psOpen = (ps.out.split(/NOT OBSERVED|PASTE TASKS/)[0] ?? "");
+    ok("mining-targets offers an open surface it confirmed",
+       /trustpilot/i.test(psOpen), psOpen.slice(0, 240));
+    ok("an unobserved platform is not reported as readable",
+       /NOT OBSERVED/.test(ps.out) && !/clutch/i.test(psOpen), psOpen.slice(0, 240));
+    ok("mining-targets exits clean when something is readable", r.code === 0, `exit ${r.code}`);
+    {
+      const d2 = tmp();
+      fs.mkdirSync(path.join(d2, ".aris", "sectors"), { recursive: true });
+      fs.writeFileSync(path.join(d2, ".aris", "state.json"),
+        JSON.stringify({ product: { name: "T" }, market: { sector: "longurl" }, status: "researching" }, null, 2));
+      fs.writeFileSync(path.join(d2, ".aris", "sectors", "longurl.json"), JSON.stringify({
+        sector: "longurl", aliases: ["longurl"], status: "provisional",
+        reviewPlatforms: [{ name: "Trustpilot",
+          url: "https://www.trustpilot.com/review/some-very-long-vendor-name", coverage: "medium" }],
+      }, null, 2));
+      const rl = run(TARGETS, ["--sector", "longurl"], d2);
+      ok("mining-targets columns do not run together on a long url",
+         !/[^\s]coverage /.test(rl.out), (rl.out.match(/^.*coverage.*$/m) ?? [""])[0]);
+    }
+  }
+  {
+    // A sector whose every target is blocked must refuse, not hand back an empty list
+    // that reads as "this market is quiet". Expressed as a real project-local sector
+    // rather than a test-only flag in the script.
+    const d = tmp();
+    fs.mkdirSync(path.join(d, ".aris", "sectors"), { recursive: true });
+    fs.writeFileSync(path.join(d, ".aris", "state.json"),
+      JSON.stringify({ product: { name: "T" }, market: { sector: "allblocked" }, status: "researching" }, null, 2));
+    fs.writeFileSync(path.join(d, ".aris", "sectors", "allblocked.json"), JSON.stringify({
+      sector: "allblocked", aliases: ["allblocked"], status: "provisional",
+      reviewPlatforms: [{ name: "G2", url: "https://www.g2.com", coverage: "high" }],
+      communities: [{ platform: "reddit", handle: "r/nowhere" }],
+    }, null, 2));
+    const r = run(TARGETS, ["--sector", "allblocked"], d);
+    ok("mining-targets refuses when nothing is readable",
+       r.code !== 0 && /aris-evidence/i.test(r.out + (r.err ?? "")),
+       `exit ${r.code}: ${(r.out + (r.err ?? "")).slice(0, 200)}`);
+  }
+  {
+    const voc = fs.readFileSync(path.join(REPO, "packages/intel/commands/aris-voc.md"), "utf8");
+    const mining = fs.readFileSync(path.join(REPO, "packages/intel/rules/mining.md"), "utf8");
+    ok("aris-voc tells you to compute the targets rather than judge them",
+       /mining-targets/.test(voc), "aris-voc.md does not mention mining-targets.mjs");
+    ok("mining.md points at the computed targets", /mining-targets/.test(mining));
+  }
+
+  // --- the gate defect: it must know which repository it is guarding ---
+  {
+    const proj = tmp(); build(proj);
+    const other = tmp();                       // an unrelated repo, no .aris anywhere above it
+    fs.mkdirSync(path.join(other, ".git"), { recursive: true });
+
+    const inProject = gate(
+      { tool_name: "Bash", tool_input: { command: "git push origin main" }, cwd: proj }, proj);
+    ok("a push from inside the project is still gated", inProject !== "allow", String(inProject).slice(0, 120));
+
+    const atProject = gate(
+      { tool_name: "Bash", tool_input: { command: `git -C ${proj} push origin main` }, cwd: proj }, proj);
+    ok("git -C pointed AT the project is still gated", atProject !== "allow", String(atProject).slice(0, 120));
+
+    const elsewhere = gate(
+      { tool_name: "Bash", tool_input: { command: `git -C ${other} push origin main` }, cwd: proj }, proj);
+    ok("git -C pointed at an unrelated repo is allowed",
+       elsewhere === "allow",
+       `the gate blocked a push to a repo outside the project: ${String(elsewhere).slice(0, 160)}`);
+  }
+}
+
 
 process.stdout.write(`\n${pass} passed, ${fail} failed\n`);
 process.exit(fail ? 1 : 0);

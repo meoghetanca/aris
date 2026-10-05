@@ -1,7 +1,7 @@
 {
   "name": "aris-assets",
   "description": "aris assets: every launch material with a claim id, the dormant measurement harness, the conditional growth playbook, and the single-file HTML command centre.",
-  "version": "0.1.2",
+  "version": "0.1.3",
   "author": {
     "name": "Nhi Trinh"
   },
