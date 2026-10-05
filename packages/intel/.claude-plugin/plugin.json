@@ -1,7 +1,7 @@
 {
   "name": "aris-intel",
   "description": "aris intel: the category map, voice of customer mined from the public record, personas derived from quotes, market size from cited factors, and demand inferred rather than asserted.",
-  "version": "0.1.1",
+  "version": "0.1.2",
   "author": {
     "name": "Nhi Trinh"
   },

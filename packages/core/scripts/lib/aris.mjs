@@ -16,6 +16,7 @@
  *   4  refused to produce output (the content itself is not publishable)
  */
 import fs from "node:fs";
+import { validate } from "./shapes.mjs";
 import path from "node:path";
 import { execFileSync } from "node:child_process";
 
@@ -54,11 +55,20 @@ export function readJson(root, rel, fallback = undefined) {
     if (fallback !== undefined) return fallback;
     return null;
   }
+  let data;
   try {
-    return JSON.parse(fs.readFileSync(p, "utf8"));
+    data = JSON.parse(fs.readFileSync(p, "utf8"));
   } catch (e) {
     throw new Error(`${rel} is not valid JSON: ${e.message}`);
   }
+  /**
+   * Parsing is not the bar. An artifact can parse and still be unreadable, and the
+   * failure then shows up as a zero rather than an error. Refuse here, once, where
+   * every script already passes through.
+   */
+  const { errors } = validate(rel, data);
+  if (errors.length) throw new Error(errors.join("\n"));
+  return data;
 }
 
 export function writeJson(root, rel, obj) {
