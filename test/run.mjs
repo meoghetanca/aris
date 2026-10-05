@@ -513,5 +513,143 @@ if (want("flow") || !filter) {
 }
 
 
+process.stdout.write("\nfailing loud, and gates that read substance\n");
+if (want("loud") || want("ready") || !filter) {
+  const LINT = path.join(CORE, "aris-lint.mjs");
+  const STATUS = path.join(CORE, "aris-status.mjs");
+  const NEXT = path.join(CORE, "next.mjs");
+
+  // --- item 1: a known artifact that parses but is misshapen must not read as zero ---
+  ok("aris-lint.mjs exists", fs.existsSync(LINT), LINT);
+
+  {
+    const d = tmp(); build(d);
+    const r0 = run(LINT, [], d);
+    ok("aris-lint passes on a clean package", r0.code === 0, (r0.out + (r0.err ?? "")).slice(0, 200));
+  }
+
+  // The exact mistake made on a real run: the right data, the wrong envelope.
+  for (const [rel, key] of [["assumptions.json", "assumptions"], ["cutSteps.json", "cuts"]]) {
+    const d = tmp(); build(d);
+    const good = J(d, rel);
+    fs.writeFileSync(path.join(d, ".aris", rel), JSON.stringify(good[key], null, 2) + "\n");
+    const r = run(STATUS, [], d);
+    const all = r.out + (r.err ?? "");
+    ok(`status refuses ${rel} written as a bare array`, r.code !== 0, `exit ${r.code}`);
+    ok(`status does not report ${rel} as zero when it is misshapen`,
+       !new RegExp(`${key}\\s+0`, "i").test(r.out), r.out.slice(0, 160));
+    ok(`the refusal names ${rel} and the key it wanted`,
+       all.includes(rel) && all.includes(key), all.slice(0, 200));
+    const rl = run(LINT, [], d);
+    const lintOut = rl.out + (rl.err ?? "");
+    ok(`aris-lint also fails on a bare-array ${rel}`,
+       rl.code !== 0 && lintOut.includes(rel),
+       `exit ${rl.code}: ${lintOut.slice(0, 160)}`);
+  }
+
+  // The third real mistake: inventing a top-level key, so the data was written and invisible.
+  {
+    const d = tmp(); build(d);
+    const src = J(d, "intel/sources.json");
+    src.notOpened = { blockedOrFailed: [{ what: "G2", reason: "403" }] };
+    W(d, "intel/sources.json", src);
+    const r = run(LINT, [], d);
+    const all = r.out + (r.err ?? "");
+    ok("aris-lint reports an unknown top-level key rather than ignoring it",
+       /notOpened/.test(all), all.slice(0, 220));
+    ok("an unknown key is a warning, not a hard failure", r.code === 0, `exit ${r.code}`);
+  }
+
+  // A legitimately annotated artifact must still pass: the fixture is a floor, not a ceiling.
+  {
+    const d = tmp(); build(d);
+    const s = J(d, "intel/tam-sam-som.json");
+    s.sizedAt = "2026-10-05"; s.headline = "annotated"; s.unknownFactors = [];
+    W(d, "intel/tam-sam-som.json", s);
+    const r = run(LINT, [], d);
+    ok("extra descriptive keys do not fail an artifact", r.code === 0, (r.out + (r.err ?? "")).slice(0, 200));
+  }
+
+  ok("shapes.mjs is identical in both script copies", (() => {
+    const a = path.join(REPO, "packages/core/scripts/lib/shapes.mjs");
+    const b = path.join(REPO, "packages/assets/scripts/lib/shapes.mjs");
+    if (!fs.existsSync(a) || !fs.existsSync(b)) return false;
+    return fs.readFileSync(a, "utf8") === fs.readFileSync(b, "utf8");
+  })(), "duplicated on purpose; only this check keeps them in step");
+
+  // --- item 2: next.mjs must read substance, not just file existence ---
+  {
+    const d = tmp(); build(d);
+    const pains = J(d, "intel/pains.json");
+    for (const p of pains.pains) p.status = "insufficient";
+    W(d, "intel/pains.json", pains);
+    fs.rmSync(path.join(d, ".aris", "intel", "personas.json"), { force: true });
+    // positioning must be absent too, otherwise it reads as "done" and the assertion
+    // below would pass without a predicate ever being consulted.
+    fs.rmSync(path.join(d, ".aris", "strategy", "positioning.json"), { force: true });
+
+    const r = run(NEXT, ["--all"], d);
+    const all = r.out + (r.err ?? "");
+    const runnable = (all.match(/^Can run now:.*$/im) ?? [""])[0];
+    ok("next does not offer personas when no pain is validated",
+       !runnable.includes("/aris-personas"), runnable || all.slice(0, 200));
+    ok("next says why personas is not ready",
+       /validated/i.test(all), all.slice(0, 300));
+
+    ok("a not-ready step still renders a mark, not undefined",
+       !/undefined/.test(all), (all.match(/^.*undefined.*$/m) ?? [""])[0]);
+
+    // Withholding personas must not simply promote the next step that also cannot be done:
+    // traceability requires every positioning direction to carry painIds and targetPersonaIds.
+    ok("next does not offer positioning when there are no personas",
+       !runnable.includes("/aris-position"), runnable);
+
+    const rj = run(NEXT, ["--json"], d);
+    let j = null; try { j = JSON.parse(rj.out); } catch {}
+    ok("--json reports personas as not runnable",
+       j !== null && !(j.canRunNow ?? []).includes("/aris-personas"),
+       JSON.stringify(j?.canRunNow ?? null));
+  }
+
+
+  // The dangerous case, and the full fixture cannot express it: a project where every
+  // remaining step is blocked or not-ready, so "ready" is empty. Before this was handled,
+  // next fell through to the completion message and invited a launch on a package stopped
+  // at step 4 of 15 with nothing verified.
+  {
+    const d = tmp();
+    fs.mkdirSync(path.join(d, ".aris", "intel"), { recursive: true });
+    const w = (rel, obj) => fs.writeFileSync(path.join(d, ".aris", rel), JSON.stringify(obj, null, 2) + "\n");
+    w("state.json", { product: { name: "Blocked" }, market: { sector: "b2b-saas" }, status: "researching" });
+    w("intel/category.json", { players: [] });
+    w("intel/pains.json", { pains: [
+      { id: "PAIN-001", statement: "thin", status: "insufficient",
+        frequency: { quoteCount: 0, sourceCount: 0 }, quotes: [] } ] });
+    w("intel/tam-sam-som.json", {
+      factors: [{ id: "F-001", name: "n", value: 10, sourceId: "SRC-001" }],
+      tam: { status: "unknown" }, sam: { status: "unknown" }, som: { status: "unknown" },
+      limitations: ["penetration is unknown"] });
+    w("intel/demand.json", { status: "inferred_not_tested", signals: [], doesNotProve: ["willingness to pay"] });
+
+    const r = run(NEXT, ["--all"], d);
+    const all = r.out + (r.err ?? "");
+    ok("next does not claim completion when steps remain undone",
+       !/Every step has run/i.test(all), all.slice(-260));
+    ok("next does not mention launchAuthorization while a step is unfinished",
+       !/launchAuthorization/.test(all), all.slice(-260));
+    ok("next says plainly that the chain is stopped", /nothing can run|stopped|blocked/i.test(all), all.slice(-260));
+  }
+
+  {
+    const d = tmp(); build(d);
+    fs.rmSync(path.join(d, ".aris", "intel", "personas.json"), { force: true });
+    const r = run(NEXT, ["--all"], d);
+    const runnable = (r.out.match(/^Can run now:.*$/im) ?? [""])[0];
+    ok("next does offer personas once a pain is validated",
+       runnable.includes("/aris-personas"), runnable || r.out.slice(0, 200));
+  }
+}
+
+
 process.stdout.write(`\n${pass} passed, ${fail} failed\n`);
 process.exit(fail ? 1 : 0);
