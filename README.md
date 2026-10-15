@@ -57,6 +57,11 @@ Then check and go:
 /arisflow "a shift-scheduling app for Vietnamese restaurants"
 ```
 
+That first run stops once the strategy is settled, the evidence base, positioning,
+messaging and go-to-market, because writing and checking every asset is about half a
+run's token cost and is work worth doing only on positioning you have approved. When it
+is right, `/arisflow --to package` turns it into the full package and `aris-launch.html`.
+
 Or just talk about marketing ("who else is doing this?", "where should we launch?") and it works
 out which step you need. **Requires Node 20 or later on PATH.** Nothing else: no accounts, no API
 keys, no config file, no build step.
@@ -121,7 +126,8 @@ fixed by citing a trial or by deleting the claim, and those are completely diffe
 
 | | |
 |:--|:--|
-| `/arisflow "<product>"` | the whole chain |
+| `/arisflow "<product>"` | the chain up to strategy (evidence, positioning, messaging, go-to-market) |
+| `/arisflow "<product>" --to package` | the whole chain, through assets to `aris-launch.html` |
 | `/arisflow --auto` | unattended: takes the recommended option everywhere and records it |
 | `/aris-status` | where this project stands |
 | `/aris-verify` | run every check |

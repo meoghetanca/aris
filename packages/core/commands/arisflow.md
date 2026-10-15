@@ -29,9 +29,17 @@ Load `${CLAUDE_PLUGIN_ROOT}/rules/decisions.md`,
 
 | `--to` | You get | Stops after |
 |:--|:--|:--|
-| `strategy` | the evidence base, positioning, messaging, go-to-market | `/aris-gtm` |
+| `strategy` *(default)* | the evidence base, positioning, messaging, go-to-market | `/aris-gtm` |
 | `assets` | that, plus every launch material with cited claims | `/aris-verify` |
-| `package` *(default)* | that, plus the harness, the playbook and `aris-launch.html` | `/aris-package` |
+| `package` | that, plus the harness, the playbook and `aris-launch.html` | `/aris-package` |
+
+**The default stops at `strategy` on purpose.** Writing and verifying every launch
+asset, then building the page, is roughly half of a full run's cost in tokens, and it
+is work you only want done once the positioning and go-to-market are the ones you chose.
+So a first pass gives you the decisions and the evidence behind them, and stops. When
+those are right, run `/arisflow --to package` (or just `/aris-assets` onward) to turn
+them into the full package and `aris-launch.html`. Nothing is recomputed; it resumes
+from where strategy left off.
 
 ## The chain
 
